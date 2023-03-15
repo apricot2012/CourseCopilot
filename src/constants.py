@@ -1,0 +1,3 @@
+# Constants
+
+SECRET_KEY = "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"
