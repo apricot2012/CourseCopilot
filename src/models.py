@@ -26,12 +26,11 @@ class Extractor:
 
 
 class tf_idfExtractor(Extractor):
-    def __init__(self, segment_length = 128, top_k_documents = 5) -> None:
+    def __init__(self, segment_length = 512, top_k_documents = 5) -> None:
         super().__init__(segment_length, top_k_documents)
 
     def infer_relevant_docs(self, paths, query):
         super().load_docs(paths)
-        print(self.docs)
         return self.get_top_k_articles(query)
 
     def get_top_k_articles(self, query):
@@ -39,8 +38,12 @@ class tf_idfExtractor(Extractor):
         # Initialize a vectorizer that removes English stop words
         vectorizer = TfidfVectorizer(analyzer="word", stop_words='english')
 
+        docasstrings = []
+        for doc in self.docs:
+            docasstrings.append(doc.page_content)
+
         # Create a corpus of query and documents and convert to TFIDF vectors
-        query_and_docs = [query] + self.docs
+        query_and_docs = [query] + docasstrings
         matrix = vectorizer.fit_transform(query_and_docs)
 
         # Holds our cosine similarity scores
@@ -58,7 +61,7 @@ class tf_idfExtractor(Extractor):
         return top_docs
     
 class dpr_Extractor(Extractor):
-    def __init__(self, segment_length = 128, top_k_documents = 5) -> None:
+    def __init__(self, segment_length = 512, top_k_documents = 5) -> None:
         super().__init__(segment_length, top_k_documents)
     
     def infer_relevant_docs(self, paths, query):
@@ -68,7 +71,7 @@ class dpr_Extractor(Extractor):
         return docsearch.similarity_search(query)
     
 class hyde_Extractor(Extractor):
-    def __init__(self, segment_length = 128, top_k_documents = 5) -> None:
+    def __init__(self, segment_length = 512, top_k_documents = 5) -> None:
         super().__init__(segment_length, top_k_documents)
     
     def infer_relevant_docs(self, paths, query):
@@ -76,6 +79,6 @@ class hyde_Extractor(Extractor):
         base_embeddings = OpenAIEmbeddings(openai_api_key=SECRET_KEY)
         llm = OpenAI(openai_api_key=SECRET_KEY)
         embeddings = HypotheticalDocumentEmbedder.from_llm(llm, base_embeddings, "web_search")
-        result = embeddings.embed_query("query")
+        result = embeddings.embed_query(query)
         docsearch = Chroma.from_texts(self.docs, embeddings)
         return docsearch.similarity_search(query)   
