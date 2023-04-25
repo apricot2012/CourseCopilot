@@ -1,0 +1,69 @@
+Marking Algorithm MARK 0. Start with all k pages in cache unmarked 1. On page request p 2. if p not in cache then 3. evict any unmarked page (if no unmarked page, first unmark all k pages) 5. bring p into cache 6. mark p A B C D B A B C D A B MARK • A • A • A • D • D • D • D • C • C • C • B Y • B • B B • B • B • B B • D • D D Z Z • C C C • A • A A A • A A * * * * * * * * FIFO A B C D D A B C D A B Y A B C C D A B C D A Z Y A B B C D A B C D * * * * * * * * * *
+
+0. Start with all k pages in cache unmarked 1. On page request p 2. if p not in cache then 3. evict any unmarked page (if no unmarked page, first unmark all k pages) 5. bring p into cache 6. mark p Proof. Partition p 1 , p 2 , . . . , p n into phases , a maximal subsequence with distinct pages. (The first starts with p 1 .) Assume p 1 is not in cache. MARK faults ≤ k times per phase. OPT must have the first page p i of a phase in cache at the beginning of a phase. Since the remainder of the phase plus the first page of the next phase consists of k different pages (different from p i ), OPT must fault at least once during these requests. ⇒ OPT faults ≥ #phases − 1 times.
+
+0. Start with all k pages in cache unmarked 1. On page request p 2. if p not in cache then 3. evict any unmarked page (if no unmarked page, first unmark all k pages) 5. bring p into cache 6. mark p
+
+Mouse hides in one of m hiding spots. Cat looks in one spot each time step. If Cat finds Mouse, Mouse runs to another spot.
+
+= min #times future-knowing Mouse must move
+
+1 2 3 4
+
+Mouse hides in one of m hiding spots. Cat looks in one spot each time step. If Cat finds Mouse, Mouse runs to another spot.
+
+= min #times future-knowing Mouse must move
+
+1 2 3 4 OPT(1 2 3 4 1 2 3 4) = 2
+
+Mouse hides in one of m hiding spots. Cat looks in one spot each time step. If Cat finds Mouse, Mouse runs to another spot.
+
+= min #times future-knowing Mouse must move
+
+1 2 3 4 OPT(1 2 3 4 1 2 3 4) = 2
+
+Mouse hides in one of m hiding spots. Cat looks in one spot each time step. If Cat finds Mouse, Mouse runs to another spot.
+
+= min #times future-knowing Mouse must move
+
+1 2 3 4 OPT(1 2 3 4 1 2 3 4) = 2
+
+Mouse hides in one of m hiding spots. Cat looks in one spot each time step. If Cat finds Mouse, Mouse runs to another spot.
+
+= min #times future-knowing Mouse must move
+
+1 2 3 4 OPT(1 2 3 4 1 2 3 4) = 2
+
+Mouse hides in one of m hiding spots. Cat looks in one spot each time step. If Cat finds Mouse, Mouse runs to another spot.
+
+= min #times future-knowing Mouse must move
+
+1 2 3 4 OPT(1 2 3 4 1 2 3 4) = 2 OPT(1 2 3 4 1 2 3 4) = 2
+
+Mouse hides in one of m hiding spots. Cat looks in one spot each time step. If Cat finds Mouse, Mouse runs to another spot.
+
+= min #times future-knowing Mouse must move
+
+1 2 3 4 OPT(1 2 3 4 1 2 3 4) = 2 OPT(1 2 1 1 3 4 1 2) = 1
+
+If Mouse follows a deterministic strategy, there is a sequence Cat probes that causes
+
+MouseCost( S ) ≥ ( m − 1)OPT( S ) Paging m − 1 = cache size m = different pages Mouse = page not in cache Cat probes = page requests Must move = page fault Randomized Marking Mouse (RMM) • Start at random spot • If Cat probes a spot, mark it • If Cat probes Mouse’s spot, Mouse moves to random unmarked spot
+
+m − 1 = cache size m = different pages Mouse = page not in cache Cat probes = page requests Must move = page fault
+
+• Start at random spot • If Cat probes a spot, mark it • If Cat probes Mouse’s spot, Mouse moves to random unmarked spot • If Mouse is at last unmarked spot, clear marks [phase ends]
+
+TRM runs to a random spot if found.
+
+What does the OPT mouse do?
+
+TRM runs to a random spot if found.
+
+What does the OPT mouse do? Hide in spot m
+
+E [#times RM found before MC probes m ] = E [#rolls of m -sided dice before m ] = m
+
+⇒ RM is m -competitive.
+
+Claim: Any Mouse A has E [ A ( S )] ∈ Ω(log m )OPT( S )

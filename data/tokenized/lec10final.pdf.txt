@@ -1,0 +1,31 @@
+Maximum matching in bipartite graphs Pennant Race Problem Open Pit Mining
+
+A matching in a graph G is a subset M of its edges with no vertex the endpoint of more than
+
+matching edge
+
+B A
+
+A bipartite graph is a graph G = ( V , E ) where V can be partitioned into A and B such that ∀ ( u , v ) ∈ E , either u ∈ A and v ∈ B or u ∈ B and v ∈ A .
+
+Given bipartite graph G = ( V , E ) with partitions A and B : 1. Create a flow network F = ( V ′ , E ′ ) V ′ = V ∪ { s , t } add source and sink E ′ = E ∪ { ( s , u ) | u ∈ A } ∪ { ( v , t ) | v ∈ B } Set all capacities to 1. 2. Find maximum flow f in F 3. Output edges ( u , v ) ∈ E such that f ( u , v ) = 1 A B s t A B Claim If M is a matching in G then ∃ flow f in F with size( f ) = | M | . Claim If f is an integer-valued flow in F then there exists a matching M in G with | M | = size( f ).
+
+Pennant Race Problem Input Example Given team A (your favorite team) A list of teams T 1 , T 2 , . . . , T n A T 1 T 2 T 3 T 4 #wins for each team this season 3 4 6 5 4 list of games remaining to be played ( A , T 1 ) , ( A , T 3 ) , ( A , T 4 ) , ( T 1 , T 3 ) , ( T 2 , T 4 ) , ( T 1 , T 2 ) , ( T 2 , T 3 ) Determine if it is possible for team A to win at least as many games as any other team by the end of the season.
+
+Determine if it is possible for team A to win at least as many games as any other team by the end of the season. T 1 T 3 T 2 T 4 T 1 T 2 T 2 T 3 T 1 T 2 T 3 T 4 s t 1 1 1 1 1 1 1 11 1 1 1 2 0 1 2 A has hope iff max flow size = # games
+
+Imagine the earth is a lattice of cubes. Every cube has a value (think “gold” minus “cost” to process) Constraint: must remove some cubes before others (think cave-in) Input: Directed acyclic graph G = ( V , E ). V = set of cubes E = { ( u , v ) | u must be removed before v } w ( v ) = value of cube v A B C D E F G H I -1 -2 -1 +1 -3 -2 +1 +5 +2
+
+network so that A. Any finite capacity cut corresponds to an initial set . B. A min capacity cut corresponds to a max value initial set. 1. Add source s and sink t 2. Set capacity c ( u , v ) = ∞ for ( u , v ) ∈ E 3. Create an edge ( s , v ) or ( v , t ) for every v ∈ V with finite capacity (to be determined) A B C D E F G H I ∞ ∞ ∞ ∞ ∞ ∞ ∞ ∞ s t -1 -2 -1 +1 -3 -2 +1 +5 +2
+
+A B C D E F G H I ∞ ∞ ∞ ∞ ∞ ∞ ∞ ∞ s t -1 -2 -1 +1 -3 -2 +1 +5 +2
+
+A B C D E F G H I ∞ ∞ ∞ ∞ ∞ ∞ ∞ ∞ -1 -2 -1 +1 -3 -2 +1 +5 +2
+
+If w ( u ) > 0, increase cut capacity if we don’t take u ( u ̸∈ If w ( v ) < 0, increase cut capacity if we do take v ( v ∈ T ). v u -1 +3 ∞ s t 1 3 flow network A B C D E F G H I ∞ ∞ ∞ ∞ ∞ ∞ ∞ ∞ s t 1 2 1 2 1 1 5 2 3
+
+network A B C D E F G H I ∞ ∞ ∞ ∞ ∞ ∞ ∞ ∞ s t 1 2 1 2 1 1 5 2 3
+
+Final flow network
+
+For any initial set U , the capacity of the corresponding cut ( S = ( V − U ) + s , T = U + t ) is c ( S , T ) = u ̸∈ U w ( u ) > 0 w ( u ) + v ∈ U w ( v ) < 0 − w ( v ) profit = u ∈ U w ( u ) > 0 w ( u ) + v ∈ U w ( v ) < 0 w ( v ) To maximize profit, minimize (over cuts ( S , T ), which define U u ∈ U w ( u ) > 0 w ( u ) − profit = u ̸∈ U w ( u ) > 0 w ( u ) − v ∈ U w ( v ) < 0 w ( v ) = c ( S , T

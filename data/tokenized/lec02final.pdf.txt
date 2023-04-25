@@ -1,0 +1,39 @@
+a circular sequence of line seg- plane joined end-to-end. (Each is the endpoint of two adja- in the sequence.) simple if the segments don’t in- non-endpoint. of a finite point set P is a simple
+
+A polygon is simple if the segments don’t in- tersect in a non-endpoint.
+
+Idea: Tie a string to a point p 1 ∈ P that is on the CH ( P ). Rotate a taut string around the points until it ”bends” at the next point on CH ( P ). Keep go- ing until back to p 1 . Turn test Path a → b → c makes a left turn at b iff det   a x a y 1 b x b y 1 c x c y 1   > 0 a x b y − a y b x + a y c x − a x c y + b x c y − c x b y > 0
+
+a → b → c makes a left turn at b iff det   a x a y 1 b x b y 1 c x c y 1   > 0 a x b y − a y b x + a y c x − a x c y + b x c y − c x b y > 0
+
+
+
+INPUT: P[0...n-1] array of 2D points OUTPUT: Array of convex hull vertices in ccw If n < 3 return distinct points in P a0 = index of point with min y-coord in P h = 0, a = a0, b = (any index not a0) mod n while b != a0 for c = 0 to n-1 if (c != a and c != b and not LeftTurn(P[a],P[b],P[c])) then b = c H[h++] = P[b], a = b return H Running time: O ( nh ) where h is number of vertices of convex
+
+time: O ( nh ) where h is number of vertices of convex hull.
+
+1. Find point p 1 in P with smallest y -coord (break ties using smaller x -coord) 2. Sort remaining points in P by ccw angle around p 1 . Let p 2 , p 3 , . . . , p n be these points in order. (What about ties?) 3. Start with p 1 p 2 p 3 as candidate hull. Put them on a stack S . 4. for i = 4 to n while not LeftTurn( S [top-1], S [top], p i ) pop( S ) push p i onto S return S
+
+
+
+1. Finding p 1 takes time 2. Sorting by angle takes time 3. Put p 1 p 2 p 3 on a stack S takes time 4. for i = 4 to n while not LeftTurn( S [top-1], S [top], p i ) pop( S ) push p i onto S return S One iteration of for-loop causes < n pops ⇒ time But, over all iterations, #pushes < n and #pops < #pushes So total time taken by for-loop is
+
+Is this the fastest algorithm for Convex Hull?
+
+Is this the fastest algorithm using an Algebraic Decision Tree model computer for Convex Hull?
+
+Suppose there exists a really fast Convex Hull algorithm.
+
+CH Alg. Input pts P Output CH( P )
+
+CH Alg. Input pts P Output CH( P ) TransformInput Input to Sort x 1 , . . . , x n TransformOutput Output Create an alg. that transforms an input to the sorting problem into an input to CH problem... Make this really fast. and then transform CH output into the answer to the sorting problem. Make this really fast. let CH Alg. do all the hard work... Sorted x 1 , . . . , x n
+
+Suppose there exists a really fast Convex Hull algorithm.
+
+CH Alg. Input pts P Output CH( P ) TransformInput Input to Sort x 1 , . . . , x n TransformOutput Output Create an alg. that transforms an input to the sorting problem into an input to CH problem... Make this really fast. and then transform CH output into the answer to the sorting problem. Make this really fast. let CH Alg. do all the hard work... Sorted x 1 , . . . , x n x 3 x 4 x 1 x 5 x 2 x i → ( x i , x 2 i ) for all i : Find hull pt w/ min x-coord Output x-coords in ccw order
+
+We already have good algorithms for sorting. Why make this complicated sorting algorithm?
+
+We already have good algorithms for sorting. complicated sorting algorithm?
+
+Because we know Sorting complexity is Ω( n log n ). (i.e. fastest alg. for sorting takes ≥ cn log n steps for large n )

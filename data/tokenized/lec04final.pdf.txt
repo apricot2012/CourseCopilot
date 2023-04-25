@@ -1,0 +1,24 @@
+
+
+Given n points P and a guess g for the number of hull points... 1. Divide P into n / g groups of g points 2. Use Graham’s Scan to find the convex hull of each group O ( g log g ) time per group 3. Find the lowest point p 0 4. Gift-wrap (Jarvis March) these convex hulls for g wrap To find the next hull point p i +1 4.1 find the right-tangent from p i to each group hull in O (log time per group 4.2 p i +1 is rightmost-by-tangent-angle of these tangent points 4.3 If p i +1 = p 0 output hull Succeed 5. Output “ g is too small!” Fail Total time: O ( n log g ).
+
+Run Chan’s Alg. with guess g = 4 then g = 16 then g = 256 ... until it outputs the Convex hull g = 2 2 t on the t th try. Total run time (until g ≥ hull size h ): ⌈ lg lg h ⌉ >
+ t =1 O ( n log(2 2 t )) = ⌈ lg lg h ⌉ t =1 O ( n 2 t ) = O ( n ⌈ lg lg h ⌉ t =1 2 t ) = O ( n lg h )
+
+Total run time (until g ≥ hull size h ): ⌈ lg lg h ⌉ >
+ t =1 O ( n log(2 2 t )) = ⌈ lg lg h ⌉ t =1 O ( n 2 t ) = O ( n ⌈ lg lg h ⌉ t =1
+
+Voronoi diagrams 4/9
+
+Voronoi diagrams
+
+
+
+This algorithm finds both VorD and CH of S . 0. Sort sites by x -coord VorD+CHull ( S ) 1. if | S | = 1 return VorD = ∅ and CHull = [ s 1 ] 2. if | S | = 2 return VorD = ⊥ -bisector of s 1 s 2 and CHull = [ s 1 s 2 ] 3. Recursively find VorD L and CHull L of s 1 , . . . , s n / 2 4. Recursively find VorD R and CHull R of s n / 2+1 , . . . , s n 5. Merge CHull L and CHull R to get CHull 6. Stitch together VorD L and VorD R to get VorD 7. Return VorD and CHull
+
+CHull L CHull R Homework 1 for a (more general) O ( n ) time solution.
+
+See your Homework 1 for a (more general) O ( n ) time The two blue lines are the upper and lower bridges.
+
+2 1 3 4 5 6 1. Let pq be upper bridge 2. Find intersection of ⊥ pq with edge of VorD L ( p ) and VorD R ( q ) 3. If ⊥ pq intersects ⊥ pp ′ before ⊥ qq ′ then p = p ′ else q = q ′ 4. Repeat until pq is lower bridge Note: Step 2 can be done by scanning edges of VorD L ( p ) cw and VorD R ( q ) ccw (no backtracking).
+

@@ -1,0 +1,23 @@
+Hardness of approximation
+
+is MinTSP where the edge weights obey the triangle w ( a , c ) ≤ w ( a , b ) + w ( b , c ) for all vertices a , b , c . Let T be a Minimum Spanning Tree of G . Let M be a min length complete matching in the complete graph on odd degree vertices of T .
+
+T min spanning tree odd degree vertices in T 1. Let T be a Minimum Spanning Tree of G . 2. Let M be a min length complete matching in the complete graph on odd degree vertices of T . 3. Let E be Euler tour in T ∪ M . 4. Eliminate repeated vertices in E to get approx TSP.
+
+inequality: w ( a , c ) ≤ w ( a , b ) + w ( b , c ) for all vertices a , b , c . T M min spanning tree odd degree vertices in T min weight matching 1. Let T be a Minimum Spanning Tree of G . 2. Let M be a min length complete matching in the complete graph on odd degree vertices of T . 3. Let E be Euler tour in T ∪ M . 4. Eliminate repeated vertices in E to get approx TSP.
+
+T M E P min spanning tree odd degree vertices in T min weight matching Euler tour approximate TSP Let T be a Minimum Spanning Tree of G . Let M be a min length complete matching in the complete graph on odd degree vertices of T . Let E be Euler tour in T ∪ M .
+
+T M E P min spanning tree odd degree vertices in T min weight matching Euler tour approximate TSP T be a Minimum Spanning Tree of G . | T | ≤ | TSP( G ) |
+
+T M E P min spanning tree odd degree vertices in T min weight matching Euler tour approximate TSP Let T be a Minimum Spanning Tree of G . | T | ≤ | TSP( G ) | Let M be a min length complete matching in the complete graph on odd degree vertices of T . | M | ≤ 12 | TSP( G ) |
+
+T M E P min spanning tree odd degree vertices in T min weight matching Euler tour approximate TSP 1. Let T be a Minimum Spanning Tree of G . | T | ≤ | TSP( G 2. Let M be a min length complete matching in the complete graph on odd degree vertices of T . | M | ≤ 12 | TSP( G 3. Let E be Euler tour in T ∪ M . | E | ≤ | T | + | M | ≤ 3 2 | TSP( G
+
+T M E P min spanning tree odd degree vertices in T min weight matching Euler tour approximate TSP 1. Let T be a Minimum Spanning Tree of G . | T | ≤ | TSP( G ) | 2. Let M be a min length complete matching in the complete graph on odd degree vertices of T . | M | ≤ 12 | TSP( G ) | 3. Let E be Euler tour in T ∪ M . | E | ≤ | T | + | M | ≤ 3 2 | TSP( G ) | 4. Eliminate repeated vertices in E to get approx TSP. | P | ≤ | E |
+
+X = Fast input transform c -approxTSP( G ) A Graph G = ( V , E ) G , w T/F Y = Fast output transform Q weightedgraph
+
+X = Fast input transform c -approxTSP( G ) A Graph G = ( V , E ) G , w T/F Hamiltonian Cycle algorithm Y = Fast output transform Q weightedgraph Transform X : G ′ is complete graph on V . w ( u , v ) = 1 if ( u , v ) ∈ E c | V | + 1 otherwise Transform Y : If | Q | ≤ c | V | then output “T” else output “F” Why does this work? Edges not in the original graph are so costly that there is a gap between cost of tour if G contains Ham Cycle (cost = | V | ) versus when it does not (cost > c | V | ). A c -approx. alg is sensitive
+
+X = Fast input transform c -approxTSP( G ) A Graph G = ( V , E ) G , w T/F Y = Fast output transform Q weightedgraph

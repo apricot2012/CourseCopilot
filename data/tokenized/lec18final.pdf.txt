@@ -1,0 +1,51 @@
+: Decision problems A where A ∈ NP-hard and
+
+P co-NP NP NP-hard NP-complete
+
+Circuit satisfiability is NP-hard
+
+How do we show other problems are NP-hard?
+
+Circuit satisfiability is NP-hard
+
+How do we show other problems are NP-hard?
+
+Satisfiability using an algorithm for A
+
+3SAT: Is a given boolean formula, which is the AND of several three-literal OR-clauses, satisfiable? Example: Is ( a ∨ b ∨ c ) ∧ ( a ∨ b ∨ c ) ∧ ( a ∨ c ∨ d ) satisfiable? Reduction: From CircuitSat to 3SAT Fastinput transform 3CNF formula 3SAT algorithm Circuit K Φ T/F CircuitSat algorithm
+
+From CircuitSat to 3SAT Fastinput transform 3CNF formula 3SAT algorithm Circuit K Φ T/F CircuitSat algorithm
+
+Input to CircuitSAT = Boolean Circuit x 1 x 2 x 3 x 4 AND NOT OR OR AND AND
+
+Input to CircuitSAT = Boolean Circuit x 1 x 2 x 3 x 4 AND NOT OR OR AND AND x 1 AND NOT OR OR AND AND OR x 3 x 4 x 2 y 1 y 2 y 3 y 4 y 5 y 6 y circuit where AND and OR gates have two
+
+x 1 AND NOT OR OR AND AND OR x 3 x 4 x 2 y 1 y 2 y 3 y 4 y 5 y 6 y 7 ∨ x 2 ∨ y 1 ) ∧ ( x 1 ∨ y 1 ) ∧ ( x 2 ∨ y 1 ) ∧ ( x 2 ∨ y 2 ) ∧ ( x 2 ∨ y 2 ) ∧ ( x 3 ∨ x ) ∧ ( x 3 ∨ y 3 ) ∧ ( x 2 ∨ y 3 ) ∧ ( y 3 ∨ x 4 ∨ y 4 ) ∧ ( y 3 ∨ y 4 ) ∧ ( x 4 ∨ y 4 ∨ y 2 ∨ y 5 ) ∧ ( y 1 ∨ y 5 ) ∧ ( y 2 ∨ y 5 ) ∧ ( y 2 ∨ y 4 ∨ y 6 ) ∧ ( y 2 ∨ y 6 ) ∧ ( y ) ∧ ( y 5 ∨ y 6 ∨ y 7 ) ∧ ( y 5 ∨ y 7 ) ∧ ( y 6 ∨ y 7 ) ∧ ( y 7 ) x 1 AND NOT OR OR AND AND OR x 3 x 4 x 2 y 1 y 2 y 3 y 4 y 5 y 6 y 7 AND a b c OR a b c NOT a b (cid:55)−→ ( a ∨ b ∨ c ) ∧ ( a ∨ c ) ∧ ( b ∨ c ) (cid:55)−→ ( a ∨ b ∨ c ) ∧ ( a ∨ c ) ∧ ( b ∨ c ) (cid:55)−→ ( a ∨ b ) ∧ ( a ∨ b )
+
+x 1 AND NOT OR OR AND AND OR x 3 x 4 x 2 y 1 y 2 y 3 y 4 y 5 y 6 y 7 ( x 1 ∨ x 2 ∨ y 1 ) ∧ ( x 1 ∨ y 1 ∨ z 1 ) ∧ ( x 1 ∨ y 1 ∨ z 1 ) ∧ ( x 2 ∨ y 1 ∨ z 2 ) ∧ ( x 2 ∨ y 1 ∨ z 2 ) ∧ ( x 2 ∨ y 2 ∨ z 3 ) ∧ ( x 2 ∨ y 2 ∨ z 3 )( x 2 ∨ y 2 ∨ z 4 ) ∧ ( x 2 ∨ y 2 ∨ z 4 ) ∧ ( x 3 ∨ x 2 ∨ y 3 ) ∧ ( x 3 ∨ y 3 ∨ z 5 ) ∧ ( x 3 ∨ y 3 ∨ z 5 ) ∧ ( x 2 ∨ y 3 ∨ z 6 ) ∧ ( x 2 ∨ y 3 ∨ z 6 ) ∧ ( y 3 ∨ x 4 ∨ y 4 ) ∧ ( y 3 ∨ y 4 ∨ z 7 ) ∧ ( y 3 ∨ y 4 ∨ z 7 ) ∧ ( x 4 ∨ y 4 ∨ z 8 ) ∧ ( x 4 ∨ y 4 ∨ z 8 ) ∧ ( y 1 ∨ y 2 ∨ y 5 ) ∧ ( y 1 ∨ y 5 ∨ z 9 ) ∧ ( y 1 ∨ y 5 ∨ z 9 ) ∧ ( y 2 ∨ y 5 ∨ z 10 ) ∧ ( y 2 ∨ y 5 ∨ z 10 ) ∧ ( y 2 ∨ y 4 ∨ y 6 ) ∧ ( y 2 ∨ y 6 ∨ z 11 ) ∧ ( y 2 ∨ y 6 ∨ z 11 ) ∧ ( y 4 ∨ y 6 ∨ z 12 ) ∧ ( y 4 ∨ y 6 ∨ z 12 ) ∧ ( y 5 ∨ y 6 ∨ y 7 ) ∧ ( y 5 ∨ y 7 ∨ z 13 ) ∧ ( y 5 ∨ y 7 ∨ z 13 ) ∧ ( y 6 ∨ y 7 ∨ z 14 ) ∧ ( y 6 ∨ y 7 ∨ z 14 ) ∧ ( y 7 ∨ z 15 ∨ z 16 ) ∧ ( y 7 ∨ z 15 ∨ z 16 ) ∧ ( y 7 ∨ z 15 ∨ z 16 ) ∧ ( y 7 ∨ z 15 ∨ z 16 ) a ∨ b (cid:55)−→ ( a ∨ b ∨ z ) ∧ ( a ∨ b ∨ z ) a (cid:55)−→ ( a ∨ w ∨ z ) ∧ ( a ∨ w ∨ z ) ∧ ( a ∨ w ∨ z ) ∧ ( a ∨ w ∨ z )) x 1 AND NOT OR OR AND AND OR x 3 x 4 x 2 y 1 y 2 y 3 y 4 y 5 y 6 y 7
+
+( x 1 ∨ x 2 ∨ y 1 ) ∧ ( x 1 ∨ y 1 ∨ z 1 ) ∧ ( x 1 ∨ y 1 ∨ z 1 ) ∧ ( x 2 ∨ y 1 ∨ z 2 ) ∧ ( x 2 ∨ y 1 ∨ z 2 ) ∧ ( x 2 ∨ y 2 ∨ z 3 ) ∧ ( x 2 ∨ y 2 ∨ z 3 )( x 2 ∨ y 2 ∨ z 4 ) ∧ ( x 2 ∨ y 2 ∨ z 4 ) ∧ ( x 3 ∨ x 2 ∨ y 3 ) ∧ ( x 3 ∨ y 3 ∨ z 5 ) ∧ ( x 3 ∨ y 3 ∨ z 5 ) ∧ ( x 2 ∨ y 3 ∨ z 6 ) ∧ ( x 2 ∨ y 3 ∨ z 6 ) ∧ ( y 3 ∨ x 4 ∨ y 4 ) ∧ ( y 3 ∨ y 4 ∨ z 7 ) ∧ ( y 3 ∨ y 4 ∨ z 7 ) ∧ ( x 4 ∨ y 4 ∨ z 8 ) ∧ ( x 4 ∨ y 4 ∨ z 8 ) ∧ ( y 1 ∨ y 2 ∨ y 5 ) ∧ ( y 1 ∨ y 5 ∨ z 9 ) ∧ ( y 1 ∨ y 5 ∨ z 9 ) ∧ ( y 2 ∨ y 5 ∨ z 10 ) ∧ ( y 2 ∨ y 5 ∨ z 10 ) ∧ ( y 2 ∨ y 4 ∨ y 6 ) ∧ ( y 2 ∨ y 6 ∨ z 11 ) ∧ ( y 2 ∨ y 6 ∨ z 11 ) ∧ ( y 4 ∨ y 6 ∨ z 12 ) ∧ ( y 4 ∨ y 6 ∨ z 12 ) ∧ ( y 5 ∨ y 6 ∨ y 7 ) ∧ ( y 5 ∨ y 7 ∨ z 13 ) ∧ ( y 5 ∨ y 7 ∨ z 13 ) ∧ ( y 6 ∨ y 7 ∨ z 14 ) ∧ ( y 6 ∨ y 7 ∨ z 14 ) ∧ ( y 7 ∨ z 15 ∨ z 16 ) ∧ ( y 7 ∨ z 15 ∨ z 16 ) ∧ ( y 7 ∨ z 15 ∨ z 16 ) ∧ ( y 7 ∨ z 15 ∨ z 16 )
+
+3CNF formula satisfied iff circuit is satisfied.
+
+1. Replace AND gates that have k > 2 inputs with a logically equivalent binary tree of k − 1 AND gates. Same for OR. AND AND AND AND AND abcde a b c d e (cid:55)−→ 2. Add new variables y i to each gate output. 3. Use AND a b c OR ab c NOT a b (cid:55)−→ ( a ∨ b ∨ c ) ∧ ( a ∨ c ) ∧ ( b ∨ c ) (cid:55)−→ ( a ∨ b ∨ c ) ∧ ( a ∨ c ) ∧ ( b ∨ c ) (cid:55)−→ ( a ∨ b ) ∧ ( a ∨ b ) to ensure y i = gate output for each AND, OR, NOT gate.
+
+The previous reduction (from CircuitSat) proves that 3SAT is NP-hard.
+
+is NP-complete we need to show 3SAT is in NP.
+
+An independent set is a set of vertices in a graph G common edge.
+
+IndependentSet takes graph G and integer k and outputs if G has an independent set of size k and “No” otherwise.
+
+IndependentSet is NP-hard.
+
+Fastinput transform Graphandsize IndSet algorithm Φ G , k T/F CNFformula
+
+Transform a 3CNF formula Φ into a graph G and integer k so that Φ is satisfied if and only if G has an independent set of size k .
+
+Fastinput transform Graphandsize IndSet algorithm Φ G , k T/F CNFformula
+
+Φ = ( a ) ∧ ( a ∨ b ) ∧ ( a ∨ c ) ∧ ( b ∨ c ∨ d ) a a b a c b c d G = k = 4
+
+Φ = ( a ) ∧ ( a ∨ b ) ∧ ( a ∨ c ) ∧ ( b ∨ c ∨ d ) a a b a c b c d G = k = 4

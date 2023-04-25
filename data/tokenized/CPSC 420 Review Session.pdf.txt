@@ -1,0 +1,140 @@
+Zero-knowledge Proofs
+
+The convex hull of a set P of points is the intersection of all convex sets that contain P , or equivalently the set of all convex combinations of P ( λ i p i , λ i = 1).
+
+The convex hull of a set P of points is the intersection of all convex sets that contain P , or equivalently the set of all convex combinations of P ( λ i p i , λ i = 1). A point p ∈ P is on the boundary of CH( P ) iff there exists a line ℓ through p with all P on one side of ℓ . CH( P )
+
+i i i A point p ∈ P is on the boundary of CH( P ) iff there exists a line ℓ through p with all P on one side of ℓ . CH( P )
+
+
+
+
+
+
+
+
+
+I can use convex hull to sort using the mapping i (cid:55)→ ( i , i 2 ) in time equal to O ( Convex + n ), so convex hull can’t be faster than comparison sorting, and I can use a decision tree to show that’s Ω(lg n ).
+
+I can use convex hull to sort using the mapping i (cid:55)→ ( i , i 2 ) in time equal to O ( Convex + n ), so convex hull can’t be faster than comparison sorting, and I can use a decision tree to show that’s
+
+(Reminder) in essence the tree has n ! leaves, which requires a depth of Ω( n lg n ).
+
+A Voronoi diagram of a set of n sites (points) s 1 , . . . , s n is a set of regions R 1 , . . . , R n where R i is the set of points x such that d ( x , s i ) ≤ d ( x , s j ) for all j.
+
+A Voronoi vertex is the intersection of Voronoi edges: { x | x in more than 2 Vor. Regions } .
+
+
+
+a O ( h log(log h ) 4 ) algorithm for Convex
+
+A flow network is a directed graph G = ( V , E ) in which edge ( u , v ) ∈ E has a positive capacity c ( u , v ) (non-edges capacity 0).
+
+contains a source vertex s and a sink vertex t .
+
+s a b d e t 3 3 4 10 2 1 1 5 1 2 5
+
+solution) path from s to t as much as s a b t 1 1 1 1 1
+
+Start with zero flow (a feasible solution) Repeat until impossible
+
+Choose an augmenting path from s to t Increase flow on this path as much as possible
+
+1. Start with zero flow (a feasible solution) 2. Repeat until impossible ▶ Choose an augmenting path from s to t ▶ Increase flow on this path as much as possible s a b t 1 1 1 1 1 s a b t The residual network of flow network G = ( V , E ) with flow f is G f = ( V , E f ) where E f = { ( u , v ) | f ( u , v ) < c ( u , v ) or f ( v , u ) > 0 } The residual capacity of an edge ( u , v ) ∈ E f is c f ( u , v ) = c ( u , v ) − f ( u , v ) if f ( u , v ) < c ( u , v ) f ( v , u ) if f ( v , u ) > 0 An augmenting path in G is an s ⇝ t path in G f
+
+Start with zero flow (a feasible solution) Repeat until impossible
+
+An augmenting path in G is an s ⇝ t path in G f
+
+14 7 s a b c d t 5 5 12 5 5 2 7 33 5 5 5 4 Residual 3 5 5 a d 3 5 7 3 5 s a b c d t Flow 3 10 7 17 10 s a b c d t Flow 5 5 0 5 4 12 7 17
+
+Residual network 3 5 5 = a d 8 5 a d
+
+O ( m | f ∗ | ) (pseudo-polynomial). Solution?
+
+O ( m | f ∗ | ) (pseudo-polynomial). Solution? Edmonds-Karp is O ( mn 2 ) by using shortest path. There is even faster though!
+
+A matching in a graph G is a subset M of its edges with no vertex the endpoint of more than
+
+matching edge
+
+
+
+A bipartite graph is a graph G = ( V , E ) where V can be partitioned into A and B such that ∀ ( u , v ) ∈ E , either u ∈ A and v ∈ B or u ∈ B and v ∈ A .
+
+A matching in a graph G is a subset M of its edges with no vertex the endpoint of more than
+
+matching edge
+
+B A
+
+A bipartite graph is a graph G = ( V , E ) where V can be partitioned into A and B such that ∀ ( u , v ) ∈ E , either u ∈ A and v ∈ B or u ∈ B and v ∈ A .
+
+Dynamic Programming is an oft-overloaded term. The two key things you need to call what you’re doing Dynamic Programming
+
+Dynamic Programming is an oft-overloaded term. The two key things you need to call what you’re doing Dynamic Programming
+
+Dynamic Programming is an oft-overloaded term. The two key things you need to call what you’re doing Dynamic Programming
+
+Dynamic Programming is an oft-overloaded term. The two key things you need to call what you’re doing Dynamic Programming
+
+or Top-Down solutions solve the top level by calling
+
+▶ Iterative or Bottom-Up solutions start with the sub-problems with no dependencies, then build up until they reach the top
+
+We have n items, each with a profit p i and a weight w i . Given a total profit P and total weight W , does there exists a set S ⊆ [ n ] with p S ≥ P , p S ≤ W ?
+
+Given a set of characters a 1 , a 2 , . . . , a α and a probability p i for each a i ( i p i = 1), construct an encoding c i for each character a i so that the expected length of an encoded message is minimized,
+
+Given a set of characters a 1 , a 2 , . . . , a α and a probability p i for each a i ( i p i = 1), construct an encoding c i for each character a i so that the expected length of an encoded message is minimized, then it’s just lookup.
+
+Imagine I promise you 2 compression algorithms: the first compresses to 70% on average, and at worst it compresses to 110%. The second compresses to 25% on average, and at worst it compresses to 97%. Why would you ask for the first?
+
+
+
+
+
+hand me a B -machine, I can write a polyime algorithm
+
+Prove A in NP if we want Completeness
+
+State your input mapping and output mapping
+
+Oh, and 0–1 integer programming (A sat-only variation)
+
+Sometimes, you get problems that are even hard to approximate!
+
+Wait, those equations look different.
+
+We have n items, each with a profit p i and a weight w i . Given a total weight W , maximize p S ≥ P by picking S ⊆ [ n ] with yx
+ p ≤ W .
+
+If Mouse follows a deterministic strategy, there is a sequence Cat probes that causes
+
+MouseCost( S ) ≥ ( m − 1)OPT( S ) Paging m − 1 = cache size m = different pages Mouse = page not in cache Cat probes = page requests Must move = page fault Randomized Marking Mouse (RMM) • Start at random spot • If Cat probes a spot, mark it • If Cat probes Mouse’s spot, Mouse moves to random unmarked spot
+
+m − 1 = cache size m = different pages Mouse = page not in cache Cat probes = page requests Must move = page fault
+
+• Start at random spot • If Cat probes a spot, mark it • If Cat probes Mouse’s spot, Mouse moves to random unmarked spot • If Mouse is at last unmarked spot, clear marks [phase ends]
+
+TRM runs to a random spot if found.
+
+What does the OPT mouse do?
+
+TRM runs to a random spot if found.
+
+What does the OPT mouse do? Hide in spot m
+
+E [#times RM found before MC probes m ] = E [#rolls of m -sided dice before m ] = m
+
+⇒ RM is m -competitive.
+
+Claim: Any Mouse A has E [ A ( S )] ∈ Ω(log m )OPT( S )
+
+= (( ax + b ) mod p ) mod m where p is a prime bigger
+
+Bob has two functions: secret S B () and public P B ()
+
+factoring easy ⇒ RSA breakable. factoring hard ⇒ RSA secure? (unknown)
+
+Any Questions?

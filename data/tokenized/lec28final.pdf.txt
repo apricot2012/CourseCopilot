@@ -1,0 +1,44 @@
+How is this possible?
+
+
+
+insert (x) 1. if T [ h 1 ( x )] = x or T [ h 2 ( x )] = x return 2. i ← h 1 ( x ) 3. repeat n times 4. y ← T [ i ] 5. T [ i ] ← x 6. if y = NULL return 7. if i = h 1 ( y ) then i ← h 2 ( y ) else i ← h 1 ( y ) 8. x ← y 9. rehash; insert( x )
+
+Cuckoo Graph 0 1 2 3 4 5 6 7 8 9 T h 1 h 2 A 0 3 B 3 8 C 1 2 H 4 7 P 5 8 W 7 4 X 7 0 Y 3 4 m − 1 = n = 8
+
+0 1 2 3 4 5 6 7 8 9 T h 1 h 2 A 0 3 B 3 8 C 1 2 H 4 7 P 5 8 W 7 4 X 7 0 Y 3 4 m − 1 = n = 8
+
+0 1 2 3 4 5 6 7 8 9 T h 1 h 2 A 0 3 B 3 8 C 1 2 H 4 7 P 5 8 W 7 4 X 7 0 Y 3 4 m − 1 = n = 8 0 1 2 3 4 5 6 7 8 9 Vertex i for every slot i = 0 , 1 , . . . , m − 1.
+
+0 1 2 3 4 5 6 7 8 9 T h 1 h 2 0 3 3 8 1 2 4 7 5 8 7 4 7 0 3 4 m − 1 = = 8 0 1 2 3 4 5 6 7 8 9 A A Vertex i for every slot i = 0 , 1 , . . . , m
+
+0 1 2 3 4 5 6 7 8 9 T h 1 h 2 A 0 3 B 3 8 C 1 2 H 4 7 P 5 8 W 7 4 X 7 0 Y 3 4 m − 1 = n = 8 0 1 2 3 4 5 6 7 8 9 A B A B Vertex i for every slot i =
+
+C 0 1 2 3 4 5 6 7 8 9 T h 1 h 2 0 3 3 8 1 2 4 7 5 8 7 4 7 0 3 4 m − 1 = n = 8 0 1 2 3 4 5 6 7 8 9 A B C A B Vertex i for every slot i = 0 , 1 ,
+
+C 0 1 2 3 4 5 6 7 8 9 T h 1 h 2 0 3 3 8 1 2 4 7 5 8 7 4 7 0 3 4 m − 1 = n = 8 0 1 2 3 4 5 6 7 8 9 A B C H A B H Vertex i for every slot i = 0 , 1 ,
+
+C 0 1 2 3 4 5 6 7 8 9 T h 1 h 2 0 3 3 8 1 2 4 7 5 8 7 4 7 0 3 4 m − 1 = = 8 0 1 2 3 4 5 6 7 8 9 A B C H P A B H P Vertex i for every slot i = 0 , 1 ,
+
+C 0 1 2 3 4 5 6 7 8 9 T h 1 h 2 0 3 3 8 1 2 4 7 5 8 7 4 7 0 3 4 m − 1 = n = 8 0 1 2 3 4 5 6 7 8 9 A B C H P W A B H P W Vertex i for every slot i = 0 , 1 , . . . , m −
+
+C 0 1 2 3 4 5 6 7 8 9 T h 1 h 2 0 3 3 8 1 2 4 7 5 8 7 4 7 0 3 4 m − 1 = n = 8 0 1 2 3 4 5 6 7 8 9 A B C H P W A B H P W X Vertex i for every slot i = 0 , 1 , . . . , m
+
+C 0 1 2 3 4 5 6 7 8 9 A B C H P W A B H P W X
+
+0 1 2 3 4 5 6 7 8 9 T h 1 h 2 0 3 3 8 1 2 4 7 5 8 7 4 7 0 3 4 m − 1 = n = 8 0 1 2 3 4 5 6 7 8 9 C 0 1 2 3 4 5 6 7 8 9 A B H P W X X C A P W H B Vertex i for every slot i = 0 , 1 , . . . , m − Edge ( h ( x ) , h ( x )) for every item
+
+0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 C 0 1 2 3 4 5 6 7 8 9 A B H P W X X C A P W H B
+
+0 1 2 3 4 5 6 7 8 9 T h 1 h 2 0 3 3 8 1 2 4 7 5 8 7 4 7 0 3 4 m − 1 = = 8 0 1 2 3 4 5 6 7 8 9 C 0 1 2 3 4 5 6 7 8 9 A B H P W X X C A P W H B Y Vertex i for every slot i = 0 , 1 , . .
+
+0 1 2 3 4 5 6 7 8 9 T h 1 h 2 0 3 3 8 1 2 4 7 5 8 7 4 7 0 3 4 m − 1 = n = 8 0 1 2 3 4 5 6 7 8 9 C 0 1 2 3 4 5 6 7 8 9 A B H P W X X C A P W H B Y Vertex i for every slot i = 0 , 1 , . . . , m − 1.
+
+Lemma 1: For any slots i and j and any c > 1, if m ≥ 2 cn then the probability that a shortest path from i to j has length ℓ in the cuckoo graph is ≤ 1 c ℓ m . Proof: Such a path exists of length ℓ = 1 iff some item x has ( h 1 ( x ) , h 2 ( x )) = ( i , j ) or ( j , i ). This happens with probability ≤ n (choices for x ) (2 / m 2 ) ≤ 1 / ( cm ) (assuming h 1 and h 2 are random). Proceed by induction on ℓ . There is a shortest path from i to j of length ℓ ≥ 2 iff there is (1) a shortest path of length ℓ − 1 from i to k (that avoids j ) probability ≤ 1 c ℓ − 1 m by induction and (2) an edge from k to j (for some k ̸ = i , j ). probability ≤ n (2 / m 2 ) ≤ 1 / ( cm )
+
+Lemma 2: The probability that x and y are in the same bucket is O (1 / m ). Proof: Items x and y are in the same bucket iff there is a path of length ℓ (for some ℓ ) from h 1 ( x ) or h 2 ( x ) to h 1 ( y ) or h 2 ( y ). This happens with probability ≤ 4 ∞ 7
+ ℓ =1 1 c ℓ m = 4 ( c − 1) m = O (1 / m ). Theorem: If there is no cycle in the cuckoo graph then the expected time for insert( x ) is O (1) Proof: Only those items y ̸ = x that are in the same bucket as x can cause cuckoo swaps during insert( x ) and each y causes at most one swap (assuming there is no cycle). The probability that item y is in the same bucket as x is O (1 / m ) (Lemma 2). So the total expected number of swaps is ≤ ( n − 1) (choices for y ) · O (1 / m ) = O (1)
+
+insert (x) 1. if T [ h 1 ( x )] = x or T [ h 2 ( x )] = x return 2. i ← h 1 ( x ) 3. repeat n times 4. y ← T [ i ] 5. T [ i ] ← x 6. if y = NULL return 7. if i = h 1 ( y ) then i ← h 2 ( y ) else i ← h 1 ( y ) 8. x ← y 9. rehash; insert( x ) Lemma 3: If m ≥ 2 cn then the probability of a cycle in the cuckoo graph after n insertions is at most 1 c − 1 . Proof: Slot i is involved in a cycle iff there is a path from i to itself of length ℓ ≥ 1. By Lemma 1, this happens with probability ≤ ∞ ℓ =1 1 c ℓ m = 1 ( c − 1) m . Summing over all m slots, gives probability
+
+m . Summing over all m slots, gives probability

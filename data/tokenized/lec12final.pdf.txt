@@ -1,0 +1,39 @@
+x 1 + 6 x 2 ≤ 200 y 1 + 300 y 2 + 400 y 3 for all x 1 ≤ 200 for all y 1 + y 3 ≥ 1 x 2 ≤ 300 y 2 + y 3 ≥ 6 x 1 + x 2 ≤ 400 x 1 , x 2 ≥ 0 y 1 , y 2 , y 3 ≥ 0 objective value of any feasible solution of the dual LP is an
+
+max c 1 x 1 + · · · + c n x n min b 1 y 1 + · · · + b m y m a i , 1 x 1 + · · · + a i , n x n ≤ b i a 1 , j y 1 + · · · + a m , j y m ≥ c j x j ≥ 0 y i ≥ 0 i = 1 . . . m j = 1 . . . n i = 1 . . . m j = 1 . . . n max c · x subject to: Ax ≤ b x ≥ 0 min y · b subject to: yA ≥ c y ≥ 0
+
+What is a longest common subsequence (LCS) of: A B A N D O N B A D N O D N O A string (array of characters) Z [1 .. k ] is a subsequence of X [1 .. m ] if there exist indices i 1 < i 2 < · · · < i k such that Z [ j ] = X [ i j ] for all
+
+A string (array of characters) Z [1 .. k ] is a subsequence of X [1 .. m ] if there exist indices i 1 < i 2 < · · · < i k such that Z [ j ] = X [ i j ] for all j = 1 . . . k . Given: Two character strings X and Y ( | X | = m , | Y | = n ) Find: LCS of X and Y If last characters match (i.e. X [ m ] = Y [ n ]) Then there is some LCS that ends with this character. (Why?) So recursively find LCS( X [1 .. m − 1], Y [1 .. n − 1]) and add X [ m ].
+
+What if the last characters don’t match? A B A N D O N B A D N O D N O Then X [ m ] might match something in Y [1 .. n − 1] Or Y [ n ] might match something in X [1 .. m − 1] But not both. (Why?) So recursivly find LCS( X [1 .. m ], Y [1 .. n − 1]) and LCS( X [1 .. m − 1], Y [1 .. n ]) and return the longest. LCS(X,Y) 1. m = | X | , n = | Y | , If m = 0 or n = 0 return ∅ 2. If X [ m ] = Y [ n ] return LCS( X [1 .. m − 1], Y [1 .. n − 1]) ◦ X [ m ] 3. Else return longer of LCS( X [1 .. m ], Y [1 .. n − 1]) and LCS( X [1 .. m − 1], Y [1 .. n ])
+
+Dynamic programming is a technique for avoiding repeated recursive calls by:
+
+Storing the solutions to subproblems.
+
+∅ A B A N D O N ∅ B A D N O D N O
+
+Dynamic programming is a technique for avoiding repeated recursive calls by:
+
+Storing the solutions to subproblems.
+
+∅ A B A N D O N ∅ 0 0 0 0 0 0 0 0 B 0 0 1 1 1 1 1 1 A 0 1 1 2 2 2 2 2 D 0 1 1 2 2 3 3 3 N 0 1 1 2 3 3 3 4 O 0 1 1 2 3 3 4 4 D 0 1 1 2 3 4 4 4 N 0 1 1 2 3 4 4 5 O 0 1 1 2 3 4 5 5
+
+Dynamic Programming LCS T [ i , j ] = LCS( X [1 .. i ], Y [1 .. j ]) T [ i , j ] = T [ i − 1 , j − 1] ◦ X [ i ] if X [ i ] = Y [ j ] max { T [ i − 1 , j ] , T [ i , j − 1] } otherwise LCS(X,Y) 1. T [0 , 0] = ∅ 2. For i = 1 to m T [ i , 0] = ∅ 3. For j = 1 to n T [0 , j ] = ∅ 4. For i = 1 to m 5. For j = 1 to n 6. if X [ i ] = Y [ j ] then T [ i , j ] = T [ i − 1 , j − 1] ◦ X [ i ] 7. else T [ i , j ] = max { T [ i − 1 , j ] , T [ i , j − 1] } 8. return T [ m , n ] Running time?
+
+What is a longest increasing subsequence of: 5 3 4 9 6 2 1 8 A sequence S [1 .. k ] is increasing if S [ i ] < S [ i + 1] ∀ i = 1 .. k − 1. Given: A sequence of numbers R [1 .. n ]. Find: LIS of R Use LCS to solve LIS LIS( R ) 1. S = 2. output LCS( S , R )
+
+5 3 4 9 6 2 1 8 ↑ 3 4 9 or 3 4 6?
+
+5 3 4 9 6 2 1 8 ↑ 3 4 9 or 3 4 6?
+
+1 2 5 3 4 ↑ want shorter IS as well
+
+5 3 4 9 6 2 1 8 ↑ 3 4 9 or 3 4 6?
+
+1 2 5 3 4 ↑ want shorter IS as well
+
+5 3 4 9 6 2 1 8 ↑ 3 4 9 or 3 4 6?
+
+1 2 5 3 4 ↑ want shorter IS as well

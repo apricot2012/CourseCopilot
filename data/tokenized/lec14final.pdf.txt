@@ -1,0 +1,28 @@
+8 3 4 9 6 2 1 5 7 2 R [ k ] extends BIS[ j ] iff BIS[ j ] . last < R [ k ] and ( j = | BIS | or BIS[ j + 1] . last > R [ k ]) Maintain lists L [0] , L [1] , .. where L 0 [0] = [0]. After we scan R [1 .. k ] L k [ j ] = L k − 1 [ j ] ◦ R [ k ] if R [ k ] extends BIS k − 1 [ j ] L k − 1 [ j ] otherwise L [0] = 0 L [1] = 8 3 2 1 L [2] = 4 2 L [3] = 9 6 5 L [4] = 7 use binary search to ﬁnd Running time? a b means b extended BIS ending with As a result list L k [ i ] ends with BIS k [ j ] . last at step k .
+
+= = A B C B A C C B B x x x C x x x D A x x B x x x C x x x C x x x
+
+= X = A B C B A C C B B x ○ x x C x ○ x x D A x x B x x ○ x C x x ○ x C x x x ○ 1 , 2 2 , 3 5 , 4 6 , 6 7 , 7 Longest Common Subsequence = BCBCC
+
+What properties do the circled entries have?
+
+= X Y = A B C B A C C B B x ○ x x C x ○ x x D A x x B x x ○ x C x x ○ x C x x x ○ 1 , 2 2 , 3 5 , 4 6 , 6 7 , 7 Longest Common Subsequence = BCBCC
+
+What properties do the circled entries have?
+
+= X Y = A B C B A C C B B x ○ x x C x ○ x x D A x x B x x ○ x C x x ○ x C x x x ○ 1 , 2 2 , 3 5 , 4 6 , 6 7 , 7 Longest Common Subsequence = BCBCC index-pairs of matches in top-bottom, right-left 1 1 1 2 2 2 4 4 5 5 5 6 6 6 7 7 7 8 4 2 7 6 3 5 1 8 4 2 7 6 3 7 6 3 = S
+
+LCS( X , Y ) 1. Stably sort X keeping track of each character’s index in X 2. for i = 1 to n 3. look up Y [ i ] in sorted X 4. add indices of matching characters in reverse order to S 5. Q = LIS( S ) 6. Output X [ Q ] (characters in X indexed by Q ) X = A B C B A C C B Y = B C D A B C C A A B B B C C C 1 5 2 4 8 3 6 7
+
+In practice: Use hashing rather than sorting.
+
+(0, 0) D A R V A T R A V A D ( x , y − 1) ↓ ( x , y ) insert Y [ y ] ( x − 1, y ) → ( x , y ) delete X [ x ] ( x − 1, y − 1) Nu
+ ( x , y ) X [ x ] = Y [ y ] = X Y = red cost = 1 black cost = 0 ( m , n )
+
+(0, 0) D A R V A T R A V A D ( x , y − 1) ↓ ( x , y ) insert Y [ y ] ( x − 1, y ) → ( x , y ) delete X [ x ] ( x − 1, y − 1) ( x , y ) X [ x ] = Y [ y ] = X Y = red cost = 1 black cost = 0 ( m , n )
+
+(0, 0) D A R V A T R A V A D ( x , y − 1) ↓ ( x , y ) insert Y [ y ] ( x − 1, y ) → ( x , y ) delete X [ x ] ( x − 1, y − 1) ( x , y ) X [ x ] = = X Y = red cost = 1 black cost = 0 ( m , n ) 0 1 2 3 4 5 Edit distance d ( X , Y ) ≡ shortest path length from (0 , 0) to (
+
+(0, 0) D A R V A T R A V A D ( x , y − 1) ↓ ( x , y ) insert Y [ y ] ( x − 1, y ) → ( x , y ) delete X [ x ] ( x − 1, y − 1) ( x , y ) X [ x ] = Y [ y ] = X Y = red cost = 1 black cost = 0 ( m , n ) 0 1 2 3 4 5 Edit distance d ( X , Y ) ≡ shortest path length from (0 , 0) to ( m , n ).
+
+Running time: O ( d ( n + m )).

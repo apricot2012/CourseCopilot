@@ -1,0 +1,29 @@
+1. Start with zero flow (a feasible solution) 2. Repeat until impossible ▶ Choose an augmenting path from s to t ▶ Increase flow on this path as much as possible s a b t 1 1 1 1 1 s a b t The residual network of flow network G = ( V , E ) with flow f is G f = ( V , E f ) where E f = { ( u , v ) | f ( u , v ) < c ( u , v ) or f ( v , u ) > 0 } The residual capacity of an edge ( u , v ) ∈ E f is c f ( u , v ) = c ( u , v ) − f ( u , v ) if f ( u , v ) < c ( u , v ) f ( v , u ) if f ( v , u ) > 0 An augmenting path in G is an s ⇝ t path in G f
+
+Start with zero flow (a feasible solution) Repeat until impossible
+
+An augmenting path in G is an s ⇝ t path in G f
+
+
+
+For flow networks ( V , E ) with integral capacities: Running time O ( | E | size( f ∗ ))
+
+Lemma: The length d 1 ( s , v ) (# edges) of the shortest path in residual network G 1 from s to v cannot decrease in residual network G 2 after a shortest aug. path augmentation. Proof: Suppose d 1 ( s , v ) does decrease to d 2 ( s , v ) < d 1 ( s , v ). Pick such a v with smallest d 2 ( s , v ). Let u be the vertex before v in this shortest aug. path in G 2 ( v ̸ = s so u exists). d 2 ( s , v ) = d 2 ( s , u ) + 1 ≥ d 1 ( s , u ) + 1 u is closer to s ≥ d 1 ( s , v ) see (1) and (2) ⇒⇐ □ (1) If ( u , v ) ∈ G 1 then d 1 ( s , v ) ≤ d 1 ( s , u ) + 1 (2) If ( u , v ) ̸∈ G 1 then augmentation created ( u , v ) in G 2 G 1 s v u t This is a shortest aug. path so d 1 ( s , u ) = d 1 ( s , v ) + 1 and d 1 ( s , u ) > d 1 ( s , v )
+
+A critical edge on an aug. path is edge with smallest residual capacity on path. G a s u v t ⇓ shortest aug.path ( u , v ) critical augment s u v t ⇓ ... ⇓ ( u , v ) (cid:54)∈ res. network ( u , v ) can’t be in aug. path until ﬂow is pushed back from v to u s u v t s u v t shortest aug.path G b ⇓ augment d a ( s , v ) = d a ( s , u ) + 1 shortest path prefix is shortest d b ( s , u ) = d b ( s , v ) + 1 ≥ d a ( s , v ) + 1 = d a ( s , u ) + 2
+
+shortest path prefix is shortest
+
+matching edge
+
+A matching in a graph G is a subset M of its edges with no vertex the endpoint of more than
+
+A matching in a graph G is a subset M of its edges with no vertex the endpoint of more than
+
+matching edge
+
+B A
+
+A bipartite graph is a graph G = ( V , E ) where V can be partitioned into A and B such that ∀ ( u , v ) ∈ E , either u ∈ A and v ∈ B or u ∈ B and v ∈ A .
+
+Given bipartite graph G = ( V , E ) with partitions A and B : 1. Create a flow network F = ( V ′ , E ′ ) V ′ = V ∪ { s , t } add source E ′ = { ( u , v ) | u ∈ A , v ∈ B , ( u , v ) ∈ E } edges from ∪ { ( s , u ) | u ∈ A } edges from ∪ { ( v , t ) | v ∈ B } edges from Set all capacities to 1. 2. Find maximum flow f in F 3. Output edges ( u , v ) ∈ E such that f ( u , v ) = 1

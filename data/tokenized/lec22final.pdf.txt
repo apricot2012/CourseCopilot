@@ -1,0 +1,69 @@
+Imagine you’re an uber driver picking clients.
+
+uber driver picking clients.
+
+Imagine you’re an uber driver picking clients.
+
+
+
+
+
+Motivation: you interview several people for a position, should you stop interviewing and hire someone?
+
+
+
+Say you’ll interview only 3 people;
+
+
+
+So you should pick the first one, but...
+
+
+
+There are 6 possible permutations:
+
+There are 6 possible permutations: Strategy: always reject the first
+
+Strategy: always reject the first candidate and accept the second
+
+
+
+Can you think about a strategy? Will the probability of converge to 0?
+
+converge to 0?
+
+Can you think about a strategy? Will the probability of converge to 0?
+
+about a strategy? Will the probability of success
+
+Consider the following strategy: reject first k candidates and then propose to the first candidate better than all previous ones.
+
+Let A i denote the event that the best candidate is the i th candidate. P ( the best is chosen ) = n i = 1 P ( the best is chosen | A i ) P ( A i )
+
+kn , then P ( the best is chosen ) ≈ x ln( x − 1 ) = − x ln( x ) .
+
+Define x = kn , then P ( the best is chosen ) ≈ x ln( x − 1 ) = − x ln( x ) . You can optimize x by taking derivative equal to 0.
+
+Define x = kn , then P ( the best is chosen ) ≈ x ln( x − 1 ) = − x ln( x You can optimize x by taking derivative equal to 0. So the optimal choice is to take k ≈ n / e and this guarantees we choose the best candidate with probability 1 / e .
+
+Our objective function was the probability of choosing the best and we got a probability of 1 e .
+
+we got a probability of 1 e .
+
+Therefore, our online algorithm is 1 e -competitive.
+
+Theorem (Dynkin 1963) In the Hiring Problem, the optimal strategy selects the best candidate with probability 1 e .
+
+
+
+If you reject the first 30 % of the candidates (instead of a 1 e fraction), your chances of getting the best would drop to 36 % , the chances of no hiring would drop to 30 % .
+
+Try to always think about the practical and ethical consequences your modeling choices.
+
+Intuitively this is when you know something about the candidates beforehand (you read their CVs).
+
+Intuitively, here we add a cost on each interview.
+
+Objective: maximize expected total gain.
+
+You can also consider richer combinatorial constraints: instead just choosing one candidate you may want to choose k or a set of candidates given some feasibility constraints.

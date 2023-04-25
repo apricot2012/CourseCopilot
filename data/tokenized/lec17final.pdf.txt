@@ -1,0 +1,49 @@
+A # B C a / a / 0 b / 1 1 1 b / 10 a / 0 b / 1 # /10 #/0 #/11 input T Output a # 0 aa # 010 Require: output of M uniquely determines input T . Show all FSC with s states can’t compress better than r (
+
+A # B C a / a / 0 b / 1 1 1 b / 10 a / 0 b / 1 # /10 #/0 #/11
+
+If two phrases x and y cause the same output going from A to B then M outputs the same encoding for wx # ̸ = wy #, where w takes M to state A . Assume c j = s 2 2 j for all j ≤ k i.e. use max number of short codes. c ( T ) = k j =0 c j ≤ s 2 k j =0 2 j = s 2 (2 k +1 − 1) Total length of encoding by M : | M ( T ) | ≥ k j =0 jc j = s 2 k j =0 j 2 j = s 2 (( k − 1)2 k +1 + 2) = r s ( T )
+
+| LZ78( T ) | ≤ c ( T ) log 2 c ( T )
+
+causes it to output 1? x 1 x 2 x 3 x 4 (( x 1 ∧ x 2 ) ∨ x 2 ) ∧ ( x 2 ∧ ( x 3 ∨ x 2 ∨ x AND NOT OR OR AND AND
+
+A decision problem is a problem (a problem takes an input and produces an output) whose output is either “Yes” or “No”.
+
+Do all inputs to a given boolean circuit cause
+
+a proof that can be checked in polynomial time. P co-NP NP Primality Satisﬁability Tautology LCSpanningTree
+
+Our current guess of P vs NP vs co-NP
+
+P co-NP NP NP-hard NP-complete
+
+Circuit satisfiability is NP-hard
+
+How do we show other problems are NP-hard?
+
+Circuit satisfiability is NP-hard
+
+How do we show other problems are NP-hard?
+
+Satisfiability using an algorithm for A
+
+3SAT: Is a given boolean formula, which is the AND of several three-literal OR-clauses, satisfiable?
+
+CircuitSat algorithm
+
+Fastinput transform 3CNF formula 3SAT algorithm Circuit K Φ T/F
+
+x 1 x 2 x 3 x 4 AND NOT OR OR AND AND
+
+x 1 AND NOT OR OR AND AND OR x 3 x 4 x 2 y 1 y 2 y 3 y 4 y 5 y 6 y 7
+
+x 1 AND NOT OR OR AND AND OR x 3 x 4 x 2 y 1 y 2 y 3 y 4 y 5 y 6 y 7 a ∧ b = c (cid:55)−→ ( a ∨ b ∨ c ) ∧ ( a ∨ c ) ∧ ( b ∨ c ) a ∨ b = c (cid:55)−→ ( a ∨ b ∨ c ) ∧ ( a ∨ c ) ∧ ( b ∨ c ) a = b (cid:55)−→ ( a ∨ b ) ∧ ( a ∨ b )
+
+( x 1 ∨ x 2 ∨ y 1 ) ∧ ( x 1 ∨ y 1 ) ∧ ( x 2 ∨ y 1 ) ∧ ( x 2 ∨ y 2 ) ∧ ( x 2 ∨ y 2 ) ∧ ( x 3 ∨ x 2 ∨ y 3 ) ∧ ( x 3 ∨ y 3 ) ∧ ( x 2 ∨ y 3 ) ∧ ( y 3 ∨ x 4 ∨ y 4 ) ∧ ( y 3 ∨ y 4 ) ∧ ( x 4 ∨ y 4 ) ∧ ( y 1 ∨ y 2 ∨ y 5 ) ∧ ( y 1 ∨ y 5 ) ∧ ( y 2 ∨ y 5 ) ∧ ( y 2 ∨ y 4 ∨ y 6 ) ∧ ( y 2 ∨ y 6 ) ∧ ( y 4 ∨ y 6 ) ∧ ( y 5 ∨ y 6 ∨ y 7 ) ∧ ( y 5 ∨ y 7 ) ∧ ( y 6 ∨ y 7 ) ∧ ( y 7 )
+
+x 1 AND NOT OR OR AND AND OR x 3 x 4 x 2 y 1 y 2 y 3 y 4 y 5 y 6 y 7 ∨ b (cid:55)−→ ( a ∨ b ∨ z ) ∧ ( a ∨ b ∨ z ) a (cid:55)−→ ( a ∨ w ∨ z ) ∧ ( a ∨ w ∨ z ) ∧ ( a ∨ w ∨ z ) ∧ ( a ∨ w
+
+( x 1 ∨ x 2 ∨ y 1 ) ∧ ( x 1 ∨ y 1 ∨ z 1 ) ∧ ( x 1 ∨ y 1 ∨ z 1 ) ∧ ( x 2 ∨ y 1 ∨ z 2 ) ∧ ( x 2 ∨ y 1 ∨ z 2 ) ∧ ( x 2 ∨ y 2 ∨ z 3 ) ∧ ( x 2 ∨ y 2 ∨ z 3 )( x 2 ∨ y 2 ∨ z 4 ) ∧ ( x 2 ∨ y 2 ∨ z 4 ) ∧ ( x 3 ∨ x 2 ∨ y 3 ) ∧ ( x 3 ∨ y 3 ∨ z 5 ) ∧ ( x 3 ∨ y 3 ∨ z 5 ) ∧ ( x 2 ∨ y 3 ∨ z 6 ) ∧ ( x 2 ∨ y 3 ∨ z 6 ) ∧ ( y 3 ∨ x 4 ∨ y 4 ) ∧ ( y 3 ∨ y 4 ∨ z 7 ) ∧ ( y 3 ∨ y 4 ∨ z 7 ) ∧ ( x 4 ∨ y 4 ∨ z 8 ) ∧ ( x 4 ∨ y 4 ∨ z 8 ) ∧ ( y 1 ∨ y 2 ∨ y 5 ) ∧ ( y 1 ∨ y 5 ∨ z 9 ) ∧ ( y 1 ∨ y 5 ∨ z 9 ) ∧ ( y 2 ∨ y 5 ∨ z 10 ) ∧ ( y 2 ∨ y 5 ∨ z 10 ) ∧ ( y 2 ∨ y 4 ∨ y 6 ) ∧ ( y 2 ∨ y 6 ∨ z 11 ) ∧ ( y 2 ∨ y 6 ∨ z 11 ) ∧ ( y 4 ∨ y 6 ∨ z 12 ) ∧ ( y 4 ∨ y 6 ∨ z 12 ) ∧ ( y 5 ∨ y 6 ∨ y 7 ) ∧ ( y 5 ∨ y 7 ∨ z 13 ) ∧ ( y 5 ∨ y 7 ∨ z 13 ) ∧ ( y 6 ∨ y 7 ∨ z 14 ) ∧ ( y 6 ∨ y 7 ∨ z 14 ) ∧ ( y 7 ∨ z 15 ∨ z 16 ) ∧ ( y 7 ∨ z 15 ∨ z 16 ) ∧ ( y 7 ∨ z 15 ∨ z 16 ) ∧ ( y 7 ∨ z 15 ∨ z 16 )
+
+3CNF formula satisfied iff circuit is satisfied.
