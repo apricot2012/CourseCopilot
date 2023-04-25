@@ -1,0 +1,40 @@
+s a b c d e t 3 3 4 10 2 1 1 5 1 2 5
+
+feasible solution) path from s to t as much as s a b t 1 1 1 1 1
+
+Start with zero flow (a feasible solution) Repeat until impossible
+
+Choose an augmenting path from s to t Increase flow on this path as much as possible
+
+1. Start with zero flow (a feasible solution) 2. Repeat until impossible ▶ Choose an augmenting path from s to t ▶ Increase flow on this path as much as possible s a b t 1 1 1 1 1 s a b t The residual network of flow network G = ( V , E ) with flow f is G f = ( V , E f ) where E f = { ( u , v ) | f ( u , v ) < c ( u , v ) or f ( v , u ) > 0 } The residual capacity of an edge ( u , v ) ∈ E f is c f ( u , v ) = c ( u , v ) − f ( u , v ) if f ( u , v ) < c ( u , v ) f ( v , u ) if f ( v , u ) > 0 An augmenting path in G is an s ⇝ t path in G f
+
+Start with zero flow (a feasible solution) Repeat until impossible
+
+An augmenting path in G is an s ⇝ t path in G f
+
+diﬀerence = a ∈ S −{ v } b ∈ T + { v } f ( a , b ) − f ( b , a ) − a ∈ S , b ∈ T f ( a , b ) − f ( b , a ) = a ∈ S −{ v } ( f ( a , v ) − f ( v , a )) − >
+ b ∈ T ( f ( v , b ) − f ( b , v )) = u ∈ V f ( u , v ) − w ∈ V f ( v , w ) = 0 f ( S − { v } , T + { v } ) f ( S , T ) 2. = Repeat until S = { s } implies size( f ) = f ( S , T ) □
+
+Theorem: If residual network G f has no augmenting path then f is a max size flow. Proof: Let S = { v | s ⇝ v in G f } . The sink t ̸∈ S since G f has no augmenting path. Let T = V − S . Size of flow f = f ( S , T ) equals c ( S , T ) since f ( u , v ) = c ( u , v ) for u ∈ S , v ∈ T . Size of any flow ≤ c ( S , T ) by Lemma. □ Max-Flow Min-Cut Theorem Size of max-flow f ∗ equals capacity of min capacity cut ( S ∗ , T ∗ ) . Proof: size( f ∗ ) ≤ c ( S ∗ , T ∗ ) by Lemma size( f ∗ ) = c ( S , T ) where S = { v | s ⇝ v in G f ∗ } and c ( S , T ) ≥ c ( S ∗ , T ∗ ) since ( S ∗ , T ∗ ) is min capacity cut. □ Integrality Theorem If all capacities are integers then there is a max-flow with integer flow on every edge.
+
+For flow networks ( V , E ) with integral capacities: Running time O ( | E | size( f ∗ ))
+
+For flow networks ( V , E ) with integral capacities: Running time O ( | E | size( f ∗ ))
+
+Running time O ( | E | size( f ∗ )) For flow networks ( V , E ) with irrational capacities: Running time ∞ s t 1 1 φ φ = √ 5 − 1 2 < 1 1 − φ = φ 2
+
+s t 1 1 φ φ = √ 5 − 1 2 < 1 1 − φ = φ 2
+
+For flow networks ( V , E ) with integral capacities: Running time O ( | E | size( f ∗ ))
+
+For flow networks ( V , E ) with irrational capacities: Running time ∞
+
+Running time O ( | V || E | 2 ) regardless of capacities
+
+For flow networks ( V , E ) with integral capacities: Running time O ( | E | size( f ∗ ))
+
+Running time O ( | V || E | 2 ) regardless of capacities
+
+O ( | V || E | ) O ( | E | 1+ o (1) )
+
+[Chen-Kyng-Liu-Peng-Gutenberg-Sachdeva 2022]

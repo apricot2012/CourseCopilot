@@ -1,0 +1,65 @@
+CPSC 420: Lecture 26 The Experts Problem and Multiplicative Weights
+
+No supplementary reading, but sources for the brave:
+
+N. Garg and J. Knemann, Faster and Simpler Algorithms for Multicommodity Flow and Other Fractional
+
+The Experts Problem
+
+Day 1 2 3 4 5 ALG Stock m ALG
+
+The stock performance is adversarial.
+
+Day 1 2 3 4 5 e 1 e 2 e 3 ALG Stock m ALG
+
+Strategy 1: Follow the majority prediction
+
+Day 1 2 3 4 5 e 1 e 2 e 3 ALG Stock m ∗ m ALG
+
+Strategy 1: Follow the majority prediction
+
+Day 1 2 3 4 5 e 1 e 2 e 3 ALG Stock m ∗ m ALG
+
+Update Rule Initially, w i (1) = 1 for all i . For every day after, w i ( t + 1) = 󰀫 w i ( t ) , if i is correct on day t 12 w i ( t ) , if i is wrong on day t
+
+Day 1 2 3 4 5 e 1 w 1 1 e 2 w 2 1 e 3 w 3 1 W ↑ W ↓ ALG Stock m ∗ m ALG
+
+Let: w i ( t ) = weight of expert i at the start of day t m i ( t ) = total mistakes of expert i at the end of day t Goal: Discern some relationships. We want to relate the number mistakes of the algorithm to m i . First: Relate m i to w i . Observe that w i ( t ) is halved for every mistake i makes. w i ( t + 1) = 1 2 × 1 2 × · · · × 1 2 󰁿 󰁾󰁽 󰂀 m i ( t ) times w i (1) = 󰀕 1 2 󰀖 m i ( t )
+
+mistake i makes. w i ( t + 1) = 1 2 × 1 2 × · · · × 1 2 󰁿 󰁾󰁽 󰂀 m i ( t ) times w i (1) = 󰀕 1 2 󰀖 m i ( t )
+
+Let W ( t ) = i w i ( t ) (the “potential”, or How does the potential evolve over time?
+
+Let W ( t ) = 󰁓 i w i ( t ) (the “potential”, or “total trust”) How does the potential evolve over time? W ( t + 1) = 󰀣 󰁛 i correct w i ( t ) 󰀤 󰁿 󰁾󰁽 󰂀 W + ( t ) + 1 2 󰀳 󰁃 󰁛 i wrong w i ( t ) 󰀴 󰁄 󰁿 󰁾󰁽 󰂀 W − ( t ) = W + ( t ) + 1 2 W − ( t ) Also: W ( t ) = W + ( t ) + W − ( t ). Therefore... W ( t + 1) = W ( t ) − W − ( t ) + 1 2 W − ( t ) = W ( t ) 1 W − ( t )
+
+Last slide: W ( t + 1) = W ( t ) − 12 W − ( t ). If the algorithm guesses wrong, W − ( t ) ≥ 12 W ( t ). Then, W ( t + 1) ≤ W ( t ) − 1 2 󰀕 1 2 W ( t ) 󰀖 = 3 4 W ( t ) So every time the algorithm is wrong, the potential goes down by
+
+Say we have ﬁnished day T , start of day T + 1. Say our algorithm has made m ALG ( T ) mistakes.
+
+Say our algorithm has made m ALG ( T ) mistakes. The total trust is at most W ( T + 1) ≤ 3 4 × 3 4 × · · · · × 3 4 󰁿 󰁾󰁽 󰂀 k times W (1) = 󰀕 3 4 󰀖 m ALG ( T ) · n . From before: w i ( T + 1) ≥ 󰀃 12 󰀄 m i ( T ) . Now, an easy bound: w i ( T + 1) ≤ W ( T + 1) ≤ 34 m ALG ( T ) · n .
+
+Just algebra from here. 󰀕 1 2 󰀖 m i ( T ) ≤ 󰀕 3 4 󰀖 m ALG ( T ) n m i ( T ) · log 1 2 ≤ m ALG ( T ) · log 3 4 + log n take logs m ALG ( T ) ≤ 2 . 41 m i ( T ) + O (log n ) rearranging
+
+󰀕 1 2 󰀖 m i ( T ) ≤ 󰀕 3 4 󰀖 m ALG ( T ) n m i ( T ) · log 1 2 ≤ m ALG ( T ) · log 3 4 + log n m ALG ( T ) ≤ 2 . 41 m i ( T ) + O (log n )
+
+Theorem The weighted majority algorithm with multiplicative penalty (1 − 󰂃 ) , where 0 < 󰂃 ≤ 12 , makes at most 2(1 + 󰂃 ) m ∗ ( T ) + 2 log n 󰂃 mistakes in the worst case.
+
+Theorem This randomized algorithm, with multiplicative penalty (1 − 󰂃 ) , where 0 < 󰂃 ≤ 12 , makes at most (1 + 󰂃 ) m ∗ ( T ) + 2 log n 󰂃 mistakes in expectation.
+
+The Bigger Picture
+
+Consider this completely unrelated problem. Remember network ﬂow?
+
+
+
+Consider two-commodity ﬂows:
+
+
+
+Can’t just adapt Ford-Fulkerson! Consider the following “algorithm”. f 1 , f 2 ← the zero-ﬂow w ( e ) ← δ for some semi-complicated δ , for every e ∈ E while ...semi-complicated condition... do for i ← 1 , 2 do P ← a shortest (using lengths w ) s i t i path γ ← min e ∈ P c ( e ) f i ← f i + push γ ﬂow on P w ( e ) ← 󰀓 1 + 󰂃 γ c ( e ) 󰀔 w ( e ) for e ∈ P ⊲ Penalize selected end for end while Scale down f 1 , f 2 until they are feasible
+
+A special kind of approximation algorithm.
+
+Theorem This approach gives a polynomial-time approximation scheme (PTAS). For any ﬁxed ω > 0 , we can tune the parameters δ , 󰂃 to make an algorithm that achieves: (1 − ω ) -approximation running time O (poly( | V | , | E | )) (where ω is a hidden constant in the Big O)
+
+Penalize weights multiplicatively.

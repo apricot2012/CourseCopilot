@@ -3,9 +3,11 @@ from os.path import isfile, join, splitext
 import pickle
 from unstructured.partition.pdf import partition_pdf
 from tqdm import tqdm
+from loader import Loader
 
 class Ingestor:
     file_list_name = "files.list"
+    loader = Loader()
 
     def init(self):
         pass
@@ -31,7 +33,11 @@ class Ingestor:
         print("ingesting pdfs...")
         for file in tqdm(pdfs):
             self.ingest_pdf(file)
-        
+            # Also create .txt file
+            elements = self.loader.load_elements(file)
+            elements_string = "\n\n".join([str(el) for el in elements])
+            with open(tokenized_path + "/" + file + ".txt", "w") as text_file:
+                text_file.write(elements_string)
 
 
     def ingest_pdf(self, filename, path = "../data"):

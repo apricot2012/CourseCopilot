@@ -1,0 +1,31 @@
+insert (x) 1. if T [ h 1 ( x )] = x or T [ h 2 ( x )] = x return 2. i ← h 1 ( x ) 3. repeat n times 4. y ← T [ i ] 5. T [ i ] ← x 6. if y = NULL return 7. if i = h 1 ( y ) then i ← h 2 ( y ) else i ← h 1 ( y ) 8. x ← y 9. rehash; insert( x ) Lemma 3: If m ≥ 2 cn then the probability of a cycle in the graph after n insertions is at most 1 c − 1 . Proof: Slot i is involved in a cycle iff there is a path from i to of length ℓ ≥ 1. By Lemma 1, this happens with probability ≤ ∞ ℓ =1 1 ℓ = 1 ( c − 1) m . Summing over all m slots, gives probability
+
+m . Summing over all m slots, gives probability
+
+Alice Bob Eve (eavesdropper)
+
+string P (the pad). Alice sends M ⊕ P (bitwise exclusive or) to Bob. Bob decrypts ( M ⊕ P ) ⊕ P = M M = 1011011 P = 01110101101 ... M ⊕ P = 1100001 Alice Bob M ⊕ P = 1100001 P = 01110101101 ... ( M ⊕ P ) ⊕ P = 1011011
+
+Alice Bob Eve (eavesdropper)
+
+Bob has two functions: secret S B () and public P B ()
+
+Properties: 1. S B ( P B ( M )) = M and P B ( S B ( M )) = M 2. Hard to find M given P B ( M ) without S B () Alice sends P B ( M ) to Bob. Bob decrypts: S B ( P B ( M )) = M Good: Use again and again Bad: No one knows if it’s secure.
+
+factoring easy ⇒ RSA breakable. factoring hard ⇒ RSA secure? (unknown)
+
+Bob has two functions: secret S B () and public P B ()
+
+1. Select two large ( > 2048 bits) prime numbers p and q . p = 31 q = 17 2. Compute n = p · q n = 527 3. Select a small odd integer e relatively prime to ϕ ( n ) ≜ ( p − 1)( q − 1) i.e. gcd( e , ϕ ( n )) = 1. ϕ ( n ) = 30 · 15 = 480 e = 7 (gcd(7 , 480) = 1) 4. Compute d = e − 1 (mod ϕ ( n )) i.e. ed = 1 (mod ϕ ( n )) solve 7 d = 1 (mod 480) 7d+480c = 1 (and 0 ≤ d < 480) extended gcd given a , b finds x , y with ax + by = gcd( a , b ) 7 · 343 + 480 · ( − 5) = 1 5. Public key P = ( e , n ) Private key S = ( d , n ) P = (7 , 527) S = (343 , 527) 6. P ( M ) = M e (mod n ) S ( C ) = C d (mod n )
+
+5. Public key P = ( e , n ) 6. P ( M ) = M e (mod n )
+
+For all M < n, P ( S ( M )) = S ( P ( M )) = M Proof. P ( S ( M )) = S ( P ( M )) = M ed (mod n ). Since ed = 1 (mod ϕ ( n )), e · d = 1 + k ( p − 1)( q − 1) for integer k . If M ̸ = 0 (mod ϕ ( n )) then M ed = M ( M p − 1 ) k ( q − 1) (mod p ) = M (1) k ( q − 1) (mod p ) Fermat’s little thm = M (mod p ) If M = 0 (mod ϕ ( n )) then M ed = M (mod p ) as well. Similarly, M ed = M (mod q ). By Chinese Remainder Thm, M ed = M (mod n ) for all M < n .
+
+“Looks like the army has between 400 and 500 soldiers.”
+
+3 5 7 A = 2 mod 3 A = 3 mod 5 A = 2 mod 7 A = 23 + 105 x Let n = n 1 × n 2 × · · · × n r where n i are pairwise relatively prime. Then ( a 1 , a 2 , . . . , a r ) uniquely determines a mod n where a i = a mod n i
+
+change.
+
+Future students thank you.

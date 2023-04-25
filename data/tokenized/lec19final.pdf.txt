@@ -1,0 +1,57 @@
+An independent set is a set of vertices in a graph G common edge.
+
+IndependentSet takes graph G and integer k and outputs if G has an independent set of size k and “No” otherwise.
+
+IndependentSet is NP-hard.
+
+Fastinput transform Graphandsize IndSet algorithm Φ G , k T/F CNF formula
+
+Fastinput transform Graphandsize IndSet algorithm Φ G , k T/F CNF formula Transform a CNF formula Φ into a graph G and integer k so that
+
+a CNF formula Φ into a graph G and integer if and only if G has an independent set of Φ = ( a ) ∧ ( a ∨ b ) ∧ ( a ∨ c ) ∧ ( b ∨ c ∨ d ) a a b a c b c d
+
+Φ = ( a ) ∧ ( a ∨ b ) ∧ ( a ∨ c ) ∧ ( b ∨ c ∨ d ) a a b a c b c d G = k = 4
+
+Φ = ( a ) ∧ ( a ∨ b ) ∧ ( a ∨ c ) ∧ ( b ∨ c ∨ d ) a a b a c b c d G = k = 4
+
+Independet Set Clique Vertex Cover
+
+
+
+Vertex Cover
+
+Independet Set Clique Vertex Cover
+
+
+
+Vertex Cover
+
+Clique
+
+Complement complementgraph graph,size Clique algorithm G , k G , k T/F Independent Set graph,size
+
+
+
+
+
+complementgraph graph,size Clique algorithm G , k G , k T/F graph,size
+
+independent set = vertex cover =
+
+graph, size VertexCoveralgorithm G , k G , n − k T/F graph, size
+
+
+
+
+
+Reduce from Vertex Cover. Gadget to ensure cycle “covers” an edge. u , v ( v , u , 1) ( u , v , 6) ( u , v , 1) ( v , u , 6) Gadget for edge ( u , v ) u ∈ Cover v (cid:54)∈ Cover uv 1 uv 6 vu 6 vu 1 u ∈ Cover v ∈ Cover uv 1 uv 6 vu 6 vu 1 u (cid:54)∈ Cover v ∈ Cover uv 1 uv 6 vu 6 vu 1 u , v u , v u , v
+
+Reduce from Vertex Cover.
+
+wz 1 wz 6 zw 6 zw 1 w , z
+
+wx 1 wx 6 xw 6 xw 1 xy 1 xy 6 yx 6 yx 1 wy 1 wy 6 yw 6 yw 1 w , x x , y w , y
+
+wx 1 wx 6 xw 6 xw 1 xy 1 xy 6 yx 6 yx 1 wy 1 wy 6 yw 6 yw 1 s 1 s 2 w , x x , y w , y w z y x G = k = 2
+
+wx 1 wx 6 xw 6 xw 1 xy 1 xy 6 yx 6 yx 1 wy 1 wy 6 yw 6 yw 1 wz 1 wz 6 zw 6 zw 1 s 1 s 2 w , x x , y w , y w , z z y G = k = 2

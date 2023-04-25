@@ -1,0 +1,33 @@
+flow is an assignment f of real numbers to edges of G : 1. For all u , v : 0 ≤ f ( u , v ) ≤ c ( u , v ) capacity constraint 2. For all v ̸ = s , t : u f ( u , v ) = w f ( v , w ) flow conservation The size (or value ) of a flow is: size( f ) = ( s , v ) ∈ E f ( s , v ) Goal: Find flow with maximum size. s a b d e t 3 3 4 10 2 1 1 5 1 2 5
+
+
+
+s to t as s a b t 1 1 1 1 1
+
+Start with zero flow (a feasible solution) Repeat until impossible
+
+Choose an augmenting path from s to Increase flow on this path as much as possible
+
+Start with zero flow (a feasible solution) Repeat until impossible ▶ Choose an augmenting path from s to t ▶ Increase flow on this path as much as possible s a b t 1 1 1 1 1 s a b t residual network of flow network G = ( V , E ) with flow f is ( V , E f ) where { ( u , v ) | f ( u , v ) < c ( u , v ) or f ( v , u ) > 0 } residual capacity of an edge ( u , v ) ∈ E f is ) = c ( u , v ) − f ( u , v ) if f ( u , v ) < c ( u , v ) f ( v , u ) if f ( v , u ) > 0 ⇝ f
+
+Start with zero flow (a feasible solution) Repeat until impossible
+
+An augmenting path in G is an s ⇝ t path in G f
+
+14 7 s a b c d t 5 5 12 5 5 2 7 33 5 5 5 4 Residual 3 5 a d 3 5 7 3 5 s a b c d t Flow 3 10 7 17 10 s a b c d t Flow 5 5 0 5 4 12 7 17
+
+Residual network 3 5 5 = a d 8 5 a d
+
+A cut is a partition ( S , T ) of V such that s ∈ S and t ∈ T . (Cut separates s from t .) The capacity of cut ( S , T ) is c ( S , T ) = M
+ u ∈ S , v ∈ T c ( u , v ) The flow across cut ( S , T ) is f ( S , T ) = u ∈ S , v ∈ T f ( u , v ) Lemma For any flow f and any cut ( S , T ) , size ( f ) = f ( S , T ) ≤ c ( S , T ) Proof outline
+
+= a ∈ S , b ∈ T f ( a , b ) − f ( b , a ) ≤ a ∈ S , b ∈ T f ( a , b ) ≤ a ∈ S , b ∈ T c ( a , b ) = c ( S , T )
+
+diﬀerence = a ∈ S −{ v } b ∈ T + { v } f ( a , b ) − f ( b , a ) − a ∈ S , b ∈ T f ( a , b ) − f ( b , a ) = a ∈ S −{ v } ( f ( a , v ) − f ( v , a )) − >
+ b ∈ T ( f ( v , b ) − f ( b , v )) = u ∈ V f ( u , v ) − w ∈ V f ( v , w ) = 0 f ( S − { v } , T + { v } ) f ( S , T ) 2. = Repeat until S = { s } implies size( f ) = f ( S , T )
+
+Repeat until S = { s } implies size( f ) = f ( S , T )
+
+If residual network G f has no augmenting path then f is a max size flow. Proof: Let S = { v | s ⇝ v in G f } . The sink t ̸∈ S since G f has no augmenting path. Let T = V − S . Size of flow f = f ( S , T ) equals c ( S , T ) since f ( u , v ) = c ( u , v ) for u ∈ S , v ∈ T . Size of any flow ≤ c ( S , T ) by Lemma. □ Max-Flow Min-Cut Theorem Size of max-flow f ∗ equals capacity of min capacity cut ( S ∗ , T ∗ ) . Proof: size( f ∗ ) ≤ c ( S ∗ , T ∗ ) by Lemma size( f ∗ ) = c ( S , T ) as defined by S = { v | s ⇝ v in G f ∗ } and c ( S , T ) ≥ c ( S ∗ , T ∗ ) since ( S ∗ , T ∗ ) is min capacity cut. □
+
+G f has no augmenting path then f is a max

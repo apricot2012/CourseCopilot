@@ -1,0 +1,38 @@
+x 1 ≤ 200 x 2 ≤ 300 x 1 + x 2 ≤ 400 x 1 , x 2 ≥ 0
+
+General Problem We are given a set of variables. We want to assign real values to them so that: 1. They satisfy given linear equations and/or inequalities. 2. They maximize (or minimize) a given linear “objective” function. x 1 200 x 2 300 max x 1 + 6 x x 1 ≤ 200 x 2 ≤ 300 x 1 + x 2 ≤ 400 x 1 , x 2 ≥ 0
+
+2. They maximize (or minimize) a function. x 1 200 x 2 300
+
+max x 1 + 6 x 2 x 1 ≤ 200 x 2 ≤ 300 x 1 + x 2 ≤ 400 x 1 , x 2 ≥ 0
+
+1. Start at a vertex v of the feasible set 2. While there is a neighbor v ′ of v with better objective value 3. v = v ′ x 1 200 x 2 300 $ 0 $ 200 $ 1400 $ 1900
+
+x 1 200 x 2 300 $ 0 $ 200 $ 1400 $ 1900
+
+profit demand Box 1 $ 1 ≤ 200 boxes/day Box 2 $ 6 ≤ 300 boxes/day Box 3 $ 13 unlimited We can produce ≤ 400 boxes/day. Box 3 uses three times the filling as Box 2 and total filling is enough for 600 Box 2’s per day.
+
+profit demand Box 1 $ 1 ≤ 200 boxes/day Box 2 $ 6 ≤ 300 boxes/day Box 3 $ 13 unlimited We can produce ≤ 400 boxes/day. Box 3 uses three times the filling as Box 2 and total filling is enough for 600 Box 2’s per day.
+
+x 1 ≤ 200 x 2 ≤ 300 x 1 + x 2 + x 3 ≤ 400 x 2 + 3 x 3 ≤ 600 x 1 , x 2 , x 3 ≥ 0
+
+x 1 x 2 3
+
+x 1 ≤ 200 x 2 ≤ 300 x 1 + x 2 + x 3 ≤ 400 x 2 + 3 x 3 ≤ 600 x 1 , x 2 , x 3 ≥ 0
+
+x 1 x 2 x 3 $ 0 $ 200 $ 1400 $ 2800 $ 3100 (0,0,0) → (200,0,0) → (200,200,0) → (200,0,200) →
+
+x 1 ≤ 200 x 2 ≤ 300 x 1 + x 2 + x 3 ≤ 400 x 2 + 3 x 3 ≤ 600 x 1 , x 2 , x 3 ≥ 0
+
+(0,0,0) → (200,0,0) → (200,200,0) → (200,0,200) → (0,300,100)
+
+a b c B C 6 11 13 8 10 Need to connect each pair of users with ≥ 2 units. Per unit AB pays $ 3, BC pays $ 2, AC pays $ 4 Two paths satisfy each connection: a short path: A → a → b → B for AB a long path: A → a → c → b → B for AB Let x AB and x ′ AB be AB bandwidth routed on short and long path
+
+a b c B C 6 12 11 13 8 10 Need to connect each pair of users with ≥ 2 units. Per unit AB pays $ 3, BC pays $ 2, AC pays $ 4 Two paths satisfy each connection: a short path: A → a → b → B for AB a long path: A → a → c → b → B for AB Let x AB and x ′ AB be AB bandwidth routed on short and long path max 3( x AB + x ′ AB ) + 2( x BC + x ′ BC ) + 4( x AC + x ′ AC ) x AB + x ′ AB + x BC + x ′ BC ≤ 10 x AB + x ′ AB + x AC + x ′ AC ≤ 12 x AB + x ′ AC + x ′ BC ≤ 6 x AB + x ′ AB ≥ 2 ...
+
+a b c B C 6 12 11 13 8 10 Need to connect each pair of users with ≥ 2 units. Per unit AB pays $ 3, BC pays $ 2, AC pays $ 4 Two paths satisfy each connection: a short path: A → a → b → B for AB a long path: A → a → c → b → B for AB Let x AB and x ′ AB be AB bandwidth routed on short and long path max 3( x AB + x ′ AB ) + 2( x BC + x ′ BC ) + 4( x AC + x ′ AC ) x AB + x ′ AB + x BC + x ′ BC ≤ 10 x AB + x ′ AB + x AC + x ′ AC ≤ 12 x AB + x ′ AC + x ′ BC ≤ 6 x AB + x ′ AB ≥ 2 ... Solution: x AB x ′ AB x BC x ′ BC x AC x ′ AC 0 7 1.5 1.5 0.5 4.5
+
+G contains a source vertex s and a sink vertex t . A flow is an assignment f of real numbers to edges of G : 1. 0 ≤ f ( u , v ) ≤ c ( u , v ) 2. For all v ̸ = s , t : u f ( u , v ) = w f ( v , w ) The size (or value ) of a flow is: size( f ) = ( s , v ) ∈ E f ( s , v ) Goal: Find flow with maximum size. s a b c d e t 3 3 4 10 2 1 1 5 1 2 5
+
+s a b c d e t 3 3 4 10 2 1 1 5 1 2 5
+

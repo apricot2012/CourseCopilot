@@ -1,0 +1,1359 @@
+Computing Maximum Flow with Augmenting Electrical Flows
+
+We present an O m 107 U 17 -time algorithm for the maximum s - t ﬂow problem (and the minimum s - t cut problem) in directed graphs with m arcs and largest integer capacity U . This matches the running time of the O|
+ O fi
+ ( mU ) 10 7 -time algorithm of Mądry [43] in the unit-capacity
+
+case, and improves over it, as well as over the O ( m n log U ) -time algorithm of Lee and Sidford [38], whenever U is moderately large and the graph is suﬃciently sparse.
+
+By well-known reductions, this also gives us an O i
+ m 107 B 17 -time algorithm for the maximum- cardinality bipartite b -matching problem in which the largest integer demand is B . This, again, matches the O ( mB ) 107 -time algorithm of Mądry [43], when B = 1 , which corresponds to the maximum-cardinality bipartite matching problem, and outperforms it, as well as the O ( m √ n log B ) -time algorithm of Lee and Sidford [38], for moderate values of B and suﬃciently sparse graphs.
+
+One of the advantages of our algorithm is that it is signiﬁcantly simpler than the ones presented in [43] and [38]. In particular, these algorithms employ a sophisticated interior-point method framework, while our algorithm is cast directly in the classic augmenting path setting that almost all the combinatorial maximum ﬂow algorithms use. At a high level, the presented algorithm takes a primal dual approach in which each iteration uses electrical ﬂows computations both to ﬁnd an augmenting s - t ﬂow in the current residual graph and to update the dual solution. We show that by maintain certain careful coupling of these primal and dual solutions we are always guaranteed to make signiﬁcant progress.
+
+∗ Supported by NSF grant CCF-1553428, and a Sloan Research Fellowship.
+
+Introduction
+
+The maximum s - t ﬂow problem and its dual, the minimum s - t cut problem, are two of the most fundamental and extensively studied graph problems in combinatorial optimization [51, 1, 50]. They have a wide range of applications (see [2]), are often used as subroutines in other algorithms (see, e.g., [4, 53]), and a number of other important problems – e.g., bipartite matching problem [10] – can be reduced to them. Furthermore, these two problems were often a testbed for development of fundamental algorithmic tools and concepts. Most prominently, the Max-Flow Min-Cut theorem [14, 17] constitutes the prototypical primal-dual relation.
+
+Several decades of extensive work resulted in a number of developments on these problems (see Goldberg and Rao [22] for an overview) and many of their generalizations and special cases. Still, despite all this eﬀort, the basic problem of computing maximum s - t ﬂow and minimum s - t cut in general graphs resisted progress for a long time. In particular, for a number of years, the best running time bound for the problem was an O ( m min { m 12 , n 23 } log( n 2 /m ) log U ) (with U denoting the largest integer arc capacity) bound established in a a breakthrough paper by Goldberg and Rao [22] and this bound, in turn, matched the O ( m min { m 1 2 , n 2 3 } ) bound for unit-capacity graphs due to Even and Tarjan [15] – and, independently, Karzanov [25] – that were put forth more than 40
+
+The above bounds were improved only fairly recently. Speciﬁcally, in 2013, Mądry [43] presented an interior-point method based framework for ﬂow computations that gave an O m 107 -time 1 al- gorithm for the unit-capacity case of the maximum s - t ﬂow and minimum s - t cut problems. This ﬁnally broke the long-standing O n 32 running time barrier for sparse graphs, i.e., for m = O ( n ) Later on, Lee and Sidford [38] developed a variant of interior-point method that enabled them obtain improvement for the regime of dense graphs. In particular, their algorithm is able to compute the (general) maximum s - t ﬂow and minimum s - t cut in O ( m √ n log U ) time and thus improve over the Goldberg-Rao bound whenever the input graph is suﬃciently dense.
+
+It is also worth mentioning that, as a precursor to the above developments, substantial progress was made in the context of (1 − ε ) -approximate variant of the maximum s - t ﬂow problem in undi- rected graphs. In 2011, Christiano et al. [7] developed an algorithm that allows one to compute a (1 + ε ) -approximation to the undirected maximum s - t ﬂow (and the minimum s - t cut) problem in O mn 13 ε − 11 / 3 time. Their result relies on devising a new approach to the problem that combines electrical ﬂow computations with multiplicative weights update method (see [4]). Later, Lee et al. [37] presented a quite diﬀerent – but still electrical-ﬂow-based – algorithm that employs purely gradient-descent-type view to obtain an O fs
+ mn 1 / 3 ε − 2 / 3 4).
+ -time (1 + ε ) -approximation for the case of unit capacities. Very recently, this line of work was culminated by Sherman [54] and Kelner et al. [26] who independently showed how to integrate non-Euclidean gradient-descent methods with fast poly-logarithmic-approximation algorithms for cut problems of Mądry [41] to get an O ( m 1+ o (1) ε − 2 ) - time (1 + ε ) -approximation to the undirected maximum ﬂow problem. Then, Peng [48] built on these works to obtain a truly nearly-linear, i.e., O tr
+ mε − 2 2)
+ , running time.
+
+Finally, we note that, in parallel to the above work that is focused on designing weakly- polynomial algorithms for the maximum s - t ﬂow and minimum s - t cut problems, there is also a considerable interest in obtaining running time bounds that are strongly-polynomial, i.e., that do
+
+1 We recall that O ( f ) denotes O ( f log c f ) , for some constant c .
+
+Bipartite Matching Problem.
+
+Bipartite Matching Problem. Another problem that is related to the maximum s - t problem – and, in fact, can be reduced to it – is the (maximum-cardinality) bipartite matching problem. This problem is a fundamental assignment task with numerous applications (see, e.g., [1, 40]) and long history that has its roots in the works of Frobenius [18, 19] and König [29, 30, 31] from the early 20th century (see [52]). Already in 1931, König [32] and Egerváry [13] provided ﬁrst constructive characterization of maximum matchings in bipartite graphs. This characterization can be turned into a polynomial-time algorithm. Then, in 1973, Hopcroft and Karp [24] and, independently, Karzanov [25], devised the celebrated O ( m √ n ) -time algorithm. For 40 years this bound remained the best one known in the regime of relatively sparse graphs. Only recently Mądry [43] obtained an improved, O fy
+ m 10 / 7 running time. It turns out, however, that whenever the input graph is dense, i.e., when m is close to n 2 even better bounds can be obtain. In this setting, one can combine the algebraic approach of Rabin and Vazirani [49] – that itself builds on the work of Tutte [57] and Lovász [39] – with matrix-inversion techniques of Bunch and Hopcroft [6] to get an algorithm that runs in O ( n ω ) time (see [45]), where ω ≤ 2 . 3727 is the exponent of matrix multiplication [9, 59]. Also, later on, Alt et al. [3], and Feder and Motwani [16] developed combinatorial algorithms that oﬀer a slight improvement – by a factor of, roughly, log n/ log n 2 m – over the O ( m √ n ) bound of Hopcroft and Karp whenever the graph is suﬃciently dense.
+
+Finally, a lot of developments has been done in the context of the (maximum-cardinality) match- ing problem in general, i.e., not necessarily bipartite, graphs. Starting with the pioneering work of Edmonds [11], these developments led to bounds that essentially match the running time guarantees that were previously known only for bipartite case. More speciﬁcally, the running time bound of O ( m √ n ) for the general-graph case was obtained by Micali and Vazirani [44, 60] (see also [20] and [21]). Then, Mucha and Sankowski [46] gave an O ( n ω ) -time algorithms for general graphs that builds on the algebraic characterization of the problem due to Rabin and Vazirani [49]. This result was later signiﬁcantly simpliﬁed by Harvey [23].
+
+1.1 Our Contribution
+
+In this paper, we put forth a new algorithm for solving the maximum s - t ﬂow and the minimum s - t cut problems in directed graphs. More precisely, we develop an algorithm that computes the maximum s - t ﬂow of an input graph in time O m 107 U 17 , where m denotes the number of arcs of
+
+that graph and U its largest integer capacity. Known reductions imply similar running time bounds for the minimum s - t cut problem as well as for the maximum-cardinality bipartite b -matching problem, a natural generalization of the maximum bipartite matching problem in which each vertex v has a degree demand b v . For that problem, our algorithm yields an O m 107 B 17 -time algorithm, with B being the largest (integer) vertex demand.
+
+In the light of the above, for the unit-capacity/demand cases, the resulting algorithms match the performance of the algorithm of Mądry [43]. The latter algorithm, however, runs in O mU 107 time (which translates into an O "7
+ ( mB ) 107 running time for the bipartite b -matching problem) in the case of arbitrary capacities/demands. Consequently, the signiﬁcantly better dependence of the running time of our algorithm on the largest capacity U / largest demand B makes it much more
+
+favorable in that setting. In fact, even though that dependence on U / B is still polynomial it enables our algorithm to remain competitive, for a non-trivial range of parameters, with the best existing algorithms that run in time that is logarithmic in U / B , such as the ol
+ O ( m √ n log U ) -time algorithm of Lee and Sidford [38].
+
+Even more crucially, the key advantage of our algorithm is that it is signiﬁcantly simpler than both the algorithm of Mądry [43] and that of Lee and Sidford [38]). Both these algorithms rely heavily on the interior-point method framework. Speciﬁcally, [43] designed a certain new variant of path-following interior-point method algorithm for the near-perfect bipartite b -matching problem that encoded the input maximum s - t ﬂow instance. It then used electrical ﬂow computations to converge to the near-optimal solution for that problem. In order to break the bottlenecking O m 12 iteration bound, however, Mądry [43] needed to, ﬁrst, develop an extensive toolkit for perturbing and preconditioning the underlying electrical ﬂow computation and, then, to combine this machinery with a very careful and delicate analysis of the resulting dynamics.
+
+iteration bound, however, Mądry [43] needed to, ﬁrst, develop an extensive toolkit for perturbing and preconditioning the underlying electrical ﬂow computation and, then, to combine this machinery with a very careful and delicate analysis of the resulting dynamics.
+
+Our algorithm also relies on electrical ﬂow computations but it abandons the above methodology and works instead fully within the classic augmenting path framework that almost all the previous combinatorial maximum s - t ﬂow algorithms used. In this framework, developed by Ford and Fulk- erson [17] (see also [14]), the ﬂow is built in stages. Each stage corresponds to ﬁnding a so-called augmenting ﬂow in the current residual graph, which is a directed graph that encodes the solution found so far. The algorithm terminates when the residual graph admits no more augmenting ﬂows, i.e., there is no path from s to t in it, since in this case the solution found so far has to be already
+
+The chief bottleneck in the running time analysis of augmenting path based algorithms is ensur- ing that each ﬂow augmentation stage makes suﬃcient progress. Speciﬁcally, one wants to obtain a good trade oﬀ between the amount of ﬂow pushed in each augmentation step and the time needed to implement each such ﬂow push. One simple approach is to just use here s - t path computations.
+
+This is a nearly-linear time procedure but it only guarantees pushing one unit of ﬂow each time. A much more sophisticated primitive developed in this context are blocking ﬂow computations. Combining this primitive with a simple duality argument enabled Goldberg and Rao [22], who built on the work of Even and Tarjan [15], to obtain an O ( m min { m 12 , n 23 } log U ) -time maximum ﬂow that remained the best known algorithm for nearly two decades. Unfortunately, trying to improve such blocking ﬂow-based approaches turned out to be extremely diﬃcult and no progress was made here so far, even in the unit-capacity case for which the best known bounds were established over 40 years ago.
+
+One of the key contributions of this paper is bringing a new type of primitive: electrical ﬂows to the augmenting path framework; and showing how to successfully use it to outperform the blocking ﬂow-based methods. Speciﬁcally, our algorithm ﬁnds augmenting ﬂows by computing electrical ﬂows in certain symmetrization of the current residual graph – see Section 3.3 for more details. (Note that performing such a symmetrization is necessary as residual graphs are inherently directed while electrical ﬂows are inherently undirected.) The key diﬃculty that arises in this context, however, is ensuring that this symmetrized residual graph can still support a signiﬁcant fraction of the s - t capacity of the original residual graph. It is not hard to see that, in general, this might not be the case. To address this problem we introduce a certain careful coupling of the primal and dual solutions, which is inspired by the so-called centrality condition arising in interior-point method based maximum ﬂow algorithms (see [43]). We then show that maintaining this coupling and applying a simple preconditioning technique let us guarantee that looking only for the ﬂows in
+
+the symmetrized version of the residual graph still provides suﬃcient progress in each iteration and, in particular, immediately delivers a O m 32 log U a
+
+ -time algorithm.
+
+We then (see Section 4) build on that basic algorithm and develop an p -geometric understand- ing of its running time analysis. This understanding guides us towards a simple electrical ﬂow perturbation technique – akin to the perturbation techniques used in [7] and [43] – that enables us to break the Ω( √ m ) iterations bottleneck that all the blocking ﬂow-based algorithms were suﬀering from, and thus get the ﬁnal, improved result.
+
+We believe that further study of this new augmenting ﬂow based framework will deliver even faster and simpler algorithms.
+
+faster and simpler algorithms.
+
+Organization of the Paper
+
+We begin the technical part of the paper in Section 2 by presenting some preliminaries on the maximum ﬂow problem and the notion of electrical ﬂows. Then, in Section 3, we present our framework and demonstrate how it yields an O m 32 log U -time maximum s - t ﬂow algorithm. Finally, in Section 4, we show how to reﬁne our basic framework to obtain the improved running time of O m 107 U 17 .
+
+2 Preliminaries
+
+Throughout this paper, we will be viewing graphs as having both lower and upper capacities. Speciﬁcally, we will denote by G = ( V, E, u ) a directed graph with a vertex set V , an arc set E (we allow parallel arcs), and two (non-negative) integer capacities u − e and u + e , for each arc e ∈ E . (We will explain the role of these capacities below.) Usually, m will denote the number | E | of arcs of the graph in question and n = | V | will be the number of its vertices. We view each arc e of G as an ordered pair ( u, v ) , where u is its tail and v is its head .
+
+Observe that this perspective enables us to view undirected graphs as directed ones in which the ordered pair ( u, v ) ∈ E is an (undirected) edge ( u, v ) and the order just speciﬁes the orientation of that edge (from u to v ).
+
+Maximum Flow Problem.
+
+Maximum Flow Problem. The basic notion of this paper is the notion of a ﬂow . Given a graph G , we view a ﬂow in G as a vector f ∈ R m that assigns a value f e to each arc e of G . If this value is negative we interpret it as having a ﬂow of | f e | ﬂowing in the direction opposite to the arc orientation. (This convention is especially useful when discussing ﬂows in undirected graphs.) We say that a ﬂow f is an σ -ﬂow , for some demands σ ∈ R n iﬀ it satisﬁes ﬂow conservation
+
+constraints with respect to that demands. That is, we have that
+
+Here, E + ( v ) (resp. E − ( v ) ) is the set of arcs of G that are entering (resp. leaving) vertex v . Intuitively, these constraints enforce that the net balance of the total in-ﬂow into vertex v and the total out-ﬂow out of that vertex is equal to σ v , for every v ∈ V . (Observe that this implies, in particular, that σ v = 0 .)
+
+Furthermore, we say that a σ -ﬂow f is feasible in G iﬀ f obeys the the capacity constraints :
+
+In other words, we want each arc e to have a ﬂow that is at most u + e if it ﬂows in the direction of e ’s orientation (i.e., f e ≥ 0 ), and at most u − e , if it ﬂows in the opposite direction (i.e., f e < 0 ). Note that setting all u − e s be equal to zero recovers the standard notion of ﬂow feasibility in directed graphs.
+
+One type of ﬂows that will be of special interest to us are s - t ﬂows, where s (the source ) and t (the sink ) are two distinguish vertices of G . Formally, an s - t ﬂow is a σ -ﬂow whose demand vector σ is equal to F · χ s,t , where F ≥ 0 is called the value of f and χ s,t is a demand vector that has − 1 (resp. 1 ) at the coordinate corresponding to s (resp. t ) and zeros everywhere else. Now, the maximum ﬂow problem corresponds to a task in which we are given a (directed) graph
+
+σ is equal to F · χ s,t , where F ≥ 0 is called the value of f and χ s,t is a demand vector that has − 1 (resp. 1 ) at the coordinate corresponding to s (resp. t ) and zeros everywhere else. Now, the maximum ﬂow problem corresponds to a task in which we are given a (directed) graph G = ( V, E, u ) with integer capacities as well as a source vertex s and a sink vertex t and want to ﬁnd a feasible (in the sense of (2)) s - t ﬂow of maximum value. We will denote this maximum value as F ∗ .
+
+Residual Graphs.
+
+Residual Graphs. A fundamental object in many maximum ﬂow algorithms (including ours) is the notion of a residual graph. Given a graph G = ( V, E, u ) and a feasible σ -ﬂow f in that graph (it is useful to think σ = F · χ s,t ), we deﬁne the residual graph G f (of G with respect to f ) as a graph G f = ( V, E, u ( f )) over the same vertex and arc set as G and such that, for each arc e = ( u, v ) of G , its lower and upper capacities are deﬁned as
+
+We will refer to u + e ( f ) (resp. u − e ( f ) ) as forward residual capacity (resp. backward residual capacity ) of e and also deﬁne the residual capacity u e ( f ) of e as the minimum of these two, i.e., u e ( f ) := min { u − e ( f ) , u + e ( f ) } . Note that the value of residual capacity depends on the ﬂow f but we will ensure that it is always clear from the context with respect to which ﬂow the residual capacity is measured. Also, observe that feasibility of f implies that all residual capacities are always non- negative (cf. (2)).
+
+The main reason why residual graphs are useful in computing maximum ﬂows is that they constitute a very convenient representation of the progress made so far. Speciﬁcally, we have the following important fact. (Again, it is useful to think here of the maximum s - t ﬂow setting, in which σ = F ∗ χ .)
+
+Fact 2.1. Let σ be some demand and G = ( V, E, u ) be a graph in which a demand of σ can be routed, i.e., there exists a σ -ﬂow f ∗ that is feasible in G . Also, for any 0 ≤ α ≤ 1 , let f be a feasible α σ -ﬂow in G , and G f = ( V, E, u ( f )) be the residual graph of G with respect to f . We have that
+
+(b) if f is a feasible α σ -ﬂow in G f , for some α , then f + f is a feasible ( α + α ) σ -ﬂow in G .
+
+Intuitively, the above fact enables us to reduce the task of routing a demand σ in G to a sequence of computations of augmenting α σ -ﬂows in the residual graph G f . We know that as long as we have not yet computed a feasible σ -ﬂow in G , G f can route a demand of (1 − α ) σ -ﬂow, where (1 − α ) > 0 is the fraction of routed demand that we are still “missing”, and each new augmenting α σ -ﬂow found in G f brings us closer to routing σ in full in G . (Note that initially G f is equal to G and G f is changing after each new augmenting α σ -ﬂow is found.)
+
+Electrical Flows and Vertex Potentials. Another notion that will play a fundamental role in this paper is the notion of electrical ﬂows. Here, we just brieﬂy review some of the key properties that we will need later. For an in-depth treatment we refer the reader to [
+
+]. Consider a graph G and a vector of resistances r ∈ R m that assigns to each edge e its resistance r e >
+
+. For a given σ -ﬂow f in G , let us deﬁne its energy (with respect to resistances r ) E r ( f ) to be
+
+For a given demand vector σ and a vector of resistances r , we deﬁne the electrical σ -ﬂow in G (that is determined by resistances r ) to be the ﬂow that minimizes the energy E r ( f ) among all ﬂows with demand σ in G . As energy is a strictly convex function, one can easily see that such a ﬂow is unique. (It is important to keep in mind that such ﬂow is not required to be feasible with respect to capacities of G , in the sense of (2).)
+
+A very useful property of electrical ﬂows is that they can be characterized in terms of vertex potentials inducing them. Namely, one can show that a ﬂow f with demands σ in G is an electrical σ -ﬂow determined by resistances r iﬀ there exist vertex potentials φ v (that we collect into a vector φ ∈ R n ) such that, for any edge e = ( u, v ) in G ,
+
+In other words, a f with demands σ is an electrical σ -ﬂow iﬀ it is induced via (5) by some vertex potential φ . (Note that the orientation of edges matters in this deﬁnition.) The above equation corresponds to the Ohm’s law known from physics.
+
+Note that we are able to express the energy E r ( f ) (see (4)) of an electrical σ -ﬂow f in terms of the potentials φ inducing it as
+
+One of the consequences of the above is that one can develop a dual characterization of the energy of an electrical σ -ﬂow in terms of optimization over vertex potentials. Namely, we have the following lemma whose proof can be found, e.g., in [43] Lemma 2.1.
+
+Lemma 2.2. For any graph G = ( V, E ) , any vector of resistances r , and any demand vector σ ,
+
+where f ∗ is the electrical σ -ﬂow determined by r in G . Furthermore, if φ ∗ are the vertex potentials corresponding to f ∗ then the minimum is attained by taking φ to be equal to φ := φ ∗ / E r ( f ∗ ) .
+
+Note that the above lemma provides a convenient way of lowerbounding the energy of an elec- trical σ -ﬂow. One just needs to expose any vertex potentials φ such that σ T φ = 1 and this will immediately constitute an energy lowerbound.
+
+Laplacian Solvers. The fact that the electrical σ -ﬂow determined by resistances r is the only ﬂow with demands σ that can be induced by vertex potentials (cf. (5)) has an important consequence. It enables us to reduce electrical σ -ﬂow computations to solving a linear system. In fact, the task of ﬁnding vertex potentials that induce that ﬂow can be cast as a Laplacian linear system. That is, a linear system in which the constraint matrix corresponds to a Laplacian of the underlying graph with weights given by the (inverses of) the resistances r .
+
+Now, from the algorithmic point of view, the crucial property of Laplacian systems is that we can solve them, up to a very good approximation, very eﬃciently. Namely, there is a long line of work [56, 33, 34, 27, 8, 35, 36] that builds on an earlier work of Vaidya [58] and Spielman and Teng [55] and gives us a number of Laplacian system solvers that run in only nearly-linear time and, in case of more recent variants, are conceptually fairly simple. In particular, this line of work establishes the following theorem.
+
+Theorem 2.3. For any ε > 0 , any graph G with n vertices and m edges, any demand vector σ , and any resistances r , one can compute in O fr
+ m log ε − 1 time vertex potentials ˜ φ such that i
+ ˜ φ − φ ∗ L ≤ ε φ ∗ L , where L is the Laplacian of G , φ ∗ are potentials inducing the electrical σ -ﬂow determined by resistances r , and  \I9
+ φ bl
+ L := φ T L φ .
+
+Even though the solutions delivered by the above Laplacian solvers are only approximate, the quality of approximation that it delivers is more than suﬃcient for our purposes. Therefore, in the rest of this paper we assume that these solutions are exact. (See, e.g., [43] for discussion how to deal with inexactness of the electrical ﬂows computed.)
+
+Vector Norms. We will ﬁnd it useful to work with various p -norms of vectors. To this end, for any p > 0 , we deﬁne the p -norm 7
+ h il,
+ p of a vector h as
+
+In particular, the ∞ -norm is given by |!
+ h ||
+ ∞ := max i | h i | .
+
+In this section, we put forth the general framework we will use to solve the maximum s - t problem. 2 In particular, we demonstrate how this framework enables us to solve the maximum s - t ﬂow problem in O m 32 log U time, where m = | E | is the number of arcs in of the input graph and U is its largest (integer) capacity. More precisely, for any maximum s - t ﬂow instance G = ( V, E, u ) and any value F ≥ 0 , our
+
+More precisely, for any maximum s - t ﬂow instance G = ( V, E, u ) and any value F ≥ 0 , our algorithm will work in O wa
+ m 32 log U time and either: compute a feasible s - t ﬂow of value F in G ; or conclude that the maximum s - t ﬂow value F ∗ of G is strictly smaller than F .
+
+2 Observe that our treatment can be immediately extended to routing arbitrary demands since this problem can always be reduced to the directed maximum ﬂow problem by adding a super-source and super-sink and connecting all the surpluses in the original graph to the former and all the deﬁcits in that graph to the latter via arcs with appropriate capacities.
+
+Note that such procedure can be turned into a “classic” maximum s - t ﬂow by applying binary search over values of F and incurring a multiplicative running time overhead of only O (log Un ) . (In fact, a standard use of capacity scaling technique [12] enables one to keep the overall running time of the resulting algorithm be only linear, instead of quadratic, in log U .)
+
+As mentioned earlier, our algorithm follows the primal dual augmenting paths based framework. At a high level, in each iteration (see Section 3.2), we use electrical ﬂow computations to compute an augmenting ﬂow as well as an update to the dual solution. To ensure that each augmenting iteration makes enough progress, we maintain a careful coupling of the primal and dual solution. We describe it below.
+
+3.1 Primal Dual Coupling
+
+Let us ﬁx our target ﬂow value F and, for notational convenience, , for any 0 ≤ α ≤ 1 , let us denote by χ α the demand vector αF χ s,t , i.e., the demand corresponding to routing α -fraction of the target ﬂow value F of the s - t ﬂow. Also, let us deﬁne χ to be the demand equal to χ 1 .
+
+Again, our algorithm will be inherently primal dual in nature. That is, in addition to maintaining a primal solution: a χ α -ﬂow f , for some 0 ≤ α ≤ 1 , that is feasible in G , it will also maintain a dual solution y ∈ R n , which should be viewed as an embedding of all the vertices of the graph G into a line.
+
+Consequently, our goal will be to either to make f be a feasible ﬂow with demands χ α and α = 1 , which corresponds to routing the target s - t ﬂow value F in full, or to make the dual solution y certify that the target demand χ 1 = χ cannot be fully routed in G and thus F > F ∗ .
+
+Well-coupled Solutions. Our primal dual scheme will be enforcing a very speciﬁc coupling of the primal solution f and the dual solution y . More precisely, let us deﬁne for each arc e = ( u, v )
+
+to be the “stretch“ of the arc e in the embedding given by y . Also, let G f be the residual graph of G with respect to f and let us deﬁne, for a given arc e , a potential function
+
+where we recall that u + e ( f ) := u + e − f e (resp. Pe)
+ u − e ( f ) := u − e + f e ) are forward (resp. backward) residual capacities of the arc e . (See preliminaries, i.e., Section 2, for details.) Then, our intention is to maintain the following relation between f and y :
+
+Intuitively, this condition ensures that the line embedding y stretches each arc e in the direction of the smaller of the residual capacities, and that this stretch is inversely proportional to the value of that capacity. (Note that if G was undirected and thus the initial capacities u + e and u − e were equal, the direction of smaller residual capacity is also the direction in which the ﬂow f ﬂows through the arc e .) It is worth pointing out that this coupling condition is directly inspired by (and, in fact, can be directly derived from) a certain variant of centrality condition used by interior-point method based maximum ﬂow algorithms (see [43]).
+
+Even though condition (10) expresses our intended coupling, it will be more convenient to work with a slightly relaxed condition that allows us to have small violations of that ideal coupling. Speciﬁcally, we say that a primal dual solution ( f , y ) is γ -coupled iﬀ
+
+Here, u e ( f ) = min { u + e ( f ) , u − e ( f ) } is the (symmetrized) residual capacity of the arc e , and γ ∈ R m is the violation vector that we intend to keep very small. In particular, we say that a primal dual solution ( f , y ) is well-coupled iﬀ its violation vector γ has its 2 -norm (see (7)) be at most 1100 , i.e., Ih
+ γ "ll
+
+ 2 ≤ 1100 .
+
+One of the key consequences of maintaining a well-coupled primal dual pair of solutions ( f , y is that it enables us to use y as a dual certiﬁcate for inability to route certain demands in G . The following lemma gives us a concrete criterion for doing that.
+
+Lemma 3.1. Let ( f , y ) be a well-coupled primal dual solution with f being a χ α -ﬂow, for some 0 ≤ α < 1 . If
+
+then the demand χ cannot be routed in G , i.e., F > F ∗ .
+
+Note that the choice of the constant 2 in the above lemma is fairly arbitrary. In principle, any constant strictly larger than 1 would suﬃce.
+
+Proof. Assume for the sake of contradiction that χ T y > 2 m (1 − α ) but the demand χ can still be routed in G . As f is an χ α -ﬂow that is feasible in G , by Fact 2.1, there has to exist a χ (1 − α ) -ﬂow f that is feasible in the residual graph G f . Observe that, by (1) and (8), we have in that case that
+
+We want now to use the feasibility of f to derive an upper bound on the inner produce ( f ) ∆( y ) that will violate the above lower bound and thus deliver the desired contradiction. To this end, let us consider some particular arc e . Assume wlog that f e ≥ 0 (handling of the case of f e < 0 is completely analogous). We have that the contribution of that arc to the inner product ( f ) T ∆( y ) is, by (11), at most
+
+where we recall that γ is the violation vector of ( f , y ) (cf. (11)). As f is feasible in G f , we need to have that f e ≤ u + e ( f ) . So, if u + e ( f ) ≤ u − e ( f ) , i.e., u + e ( f ) = u e ( f ) , then
+
+as γ e ≤ Ih
+ γ rl
+ ∞ ≤ γ "||:
+
+ 2 ≤ 12 . So, in either case, this contribution is at most (1 + γ e ) . Summing these contributions over all arcs we get that
+
+( f a
+ ) T ∆( y ) ≤ f e ∆ e ( y ) ≤ (1 + γ e ) ≤ m + m γ rl
+ 2 ≤ 2 m,
+
+which indeed contradicts the lower bound (12). The lemma follows.
+
+In the light of the above discussion, for a given well-coupled primal dual solution ( f , y ) , we should view the value of α as a measure of our primal progress, while the value of the inner product σ T y can be seen as a measure of our dual progress.
+
+Initialization. The coupling condition (11) ties the primal and dual solutions f and y fairly tightly. In fact, coming up with some primal dual solutions that are well-coupled, which we need to initialize our framework, might be diﬃcult.
+
+Fortunately, ﬁnding such a pair of initial well-coupled solutions turns out to be easy, if our input graph G is undirected. In that case, just taking f to be a trivial zero ﬂow and y to be a trivial all- zeros embedding makes condition (11) satisﬁed (with γ e s being all zero). After all, the residual graph G f with respect to such zero ﬂow f is just the graph G itself and thus u + e ( f ) = u + e = u − e = u − e ( f ) . Furthermore, even though we are interested in solving directed instances too, every such instance can be reduced to an undirected one. Speciﬁcally, we have the following lemma.
+
+Lemma 3.2. Let G be an instance of the maximum s - t ﬂow problem with m arcs and the maximum capacity U , and let F be the corresponding target ﬂow value. In O ( m ) time, one can construct an instance G of undirected maximum s - t ﬂow problem that has O ( m ) arcs and the maximum capacity U , as well as target ﬂow value F such that:
+
+The proof of the above lemma boils down to a known reduction of the directed maximum ﬂow problem to its undirected version – see, e.g., Theorem 3.6.1 in [42] for details. Consequently, from now on we can assume without loss of generality that we always have a well-coupled primal dual pair to initialize our framework.
+
+3.2 Progress Steps
+
+Once we described our basic framework and how to initialize it, we are ready to put forth its main ingredient: progress steps that enable us to gradually improve the primal dual solutions that we maintain. To this end, let us ﬁx a well-coupled primal dual solutions ( f , y ) with f being a χ α -ﬂow, for some 0 ≤ α < 1 , that is feasible in G . Our goal in this section will be to use ( f , y ) to compute, in nearly-linear time, another pair of well-coupled primal dual solutions ( f + , y + ) that bring us closer
+
+to the optimal solutions. The ﬂow f + we obtain will be a χ α -ﬂow feasible in G , for α > α . So, the resulting ﬂow update f + − f is an augmenting ﬂow that is feasible in our current residual graph G f and pushes ( α − α ) -fraction of the target s - t ﬂow.
+
+We will compute ( f + , y + ) in two stages. First, in the augmentation step , we obtain a pair of solutions ( f , y ) , with f being a χ α -ﬂow, for α > α , that is feasible in G . These solutions make progress toward the optimal solutions but might end up being not well-coupled. Then, in the ﬁxing step , we correct ( f , y ) slightly by adding a carefully chosen ﬂow circulation, i.e., a ﬂow with all- zeros demands, to f and an dual update to y so as to make the resulting solutions ( f + , y + ) be well-coupled, as desired.
+
+The key primitive in both these steps will be electrical ﬂow computation. As we will see, the crucial property of electrical ﬂows we will rely on here is their“self-duality“. That is, the fact that each electrical ﬂow computation gives us both the ﬂow and the corresponding vertex potentials that are coupled to it via Ohm’s law (5). This enables us not only to update our primal and dual solutions with that ﬂow and vertex potentials, respectively, but also, much more crucially, this coupling introduced by Ohm’s law will be exactly what will allow us to (approximately) maintain our desired primal dual coupling property (11).
+
+Augmentation Step. To perform an augmentation step we compute ﬁrst an electrical χ -ﬂow f in G with the resistances r deﬁned as
+
+for each arc e . Note that the resistance r e is proportional, roughly, to the inverse of the square of the residual capacity u e ( f ) of that arc. So, in particular, it becomes very large whenever residual capacity of the arc e is small, and vice versa. As we will see shortly, this correspondence will allow us to control the amount of ﬂow that f sends over each edge and thus ensure that the respective residual capacities are not violated.
+
+Let ˜ φ be the vertex potentials inducing f (via the Ohm’s law (6)). Then, we obtain the new primal and dual solution ( f , y ) as follows:
+
+where δ is the desired step size . Observe that this update is exactly an augmentation of our current ﬂow f with the (scaled) electrical ﬂow δ f and adding to our dual solution the (scaled) vertex potentials δ ˜ φ . This, in particular, means that the new ﬂow f we obtain here is a χ α -ﬂow with
+
+The step size δ , however, will have to be carefully chosen. On one hand, as we see in (15), the larger it is the more progress we make. On the other hand, though, it has to be small enough so as to keep the ﬂow δ f feasible in G f (and thus, by Fact 2.1, to make the ﬂow f + f feasible in G ). Note that, a priori, we have no direct control over neither the directions in which the electrical χ -ﬂow f is ﬂowing thorough each arc nor the amount of that ﬂow. So, in order to establish a grasp on what is the right setting of δ , it is useful to deﬁne a congestion vector ρ given by
+
+Note that, a priori, we have no direct control over neither the directions in which the electrical χ -ﬂow f is ﬂowing thorough each arc nor the amount of that ﬂow. So, in order to establish a grasp on what is the right setting of δ , it is useful to deﬁne a congestion vector ρ given by
+
+for each arc e . One can view ρ e as a normalized measure of how much the electrical ﬂow f overﬂows the residual capacity u e ( f ) of the arc e and in what direction. In other words, the sign of ρ e encodes the direction of the ﬂow ie.
+ f e .
+
+It is now not hard to see that to ensure that δ f is feasible in G f , i.e., that no residual capacity is violated by the update (14), it suﬃces that δ | ρ e | ≤ 14 , for all arcs e , or, equivalently, that
+
+where · ∞ is the standard |b,
+ ∞ -norm.
+
+It is also worth pointing out that the congestion vector ρ turns out to capture (up to a small multiplicative factor) the contribution of each arc e to the energy E r ( f ) of f . In particular, we have the following simple but important observation.
+
+Lemma 3.3. For any arc e , ρ 2 e ≤ r e f 2 e ≤ 2 ρ 2 e and
+
+where · 2 is the standard 2 -norm.
+
+Proof. Note that, by deﬁnition of the resistance r e (13), (16), and the deﬁnition of the residual capacity u e , we have that
+
+This link between the energy-minimizing nature of the electrical σ -ﬂow f and the &
+ 2 -norm of the congestion vector ρ will end up being very important. One reason for that is the fact that ∞ -norm is always bounded by the &
+ 2 -norm. Consequently, we can use this connection to control the ∞ -norm of the vector ρ and thus the value of δ needed to satisfy the feasibility condition (17).
+
+This link between the energy-minimizing nature of the electrical σ -ﬂow f and the &
+ 2 -norm of the congestion vector ρ will end up being very important. One reason for that is the fact that ∞ -norm is always bounded by the &
+ 2 -norm. Consequently, we can use this connection to control the ∞ -norm of the vector ρ and thus the value of δ needed to satisfy the feasibility condition (17). It turns out, however, that just ensuring that our augmenting ﬂow is feasible is not enough for our purposes. Speciﬁcally, we also need to control the coupling of our primal dual solutions, and the feasibility bound (17) might be not suﬃciently strong for this purpose. We thus have to develop analyze the impact of the update (14) on the coupling condition (11) more closely. To this end, let us ﬁrst notice the following fact that stems from a standard application of the
+
+It turns out, however, that just ensuring that our augmenting ﬂow is feasible is not enough for our purposes. Speciﬁcally, we also need to control the coupling of our primal dual solutions, and the feasibility bound (17) might be not suﬃciently strong for this purpose. We thus have to develop analyze the impact of the update (14) on the coupling condition (11) more closely.
+
+Fact 3.4. For any u 1 , u 2 > 0 and x such as | x | ≤ u 4 , where u = min { u 1 , u 2 } , we have that
+
+Now, the above approximation bound enables us to get an accurate estimate of how the coupling condition evolves during the augmentation step (14). That is, for any arc e , applying Fact 3.4 with u 1 = u + e ( f ) , u 2 = u − e ( f ) and x = δ f e , gives us that
+
+Observe that the above expression tells us that the ﬁrst order approximation of the change in the primal contribution of the arc e to the coupling condition (11) caused by the update (14) is exactly
+
+used (13). (In fact, the choice of the resistances r was made exactly to make the
+
+where we also used (13). (In fact, the choice of the resistances r was made exactly to make the above statement true.)
+
+which is exactly the change in the dual contribution of the arc e = ( u, v ) to the coupling condition
+
+So, up to ﬁrst order approximation, these two contributions cancel out, leaving the coupling (11) intact. Consequently, any increase in the violation of the coupling condition must come from the second-order terms in the approximation (18). The following lemma makes this precise and is proved in Appendix A.2.
+
+Lemma 3.5. Let 0 < δ ≤ (4 ρ P|
+ ∞ ) − 1 and the primal dual solution ( f , y ) be γ -coupled. Then, we have that, for any arc e = ( u, v ) ,
+
+Fixing Step. Although Lemma 3.5 enables us to bound the deterioration of the primal dual coupling during the augmentation step, we cannot prevent this eﬀect altogether. Therefore, we need to introduce a ﬁxing step that deals with this problem. More precisely, we develop a procedure that uses a single electrical ﬂow computation to signiﬁcantly reduce that violation, provided it was not too large to begin with. This is formalized by the following lemma, whose proof appears in Appendix A.3.
+
+Lemma 3.6. Let ( g , z ) be a ς -coupled primal dual solution, with g being a feasible χ α -ﬂow and ς 2 ≤ 150 . In O ( m ) time, we can compute a primal dual solution ( ¯g , ¯z ) that is well-coupled and in which ¯g is still a χ α -ﬂow.
+
+Now, after putting Lemmas 3.5 and 3.6 together, we are ﬁnally able to state the condition that δ in the update (14) has to satisfy in order to ensure that the solutions ( f + , y + ) we obtain after performing the augmentation and ﬁxing step is still well-coupled.
+
+Lemma 3.7. ( f + , y + ) is a well-coupled primal dual solution with f + being a χ α -ﬂow that is feasible in G whenever
+
+The above lemma tells us that the step size δ of our augmentation step (14) should be governed by the 4 -norm (see (7)) of the congestion vector (16). Observe that the es
+ 4 -norm of a vector is always upper bounding its ∞ -norm. So, the condition (17) is subsumed by this 4 -norm bound.
+
+Proof. Note that we always have that a
+ ρ p||.
+ 4 ≥ i
+ ρ P|
+
+ ∞ . So, the condition (17) is automatically satisﬁed and the ﬂow f + is indeed a χ α -ﬂow that is feasible in G .
+
+Now, to argue about well-coupling of ( f + , y + ) , notice that, in the light of Lemma 3.6, it suﬃces to argue that the primal dual solution ( f , v)
+ y ) obtained after executing the augmentation step (14) is γ -coupled with II
+ γ lla
+ 2 ≤ 150 .
+
+To this end, observe that by Lemma 3.5 and the fact that ( f , y ) are well-coupled, i.e., γ -coupled with Ila
+ γ rl
+ 2 ≤ 1100 , we have that
+
+IAI
+ γ lla
+ 2 = e γ 2 e ≤ e 4 3 γ e + 7( δρ e ) 2 2 ≤ 4 3 γ vila
+ 2 + 7 δ 2 e ρ 4 e ≤ 4 300 + 7 δ 2 a
+ ρ p||;
+ 24 ≤ 2 150 + 7 1089 < 1 50 .
+
+Analysis of the Algorithm
+
+We want now to analyze the overall running time of our algorithm. Recall that given our target demand χ that corresponds to sending F units of ﬂow from the source s to the sink t , our overarching goal is to either route this demand fully in G or provide a dual certiﬁcate that it is impossible to route χ in G .
+
+We aim to achieve this goal by maintaining and gradually improving a primal dual solution ( f , y ) . In this solution, f is a χ α -ﬂow (which corresponds to routing an α fraction of the desired demand χ ) that is feasible in G and f and y are well-coupled, i.e., tied to each other via condition (11) with the violation vector γ having suﬃciently small 2 -norm. As described in Section 3.2, each iteration runs in nearly-linear time and boils down to employing electrical ﬂow computations to ﬁnd an augmenting ﬂow in the current residual graph G f (as well as to update the dual solution to maintain well-coupling).
+
+Consequently, all we need to do now is to lower bound the amount of progress that each of these iteration makes. Ideally, we would like to prove that in each iteration in which f already routed α -fraction of the desired ﬂow, i.e., f is a feasible χ α -ﬂow, the step size δ (see (14)) can be taken to be at least
+
+for some ﬁxed ˆ δ > 0 . Observe that if such a lower bound was established then, by (15), it would imply that each iteration ﬁnds an augmenting ﬂow that routes at least ˆ δ -fraction of the amount of ﬂow still to be routed. As a result, after executing at most O (ˆ δ − 1 log mU ) iterations, the remaining value of ﬂow to be routed would be at most 1 and thus a simple ﬂow rounding and augmenting path
+
+Unfortunately, a priori, it is diﬃcult to provide any such non-trivial unconditional lower bound on the amount of primal progress we make in each iteration. After all, it could be the case that the target ﬂow cannot be even routed in G . More importantly though, even if the target ﬂow could be routed in G , and thus the residual graph always admitted augmenting ﬂows of suﬃciently large value, it is still not clear that our ﬂow augmenting procedure would be able to ﬁnd them. (It is worth noting that this problem is by no means speciﬁc to our algorithm. In fact, in all the maximum ﬂow algorithms that rely on the augmenting paths framework ensuring that each iteration makes a suﬃcient primal progress is a chief bottleneck in the analysis.)
+
+The root of the problem here is that our ﬂow augmenting procedure is based on electrical ﬂows and these are undirected in nature. Consequently, the augmenting ﬂows that it ﬁnds have to come from a fairly restricted class: s - t ﬂows that are feasible in a certain “symmetrized" version of the residual graph.
+
+To make it precise, given a residual graph G f , let us deﬁne its symmetrization 2
+ G f to be an undirected graph in which each arc e has its forward and backward capacity equal to u e ( f ) , i.e., to the minimum of the forward u + e ( f ) and backward u − e ( f ) residual capacities in G f . Observe now that each (electrical) augmenting ﬂow δ f found in the augmentation step (cf. (14)) is not only feasible in the residual graph G f but also in its symmetrization G f – this is exactly what the condition (17) enforces.
+
+However, not all augmenting s - t ﬂows that are feasible in G f have to be feasible in G f too. In fact, it can happen that a large maximum s - t ﬂow value that the residual graph G f supports mostly vanishes in its symmetrization G f , and thus prevents our algorithm from making a suﬃcient good primal progress. (Again, a diﬃculty of a exactly the same nature arises in the analysis of the classic ﬂow augmenting algorithms such as [15, 25, 22].)
+
+Preconditioning Arcs.
+
+Preconditioning Arcs. It turns out, however, that there is a fairly simple way to circumvent the above diﬃculty and ensure that the kind of direct, “primal-only“ analysis we hoped for above can indeed be performed. Namely, we just need to “precondition“ our input graph by adding to it a large number of s - t arcs of suﬃciently large capacities.
+
+More precisely, we modify our input graph G by adding to it m undirected arcs between the source s and sink t with a forward and backward capacities equal to 2 U and their orientation being from s to t . We will call these arcs preconditioning arcs . Observe that after this modiﬁcation the number of arcs of our graph as well as its maximum capacity at most doubled, and the maximum - t ﬂow value changed additively by exactly 2 mU . In particular, the preconditioning arcs constitute exactly half of all the arcs and the amount of s - t ﬂow that they alone can support is at least twice the s - t throughput of the rest of the graph. (Also, as these arcs are undirected they do not interfere with our initialization procedure – cf. Lemma 3.2. 3 ) Consequently, we can just focus on analyzing the running time of our algorithm on this preconditioned instance and the bounds we establish will immediately translate over to the original instance. 4
+
+3 More precisely, we can just ﬁrst initialize our framework for the original graph, as before, and only precondition the undirected graph resulting from that initialization. 4 Note that the preconditioning arcs have to be fully saturated in any maximum s - t ﬂow. So, simply dropping these arcs and the ﬂow on them will yield the maximum s - t ﬂow in the original graph.
+
+As already mentioned, somewhat surprisingly, once such preconditioning arcs are in place and our primal dual solution ( f , y ) is well-coupled, it is always the case that the symmetrization G f of our current residual graph G f retains a constant fraction of the s - t throughput. Intuitively speaking, well-coupling prevents the “shortcutting” preconditioning arc from getting “clogged” too quickly. Instead, their residual capacity is consumed at the same rate as that of the rest of the graph. Consequently, these arcs alone are always able to provide enough of s - t throughput in the symmetrization G f of the residual graph G f . This is made precise in the following lemma, whose proof appears in Appendix A.4
+
+Lemma 3.8. Let ( f , y ) be a well-coupled primal dual solution in the (preconditioned) graph G and let f be a χ α -ﬂow, for some 0 ≤ α < 1 , that is feasible in G . We have either that:
+
+(a) there exists a χ (1 − α ) -ﬂow f that is feasible in the symmetrization G f of the residual graph G f
+
+Note that if our target demand χ is exactly the demand F ∗ χ s,t of the maximum s - t ﬂow, the second condition cannot ever trigger and thus indeed it is the case that the symmetrization of the (preconditioned) residual graph retains a constant fraction of the original s - t throughput.
+
+Lower Bounding ˆ δ . Once we proved that the symmetrization G f of the residual graph G f retains most of its s - t ﬂow throughput (see Lemma 3.8), we are ﬁnally able to provide an absolute lower bound ˆ δ (cf. (19)) on the amount of primal progress each iteration of our algorithm makes. To this end, we upper bound ﬁrst the energy, or, (almost) equivalently, the 2 -norm of the congestion vector (see Lemma 3.3) of the electrical ﬂow that we use in our augmentation step (see (14)).
+
+Lemma 3.9. Let ( f , y ) be a well-coupled primal dual solution, with f being a χ α -ﬂow that is feasible in G f , for some 0 ≤ α < 1 . Let f be an electrical χ -ﬂow determined by the resistances r given by (13) . We have that either:
+
+where the last inequality follows by the fact that the ﬂow f e is feasible in G f . (Recall that the forward and backward capacities of an arc e in G f are equal to u e ( f ) .)
+
+Consequently, if we scale f by 10 (1 − α ) then it will become a χ -ﬂow and its energy will be at most
+
+200 (1 − α ) 2 m . However, by deﬁnition, the energy E r ( f ) of the electrical χ -ﬂow f cannot be larger than the energy of any other χ -ﬂow. We thus can conclude that
+
+where we also used Lemma 3.3. So, taking C E := 200 concludes the proof.
+
+Now, we should notice that by Lemma 3.7 it suﬃces that we always have that
+
+Finally, we want to emphasize again that even though our above analysis was based solely on analyzing our primal progress 5 , maintaining the dual solution and the primal dual coupling (11) was absolutely critical for its success.
+
+An Improved O m 107 U 17 -Time Algorithm
+
+In this section, we present an improved maximum s - t ﬂow algorithm that runs in time O m 107 U 17 , where U is the value of the largest (integer) capacity of the graph. In the case of the unit capacities, i.e., U = 1 , this running time matches the running time of the O ( m ) 107 -time algorithm of Mądry [43], and improves over the best known bound of min { (0 |
+ O ( mU ) 107 , O ( m √ n log U ) } that stems for the work of Mądry [43] and Lee and Sidford [38] whenever U is moderately large (and the graph is suﬃciently sparse).
+
+These modiﬁcations will enable us to lower bound the amount of primal progress ˆ δ (cf. (19)) this algorithm makes in each iteration. Speciﬁcally, we aim to show that
+
+for certain η := 114 − 17 log m U − O (log log mU ) , whenever that modiﬁed algorithm executes progress steps (see Section 3.2). Clearly, as discussed in Section 3.3, establish that lower bound on ˆ δ ensures that we need at most O m 12 − η log U = O m 107 U 17 progress steps to converge to the optimum solution.
+
+5 In fact, one could perform it even without resorting explicitly to the dual infeasibility certiﬁcates χ T y .
+
+4.1 Modiﬁed Algorithm
+
+To this end, recall that the key quantity that captures the progress that each augmentation iteration makes is the 4 -norm ρ 4 of the congestion vector ρ of the electrical χ -ﬂow f determined by the resistances r (see (13)). More precisely, by Lemma 3.7, we need to always have that
+
+In Section 3.3, we bounded that 4
+ 4 -norm by simply noticing that it always has to be upper bounded by the &
+ 2 -norm of that vector and that, by Lemma 3.3, this 2 -norm is directly tied to the energy E r ( f ) of the electrical ﬂow f . Furthermore, since we were able to also prove that this energy is always O m (1 − α ) 2 (see Lemma 3.9) the ﬁnal O ( √ m ) bound on ˆ δ − 1 followed. (See (20) for details.)
+
+Now, the key observation is that such bounding of the 4 -norm of the vector ρ with its 2 -norm might be wasteful. That is, even though it is not hard to construct examples in which the congestion vector ρ has these two norms be fairly close, such examples are inherently fragile. More precisely, as ﬁrst pointed out by Christano et al. [7] in the context of an analogous bs
+ ∞ - vs 2 -norm trade oﬀ, whenever i
+ ρ pls
+ 4 ≈ We
+ ρ 2 , it must be necessarily be the case that most of the energy of the electrical ﬂow f is contributed by a very small set of arcs. Moreover, if one perturbs such arcs by increasing their resistance, this will result in a great increase of the energy of the corresponding electrical ﬂow. Christano et al. [7], and later Mądry [43] have demonstrated that a careful exploitation of this phenomena can lead to ensuring that such fragile worst-case instances do not appear too often and thus a better bound on the 4 -norm can be achieved.
+
+Arc Boosting.
+
+Arc Boosting. Our improved algorithm will also follow the perturbation paradigm we outlined above. To this end, we introduce an operation of boosting that we will use to perturb high-energy contributing arcs whenever needed.
+
+Formally, let us ﬁx a primal dual well-coupled solution ( f , y ) and a particular arc e = ( u, v ) . Let us assume wlog that u + e ( f ) = u e ( f ) (the case of u − e ( f ) = u e ( f ) is completely symmetric). We deﬁne a boost of e to be an operation that modiﬁes the input graph and the solution ( f , y ) in the following way:
+
+(
+
+) The arc e is replaced by an u - v path consisting of β ( e ) :=
+
++
+
+U u e ( f ) arcs e
+
+, . . . , e β ( e ) , oriented towards v . (
+
+) The ﬁrst two arcs e
+
+, e
+
+are just copies of the arc e , with u + e
+
+= u + e
+
+:= u + e and u − e
+
+= u − e
+
+:= u e (
+
+) For all the remaining ( β ( e ) −
+
+) arcs, we have that u + e i := + ∞ and u − e i := u , for
+
+< i ≤ β ( e where u ≥ U is a value that we will set below. (
+
+) The ﬂow f pushes the original ﬂow f e over the created u - v path. (
+
+) Finally, if v
+
+= u, v
+
+, . . . , v β ( e ) = v are the consecutive vertices on the created path then:
+
+• y v
+
+:= y v , and y v
+
+:= y v
+
++ Φ e ( f ) = y v + Φ e ( f ) ; • y v
+
+, . . . , y v β ( e ) −
+
+are set so as ∆ e i ( y ) = − ∆ e
+
+( y ) β ( e ) −
+
+=
+
+Observe that after the above modiﬁcations, we have that
+
+Therefore, the solution ( f , y ) remains feasible in the (modiﬁed) residual graph G f and is well- coupled too. Also, note that since Φ e ( f ) ≤ 1 u e ( f ) and | f e | ≤ U , the fact that ( β ( e ) − 2) ≥ 2 U u e ( f ) ensures that u − e i = u ≥ U , for all 2 < i ≤ β ( e ) . Consequently, the eﬀective forward and backward capacities of the created path are the same as the forward and backward capacities of the original arc e , and thus the s - t throughput of our graph remains unchanged.
+
+We thus see that, from our point of view, the boosting operation had only two real consequences: one of them is the intended eﬀect and the other one is an undesired side eﬀect. The intended eﬀect is that the eﬀective resistance with respect to the resistances r (cf. (13)) of the created path is at least twice as large as the original resistance r e of the arc e . (Note that the arcs e 1 and e 2 have exactly the same residual capacities, and thus the resistances r e 1 and r e 2 are both equal to the resistance r e of the original arc e .) The undesired consequence, however, is that the number of arcs in our graph increased by β ( e ) − 1 .
+
+The key impact of that (at least) doubling of the resistance of the arc e is that, intuitively, it makes the energy of our electrical χ -ﬂow f increase proportionally to the initial contribution of that arc to the (squared) bs
+ 2 -norm of the congestion vector ρ . This is made precise in the following lemma. (This lemma is stated in a slightly more general form for future reference. For now, one can think of the set S consisting of a single arc e .)
+
+Lemma 4.1. Let f be an electrical χ -ﬂow determined by the resistance r in our graph G and let ρ be the corresponding congestion vector deﬁned by (16) . If f is the electrical χ -ﬂow determined by the resistances r in the graph G that was obtained by boosting a set of arcs S then
+
+Proof. Let ˜ φ be the vertex potentials inducing f , by Lemma 2.2 and (16), we have that
+
+We want now to use the same voltages ˜ φ to lowerbound the energy E r ( f ) of the electrical χ -ﬂow f after boosting the arcs in S . Observe that the eﬀective resistance r u,v between the endpoints u and v of some boosted arc e = ( u, v ) ∈ S after that boost is at least 2 r e . So, when we analyze the energy of f we can treat the u - v path that was created as just an arc e but with the resistance r e equal to r u,v ≥ 2 r e .
+
+Therefore, by using Lemma 2.2 again, we can conclude that
+
+1 E r ( f ) ≤   e =( u ,v wv)
+ ) / ∈ S ( φ v − φ u ) 2 r e we
+ E r ( f ) 2   + e =( u,v ) ∈ S ( φ v − φ u ) 2 r e E r ( f ) 2 ≤   e =( u ,v )
+ ) ( φ v − φ u ) 2 r e E r ( f ) 2   − e =( u,v ) ∈ S ( φ v − φ u ) 2 2 r e E r ( f ) 2 = 1 E r ( f )   1 − e =( u,v ) ∈ S ( φ v − φ u ) 2 2 r e E r ( if)
+ f )   ≤ 1 E r ( if)
+ f ) 1 − e ∈ S r e f 2 e 2 E r ( if)
+ f ) ≤ 1 E r ( if)
+ f ) 1 − e ∈ S ρ 2 e 4 TF
+ ρ 22 ,
+
+where we also used Lemma 3.3 and Ohm’s law (5). The lemma follows by noticing that 1 (1 − ε )
+
+where we also used Lemma 3.3 and Ohm’s law (5). The lemma follows by noticing that 1 (1 − ε ) ≥ (1 + ε 2 ) whenever 0 ≤ ε ≤ 14 .
+
+Boosting Use and Early Termination. Once we introduced the boosting operation, we can state the two modiﬁcations of the basic algorithm from Section 3 that we will make. The ﬁrst one is relatively minor: we terminate our algorithm whenever
+
+That is, once we know that we are within an additive factor of m 12 − η of the target ﬂow, we do not execute progress steps anymore. Observe that in that case we can just round our current ﬂow and compute the optimal solution using at most m 12 − η augmenting paths computation (see, e.g., [43] for details). So, if we perform these operations, our algorithm will still run within the desired running time bound.
+
+The second modiﬁcation speciﬁes how and when we apply boosting operations. To this end, given an electrical χ -ﬂow f and its congestion vector ρ , let us deﬁne an arc e to be high-energy if
+
+for certain constant C ρ ∗ > 0 that we will set later (see (28) below). Now, recall that our goal is to ensure that (21) holds, which corresponds to ensuring that, by Lemma 3.7, i
+ ρ p||s
+ 4 ≤ m 12 − η 33(1 − α ) . However, for reasons that will be clear shortly, we will actually want to have a stronger, 3 -norm bound on ρ . Speciﬁcally, we want to make a progress step only when
+
+Lemma 3.7, i
+ ρ p||s
+ 4 ≤ m 12 − η 33(1 − α ) . However, for reasons that will be clear shortly, we will actually want to have a stronger, 3 -norm bound on ρ . Speciﬁcally, we want to make a progress step only when
+
+i
+ ρ 3 ≤ m 12 − η 33(1 − α ) , δ = ˆ δ (1 − α ) = 1 33(1 − α ) ρ 3 20
+
+when making the augmentation step described in Section 3.2. Observe that as Me
+ ρ pl
+ 3 ≥ We
+ ρ 4 , this new condition still satisﬁes the 4 -norm requirement set forth in Lemma 3.7.
+
+Unfortunately, as mentioned earlier, it can sometime happen that the bound (24) is violated. Therefore, we want to use our boosting technique to enforce that such violations do not happen too often. Speciﬁcally, whenever condition (24) does not hold we boost all the arcs in the set S ∗ , which is deﬁned to be the set of up to k ∗ := m 4 η high-energy arcs e with highest values of | ρ e | . In other words, we order all the high-energy arcs in a non-increasing order with respect to | ρ e | and take S ∗ to consist of the ﬁrst up to k ∗ of them. (Note that, in principle, in some iterations there can be only very few, or even no, high-energy arcs.)
+
+Once we boost the set S ∗ , we simply proceed to the next iteration (in the new version of the graph that our boosting operation created). Note that, at ﬁrst glance, there is nothing preventing us from needing to execute such a boosting step in each iteration, and thus to never be able to execute progress steps. However, as we argue in the next section, we are actually guaranteed to be able to execute progress steps often enough and thus make suﬃciently good progress overall.
+
+Analysis of the Improved Algorithm
+
+We proceed now to analyzing our modiﬁed algorithm and establishing the improved running time bound. This will require tackling two issues.
+
+First one is controlling the increase in the number of arcs resulting from performing of all our boosting operations. Speciﬁcally, we want to maintain the following invariant.
+
+Invariant 4.2. The total increase in the number of arcs is at most m 10 .
+
+We need to maintain this invariant in order to be able to use the machinery we developed in Section 3. (It is not hard to check that, as long as that invariant is not violated, the whole analysis performed there is still valid, subject to slight adjustment of the corresponding constants.)
+
+The other issue we need to tackle corresponds to bounding the total number of boosting steps we execute. After all, we want to ensure that we execute progress steps often enough. In order to obtain such a bound we will perform a potential based argument with our potential function being the energy E r ( f ) of the electrical χ -ﬂow f we compute in each iteration. (Note that this electrical ﬂow f is always determined by the resistances r (cf. (13)) in the current version of the graph G .) One can easily convince oneself that this energy has to be at least 1 U 2 at the beginning of the algorithm and, by Lemma 3.9 (and provided Invariant 4.2 holds), it is never larger than
+
+(Here, the second inequality follows due to the fact that 1 ≤ F ≤ 2 mU and we have our termination condition (22).) We want now to establish two claims:
+
+(I) Whenever a boosting step is executed, the energy E r ( f ) increases by a factor of at least
+
++ C B m −
+
+η ").
+ , for some constant C B >
+
+. (To prove this statement we will use Lemma
+
+) (II) Whenever a progress step is performed, with the condition (
+
+) satisﬁed, the energy E r ( f ) decreases by at most (
+
++ C D m −
+
+η ny,
+ , for some other constant C D >
+
+. (Proving this statement is where we leverage the fact that we enforce the stronger, bs
+
+-norm condition (
+
+) on ρ .)
+
+Observe that once the above two claims are established, we can amortize the number of boosting steps against the number of good progress steps. Speciﬁcally, a simple calculation shows that unless the number of boosting step is within a O (log m log U ) factor of the number of the progress steps, the resulting increase of the energy E r ( f ) would violate the absolute upper bound O ( m 3 U 2 ) we established. Furthermore, since we execute a progress step only when condition (24) is satisﬁed, this means that our desired lower bound (21) on ˆ δ holds. Therefore, by our reasoning in Section 3.3, we know that the number of progress steps is at most O ˆ δ − 1 log mU = O if,
+ m 12 − η log mU . As each boosting and progress step can be executed in nearly-linear time, our desired improved running time bound will then follow.
+
+In the light of the above, it remains to only argue that claims (I) and (II) are indeed correct and that the Invariant 4.2 is never violated.
+
+Preservation of the Invariant 4.2.
+
+Preservation of the Invariant 4.2. To prove that the Invariant 4.2 is indeed preserved, let us recall that each arc boosting operation increases the number of arcs by β ( e ) − 1 ≤ 2 U u e ( f ) , where u e ( f ) is the residual capacity of the arc e at the time the boosting occurred. As it turns out, since we only boost arcs that are high-energy, i.e., arcs e with | ρ e | ≥ ρ ∗ at the time of the boosting, one can use a simple vertex potential based argument to argue that β ( e ) has to be always at most O ( m 4 η U ) .
+
+Lemma 4.3. Assume that Invariant 4.2 holds, let f be an electrical χ -ﬂow determined by the resistances r and let e = ( u, v ) be a high-energy arc that was boosted. Then, the total arc number increase β ( e ) − 1 is at most O ( m 4 η U ) .
+
+Proof. Recall that β ( e ) − 1 ≤ 2 U u e ( f ) . So, it suﬃces that we prove that u e ( f ) ≥ Ω( m − 4 η ) . To this end, let ˜ φ be vertex potentials inducing the electrical ﬂow f and let R s,t be the eﬀective resistance between the source s and sink t in our graph. As f is an s - t ﬂow of value F , we need to have that
+
+where we used Lemma 3.9 and the fact that Invariant 4.2 holds. On the other hand, we know that the vertex potential drop φ t − φ s between s and t is non-negative (as the electrical ﬂow has to ﬂow from s to t ) and at most
+
+where the last inequality follows as (1 − α ) F ≥ m 12 − η due to our termination condition (22). However, as f is an s - t ﬂow it must be the case that the vertex potential diﬀerence between the endpoints of our arc e = ( u, v ) cannot be larger than such diﬀerence between the vertex potentials of s and t . That is, we have that
+
+But, by Ohm’s law (5) and deﬁnition (13) of the resistance r , we have that
+
+Observe now that as our boosting operation never boosts more than k ∗ = m 4 η arcs at a time and we have at most O m 12 − η log U boosting steps, by Lemma 4.3, the total arc number increase throughout the whole algorithm is at most
+
+provide we set η := 114 − 17 log m U − O (log log mU ) with appropriately chosen constant in the (log log mU ) term. Thus Invariant 4.2 is indeed never violated.
+
+Establishing Claim (I). We want now to prove that each boosting step results in an increase of the energy E r ( f)
+ f ) by a factor of at least (1
+ 1 + Ω( m − 2 η ) . In the light of Lemma 4.1, it suﬃces we show that if S ∗ is the set of high-energy arcs that got boosted due to the condition (24) not holding then these arcs had to have a large contribution to the (square) of the 2 -norm of the congestion vector ρ . That is, we want to argue that
+
+Clearly, once we establish that then the desired energy increase will follow from Lemma 4.1 applied to S = S ∗ .
+
+To prove (26), let us ﬁrst consider the case that S ∗ has maximum size, i.e., | S ∗ | = k ∗ = m 4 η Note that all the arcs in S ∗ are high-energy arcs. Therefore, (23) gives us in this case that
+
+where we used the fact that Lemma 3.9 implies that We
+ ρ 22 ≤ C E m (1 − α ) 2 . So, (26) holds in this case and we can focus on the situation when | S ∗ | < m 4 η . Observe that this means that there is no high-energy arcs that are not in S ∗ .
+
+We want to argue that in such situation the arcs of S ∗ contribute at least a half of the total (cubed) ty
+ 3 -norm of the vector ρ . That is, that we have that
+
+To this end, observe that the contribution of arcs that are not high energy (and thus not in S ∗ ) to that (cubed) |b,
+ 3 -norm is, by the Cauchy-Schwartz inequality, (23) and Lemma 3.9, at most
+
+provided the constant C ρ ∗ is set to be large enough. Therefore, since the condition (24) does not hold, we must have that the inequality (27) is indeed valid.
+
+alone suﬃces to make (26) true. We can thus assume that max e ∈ S ∗ | ρ e | < m (1 − α ) and apply the Cauchy-Schwartz inequality to (27) to obtain that
+
+which, by Lemma 3.9, establishes (26). Claim (I) is thus proved.
+
+Establishing Claim (II). To prove Claim (II) we will tie the potential decrease of energy during progress steps to the quantity that we already control: the 3 -norm of the congestion vector ρ . (In fact, the desire to control the energy decrease is precisely the reason why we enforce the stronger 3 -norm condition (24) instead of the 4 -norm condition that Lemma 3.7 suggests.) We make this connection precise in the following lemma, whose proof appears in Appendix A.5.
+
+Lemma 4.4. Let ( f , y ) be a well-coupled feasible primal dual solution and let f be the corresponding electrical χ -ﬂow determined by the resistances r and congestion vector ρ that satisﬁes the &
+ 3 -norm condition (24) . Then, after execution of the progress steps, as described in Section 3.2, the energy E r ( f ) decreases by a factor of at most
+
+which immediately establishes Claim (II) and thus concludes the analysis of the improved algorithm.
+
+Acknowledgments. We are grateful to Michael Cohen, Slobodan Mitrović, Dimitris Tsipras, and Adrian Vladu for a number of helpful discussions on this topic.
+
+Let us deﬁne
+
+g ( x ) = g (0) + g (0) x + g "(
+ ( z ) x 2 2 = 1 u 1 − 1 u 2 + 1 u 21 + 1 u 22 x + x 2 1 ( u 1 − z ) 3 − 1 ( u 2 + z ) 3 (29) where z is some value with | z | ≤ | x | . As a result, we can conclude that | ζ | = 1 ( u 1 − z ) 3 − 1 ( u 2 + z ) 3 ≤ 64 27 u 31 + 64 27 u 32 ≤ 5 u 3 , (30) as we wanted to show.
+
+where z is some value with | z | ≤ | x | . As a result, we can conclude that
+
+as we wanted to show.
+
+By the deﬁnition of our update (14) and the approximation bound (18) as well as the coupling condition (11), we have that
+
+∆ e ( y ) − Φ e ( f ) = ∆ e ( y ) + δ ( (oy
+ φ v − φ u ) − Φ( f ) − 1 ( u + e ) 2 + 1 ( (ie
+ u − e ) 2 δ f e − ( δ fe
+ f e ) 2 ζ e ≤ δ ( cs
+ φ v − φ u ) − r e f e − ( δ f e ) 2 ζ e + γ e u e ( f ) = ( δ fel
+ f e ) 2 ζ e + γ e u e ( f ) ≤ 7 δ 2 f 2 e u 2 e + 43 γ e u e ( f ) = 7( δρ e ) 2 + 43 γ e u e ( (f)
+ f ) ,
+
+where the second to last equality follows by Ohm’s law (6), the last equality follows by (16) and we also used the fact that u e ( f ) ≥ 34 u e ( f ) since δ ≤ (4 tlle
+ ρ P|.
+ ∞ ) − 1 . The lemma follows.
+
+For each arc e , let us deﬁne
+
+Intuitively, θ e is the ﬁrst-order correction to the coupling of the primal dual solution ( g , z ) with respect to the arc e . Note that by the fact that ( g , z ) is ς -coupled we have that
+
+Note that by the fact that ( g , z ) is ς -coupled we have that
+
+Let us now deﬁne a ﬂow g to be the ﬂow g with the “correcting“ ﬂow θ added. That is,
+
+for each arc e . Observe that, as ς ∞ ≤ ς 2 ≤ 150 and, by (32), | θ e | ≤ ς e u e ( g ) , this ﬂow g is feasible in G g and, in fact, 5150 u e ( g ) ≥ u e ( g ) ≥ 4950 u e ( g ) . Furthermore, if we analyze the coupling of ( g 7
+ , z ) , by Fact 3.4, for each arc e , we get that
+
+e ( z ) − Φ e ( g ) = ∆ e ( z ) − 1 u + e ( g ) − θ e − 1 u − e ( g ) + θ e = ∆ e ( z ) − Φ e ( g ) − 1 ( u + e ( g )) 2 + 1 ( u − e ( g )) 2 θ e − θ 2 e ζ e = − θ 2 e ζ ra
+ e ≤ 5 u e ( g ) 2 ς 2 e u e ( g ) 3 = 5 ς 2 e u e ( g ) ≤ 51 ς 2 e 10 Oil.
+ u e ( g ) ,
+
+where the third equality follows by the deﬁnition of θ e (31) and the second to last inequality follows by (32).
+
+We thus see that the solutions ( g , z ) are well-coupled. In fact, they are γ -coupled with
+
+So, these solutions ( g , z ) have all the desired properties except g is an ( χ α + σ ) -ﬂow, where σ are the demands of the “correcting“ ﬂow θ we added – and not a χ α -ﬂow we need. To remedy this deﬁciency, we compute an electrical ( − σ ) -ﬂow θ determined by the to resistances
+
+and obtain our desired solutions ( ¯g , ¯z ) by adding this electrical ﬂow to the ﬂow g , and simulta- neously adding the vertex potentials φ that induce θ to the dual solution z . In other words, we set
+
+Clearly, ¯g is a χ α -ﬂow, as desired. It thus only remains to ensure that the solutions ( ¯g , ¯z ) are still well-coupled.
+
+To analyze the coupling of ( ¯g , ¯z ) one should note ﬁrst that the procedure we used to obtain these solutions from the solutions ( g , z ) is analogous to the one we used obtain the solutions ( f , y ) from the solutions ( f , y ) in our augmentation step. More precisely, the update (35) is an exact analogue of the update (14) with δ = 1 .
+
+So, to quantify the change in coupling we can follow the approach we used when analyzing the augmentation step. Speciﬁcally, let us deﬁne a congestion vector ρ as
+
+for each arc e . By Lemma 3.3, we know that
+
+where the second inequality follows by the energy minimizing property of electrical ﬂows. (Note that − θ is a ( − σ ) -ﬂow.) We thus have that, by (34),
+
+where the ﬁrst inequality follows by (32). As a result, we can conclude that
+
+which ensures, in particular, that our analogue of condition (17) (for δ = 1 ) is satisﬁed. Consequently, we can use Lemma 3.5 to conclude that the solutions ( ¯g , ¯z ) is γ -coupled with
+
+where we used the estimates (33) and (36). So, ( ¯g , ¯z ) is well-coupled, as desired.
+
+Let us assume that χ T y ≤ 2 m (1 − α ) . Otherwise, by Lemma 3.1, we have a dual certiﬁcate that the target demand χ cannot be routed in G , i.e., the condition (b) triggers. As all the preconditioning arcs have s and t as their endpoints and are oriented from s to t , we have that T
+
+for each such arc e . Also, all these preconditioning arcs are completely indistinguishable from the point of view of our algorithm. They have the same endpoints, orientation, and initial (residual) capacities and stretch. Consequently, their resistances are always equal when we compute our electrical ﬂows (see, e.g., (13)) and thus, in turn, their forward and backward residual capacities evolve in exactly the same way during each of the augmentation and ﬁxing steps (see Section 3.2).
+
+As the residual capacity u e ( f ) is exactly the capacity of e in the symmetrization G f of the residual graph G f , and preconditioning arc constitute exactly half of all the m arcs, a ﬂow f that just routes (1 − α ) F 5 m units of ﬂow from s to t on each such arc will be the desired χ (1 − α ) 10 -ﬂow feasible in G f , and
+
+our proof will follow.
+
+To establish (38), let us ﬁx some representative preconditioning arc e and assume for the sake contradiction that (38) does not hold. Since the total preconditioning arc capacity constitutes at least 23 -fraction of the total s - t capacity F ∗ of the graph G , we must have that
+
+where u + e and u − e are the initial capacities of the preconditioning arcs. As a result, if (38) did not hold, by (3), we know that
+
+where we used the fact that F ≤ 32 F ∗ as otherwise we would be able to immediately tell that it is impossible to route at least 23 -fraction of the s - t ﬂow only via preconditioning arcs.
+
+impossible to route at least 23 -fraction of the s - t ﬂow only via preconditioning arcs. In fact, we also know that f e > 0 . This is so, as e is oriented from s to t and thus having f e < 0 would mean that there is a ﬂow of strictly more than F ∗ 3 from t towards s over all the preconditioning arcs. It would, however, be impossible to balance this “backward” t - s ﬂow via an s - t ﬂow over the remaining arcs as they can support an s - t ﬂow of at most F ∗ 3 . So, indeed f e > 0 . Furthermore, if (38) would indeed not hold then f e > 0 , (3) and (39) would imply that
+
+Now, combining the above bound with the fact that ( f , y ) is well-coupled (11), we can conclude that, for any preconditioning arc e ,
+
+∆ e ( y ) ≥ Φ e ( f ) − γ e u e ( f ) = 1 u + e ( f ) − 1 u − e ( f ) − γ e u e ( f ) ≥ (1 − γ e ) u e ( f ) − 1 2 u e ( f ) = (1 − 2 γ e ) 2 u e ( f ) ≥ 5 m (1 − 2 √ m ) 2(1 − α ) F > 2 m (1 − α ) F ,
+
+where we again used the assumption that (38) does not hold as well as the fact that γ e ≤ 1 √ m since otherwise the contribution of all the m 2 preconditioning arcs to the 2 -norm of the violation vector γ alone would make this norm violate the well-coupling bound. However, the above lower bound on ∆ e ( y ) directly violates our bound (37). So, we reached a contradiction that proves (38) and thus our lemma follows.
+
+A.5 Proof of Lemma 4.4
+
+By examining the augmentation and ﬁxing steps that are performed during the progress steps (cf. (14) and (35) in the proof of Lemma 3.6) and applying standard Taylor approximations to the resulting changes in the resistances r (cf. (13)), one obtains that, for each arc e , the resulting arc resistance r e change is such that
+
+where ρ is the congestion vector (16), δ = (33 ile
+ ρ p||s
+ 3 ) − 1 is the step size, and κ is a vector such that κ 2 ≤ 1 . (Roughly speaking, the δρ e term corresponds to augmentation step and the κ e term corresponds to the ﬁxing step.) Now, let φ be the vertex potentials inducing the electrical χ -ﬂow f . By Lemma 2.2, we know
+
+Furthermore, if E r ( f ) is the energy of an electrical χ -ﬂow f determined by the new resistances r , applying Lemma 2.2 again, we obtain that
+
+1 E r ( f ) ≤ e =( u,v ) ( φ v − φ u ) 2 r e E r ( f ) 2 ≤ e =( u,v ) (1 + O ( δ | ρ e | + κ e )) ( φ v − φ u ) 2 r e E r ( f ) 2 = 1 E r ( f ) 1 + O is.
+ e ( δρ e + κ e )( r e f 2 e ) E r ( f ) ≤ 1 E r ( f ) 1 + O e ( δρ 3 e + κ e ρ 2 e ) ρ 22 ,
+
+where we used (40), Ohm’s law (5) and Lemmas 3.3 and 3.9. Finally, observe that since δ = (33 sie
+ ρ 3 ) − 1 and |
+ κ 2 ≤ 1 , an application of the Cauchy-Schwartz inequality gives us that
+
+( δρ 3 e + κ e ρ 2 e ) ≤ δ slle
+ ρ p||;
+ 33 + κ 2 all
+ ρ 0
+ 24 ≤ δ ill
+ ρ p||3
+ 33 + κ 2 al
+ ρ 23 ≤ O ( (le
+ ρ p||;
+ 23 )
+
+as desired. The lemma thus follows.
+
+References
+
+[1] R. K. Ahuja, T. L. Magnanti, and J. B. Orlin. Network ﬂows: theory, algorithms, and applica- tions . Prentice-Hall, 1993.
+
+[
+
+] R. K. Ahuja, T. L. Magnanti, and J. B. Orlin. Network ﬂows: theory, algorithms, and applica- tions . Prentice-Hall,
+
+[
+
+] R. K. Ahuja, T. L. Magnanti, J. B. Orlin, and M. R. Reddy. Applications of Network Optimiza- tion , volume
+
+of Handbooks in Operations Research and Management Science . North-Holland,
+
+[
+
+] H. Alt, N. Blum, K. Mehlhorn, and M. Paul. Computing a maximum cardinality matching in a bipartite graph in time O ( n
+
+.
+
+;
+ m/ log n ) . Inf. Process. Lett. ,
+
+(
+
+):
+
+–
+
+,
+
+[
+
+] S. Arora, E. Hazan, and S. Kale. The multiplicative weights update method: a meta-algorithm and applications. Theory of Computing ,
+
+(
+
+):
+
+–
+
+,
+
+[
+
+] B. Bollobas. Modern Graph Theory . Springer,
+
+[
+
+] J. R. Bunch and J. E. Hopcroft. Triangular factorization and inversion by fast matrix multi- plication. Mathematics of Computation ,
+
+(
+
+):
+
+–
+
+,
+
+[3] H. Alt, N. Blum, K. Mehlhorn, and M. Paul. Computing a maximum cardinality matching in a bipartite graph in time O ( n 1 . 5 8;
+ m/ log n ) . Inf. Process. Lett. , 37(4):237–240, 1991.
+
+[6] J. R. Bunch and J. E. Hopcroft. Triangular factorization and inversion by fast matrix multi- plication. Mathematics of Computation , 28(125):231–236, 1974.
+
+[
+
+] P. Christiano, J. Kelner, A. Mądry, D. Spielman, and S.-H. Teng. Electrical ﬂows, Lapla- cian systems, and faster approximation of maximum ﬂow in undirected graphs. In STOC’
+
+: Proceedings of the
+
+rd Annual ACM Symposium on Theory of Computing , pages
+
+–
+
+,
+
+[
+
+] M. B. Cohen, R. Kyng, G. L. Miller, J. W. Pachocki, R. Peng, A. B. Rao, and S. C. Xu. Solving SDD linear systems in nearly m log
+
+/
+
+n time. In STOC’
+
+: Proceedings of the
+
+th Annual ACM Symposium on Theory of Computing , pages
+
+–
+
+,
+
+[
+
+] D. Coppersmith and S. Winograd. Matrix multiplication via arithmetic progressions. Journal of Symbolic Computation ,
+
+:
+
+–
+
+,
+
+[
+
+] T. H. Cormen, C. E. Leiserson, R. L. Rivest, and C. Stein. Introduction to Algorithms . The MIT Press,
+
+rd edition,
+
+[
+
+] J. Edmonds. Paths, trees, and ﬂowers. Canadian Journal of Mathematics ,
+
+:
+
+–
+
+,
+
+[
+
+] J. Edmonds and R. M. Karp. Theoretical improvements in algorithmic eﬃciency for network ﬂow problems. Journal of the ACM ,
+
+(
+
+):
+
+–
+
+,
+
+[14] P. Elias, A. Feinstein, and C. E. Shannon. A note on the maximum ﬂow through a network. IRE Transactions on Information Theory , 2, 1956.
+
+[16] T. Feder and R. Motwani. Clique partitions, graph compression and speeding-up algorithms. Journal of Computer and System Sciences , 51(2):261Ű–272, 1995.
+
+[20] H. N. Gabow and R. E. Tarjan. Faster scaling algorithms for general graph matching problems. Journal of the ACM , 38(4):815–853, 1991.
+
+[23] N. J. A. Harvey. Algebraic algorithms for matching and matroid problems. SIAM Journal on Computing , 39(2):679–702, 2009.
+
+[
+
+] J. Hopcroft and R. Karp. An n
+
+/
+
+algorithm for maximum matchings in bipartite graphs. SIAM Journal on Computing ,
+
+(
+
+):
+
+–
+
+,
+
+[
+
+] A. V. Karzanov. O nakhozhdenii maksimal’nogo potoka v setyakh spetsial’nogo vida i nekoto- rykh prilozheniyakh. Matematicheskie Voprosy Upravleniya Proizvodstvom ,
+
+:
+
+–
+
+,
+
+(in Russian; title translation: On ﬁnding maximum ﬂows in networks with special structure and some applications). [
+
+] J. A. Kelner, Y. T. Lee, L. Orecchia, and A. Sidford. An almost-linear-time algorithm for ap- proximate max ﬂow in undirected graphs, and its multicommodity generalizations. In SODA’
+
+: Proceedings of the
+
+th Annual ACM-SIAM Symposium on Discrete Algorithms , pages
+
+–
+
+,
+
+[
+
+] J. A. Kelner, L. Orecchia, A. Sidford, and Z. A. Zhu. A simple, combinatorial algorithm for solving SDD systems in nearly-linear time. In STOC’
+
+: Proceedings of the
+
+th Annual ACM Symposium on the Theory of Computing , pages
+
+–
+
+,
+
+[
+
+] V. King, S. Rao, and R. Tarjan. A faster deterministic maximum ﬂow algorithm. Journal Algorithms ,
+
+(
+
+):
+
+–
+
+,
+
+[
+
+] D. König. Vonalrendszerek és determinánsok. Mathematikai és Természettudományi Értesitö
+
+:
+
+–
+
+,
+
+[
+
+] D. König. Über graphen und ihre anwendung auf determinantentheorie und mengenlehre. Mathematische Annalen ,
+
+:
+
+–
+
+,
+
+[
+
+] D. König. Sur un probléme de la théorie générale des ensembles et la théorie des graphes. Revue de Métaphysique et de Morale ,
+
+:
+
+–
+
+,
+
+[
+
+] D. König. Graphok és matrixok. Matematikai és Fizikai Lapok ,
+
+:
+
+–
+
+,
+
+[
+
+] I. Koutis, G. L. Miller, and R. Peng. Approaching optimality for solving SDD systems. FOCS’
+
+: Proceedings of the
+
+st Annual IEEE Symposium on Foundations of Computer Sci- ence , pages
+
+–
+
+,
+
+[
+
+] I. Koutis, G. L. Miller, and R. Peng. A nearly m log n -time solver for SDD linear systems. In FOCS’
+
+: Proceedings of the
+
+nd Annual IEEE Symposium on Foundations of Computer Science , pages
+
+–
+
+,
+
+[
+
+] R. Kyng, Y. T. Lee, R. Peng, S. Sachdeva, and D. A. Spielman. Sparsiﬁed cholesky and multigrid solvers for connection Laplacians. In STOC’
+
+: Proceedings of the
+
+th Annual ACM Symposium on Theory of Computing ,
+
+[
+
+] R. Kyng and S. Sachdeva. Approximate Gaussian elimination for Laplacians: Fast, sparse, and simple. In FOCS’
+
+: Proceedings of the
+
+th Annual IEEE Symposium on Foundations Computer Science ,
+
+[
+
+] Y. T. Lee, S. Rao, and N. Srivastava. A new approach to computing maximum ﬂows using electrical ﬂows. In STOC’
+
+: Proceedings of the
+
+th Annual ACM Symposium on the Theory of Computing , pages
+
+–
+
+,
+
+[24] J. Hopcroft and R. Karp. An n 5 / 2 algorithm for maximum matchings in bipartite graphs. SIAM Journal on Computing , 2(4):225–231, 1973.
+
+[
+
+] D. König. Sur un probléme de la théorie générale des ensembles et la théorie des graphes. Revue de Métaphysique et de Morale ,
+
+:
+
+–
+
+,
+
+[
+
+] D. König. Graphok és matrixok. Matematikai és Fizikai Lapok ,
+
+:
+
+–
+
+,
+
+[
+
+] I. Koutis, G. L. Miller, and R. Peng. Approaching optimality for solving SDD systems. FOCS’
+
+: Proceedings of the
+
+st Annual IEEE Symposium on Foundations of Computer ence , pages
+
+–
+
+,
+
+[
+
+] I. Koutis, G. L. Miller, and R. Peng. A nearly m log n -time solver for SDD linear systems. In FOCS’
+
+: Proceedings of the
+
+nd Annual IEEE Symposium on Foundations of Computer Science , pages
+
+–
+
+,
+
+[
+
+] R. Kyng, Y. T. Lee, R. Peng, S. Sachdeva, and D. A. Spielman. Sparsiﬁed cholesky multigrid solvers for connection Laplacians. In STOC’
+
+: Proceedings of the
+
+th Annual ACM Symposium on Theory of Computing ,
+
+[
+
+] R. Kyng and S. Sachdeva. Approximate Gaussian elimination for Laplacians: Fast, sparse, and simple. In FOCS’
+
+: Proceedings of the
+
+th Annual IEEE Symposium on Foundations Computer Science ,
+
+[
+
+] Y. T. Lee, S. Rao, and N. Srivastava. A new approach to computing maximum ﬂows using electrical ﬂows. In STOC’
+
+: Proceedings of the
+
+th Annual ACM Symposium on the Theory of Computing , pages
+
+–
+
+,
+
+[32] D. König. Graphok és matrixok. Matematikai és Fizikai Lapok , 38:116–119, 1931.
+
+[35] R. Kyng, Y. T. Lee, R. Peng, S. Sachdeva, and D. A. Spielman. Sparsiﬁed cholesky and multigrid solvers for connection Laplacians. In STOC’16: Proceedings of the 48th Annual ACM Symposium on Theory of Computing , 2016.
+
+[
+
+] Y. T. Lee and A. Sidford. Path ﬁnding methods for linear programming: Solving linear pro- grams in ˜ O ( √ rank ) iterations and faster algorithms for maximum ﬂows. In FOCS’
+
+: Proceed- ings of the
+
+th Annual IEEE Symposium on Foundations of Computer Science , pages
+
+–
+
+,
+
+[
+
+] L. Lovász. On determinants, matchings and random algorithms. Fundamentals of Computation Theory ,
+
+–
+
+,
+
+[
+
+] L. Lovász and D. M. Plummer. Matching Theory . Elsevier Science,
+
+[
+
+] A. Mądry. Fast approximation algorithms for cut-based problems in undirected graphs. In FOCS’
+
+: Proceedings of the
+
+st Annual IEEE Symposium on Foundations of Computer Sci- ence , pages
+
+–
+
+,
+
+[
+
+] A. Mądry. From Graphs to Matrices, and Back: New Techniques for Graph Algorithms . P
+
+thesis, Massachusetts Institute of Technology,
+
+[
+
+] A. Mądry. Navigating central path with electrical ﬂows: from ﬂows to matchings, and back. In FOCS’
+
+: Proceedings of the
+
+th Annual IEEE Symposium on Foundations of Computer Science , pages
+
+–
+
+,
+
+[
+
+] S. Micali and V. V. Vazirani. An O ( | V | · | E | ) algoithm for ﬁnding maximum matching in general graphs. In FOCS’
+
+: Proceedings of the
+
+st Annual IEEE Symposium on Foundations of Computer Science , pages
+
+–
+
+,
+
+[
+
+] M. Mucha. Finding maximum matchings via Gaussian elimination . P
+
+thesis, University of Warsaw,
+
+[
+
+] M. Mucha and P. Sankowski. Maximum matchings via Gaussian elimination. In FOCS’
+
+: Proceedings of the
+
+th Annual IEEE Symposium on Foundations of Computer Science , pages
+
+–
+
+,
+
+[
+
+] J. B. Orlin. Max ﬂows in O(nm) time, or better. In STOC’
+
+: Proceedings of the
+
+th Annual ACM Symposium on the Theory of Computing , pages
+
+–
+
+,
+
+[
+
+] R. Peng. Approximate undirected maximum ﬂows in O ( mpolylog ( n )) time. In SODA’
+
+: Proceedings of the
+
+th Annual ACM-SIAM Symposium on Discrete Algorithms , pages
+
+–
+
+,
+
+[
+
+] M. O. Rabin and V. V. Vazirani. Maximum matchings in general graphs through randomization. J. Algorithms ,
+
+(
+
+):
+
+–
+
+, Dec.
+
+[
+
+] A. Schrijver. On the history of the transportation and maximum ﬂow problems. Mathematical Programming ,
+
+:
+
+–
+
+,
+
+[
+
+] A. Schrijver. Combinatorial Optimization: Polyhedra and Eﬃciency . Springer,
+
+[
+
+] A. Schrijver. On the history of combinatorial optimization (till
+
+). In R. W. K. Aardal,
+
+[
+
+] Y. T. Lee and A. Sidford. Path ﬁnding methods for linear programming: Solving linear pro- grams in ˜ O ( √ rank ) iterations and faster algorithms for maximum ﬂows. In FOCS’
+
+: Proceed- ings of the
+
+th Annual IEEE Symposium on Foundations of Computer Science , pages
+
+–
+
+,
+
+[47] J. B. Orlin. Max ﬂows in O(nm) time, or better. In STOC’13: Proceedings of the 45th Annual ACM Symposium on the Theory of Computing , pages 765–774, 2013.
+
+[52] A. Schrijver. On the history of combinatorial optimization (till 1960). In R. W. K. Aardal, G.L. Nemhauser, editor, Handbook of Discrete Optimization , pages 1–68. Elsevier, 2005.
+
+[53] J. Sherman. Breaking the multicommodity ﬂow barrier for O ( log n ) -approximations to spars- est cuts. In FOCS’09: Proceedings of the 50th Annual IEEE Symposium on Foundations of Computer Science , pages 363–372, 2009.
+
+est cuts. In FOCS’
+
+: Proceedings of the
+
+th Annual IEEE Symposium on Foundations of Computer Science , pages
+
+–
+
+,
+
+[
+
+] J. Sherman. Nearly maximum ﬂows in nearly linear time. In FOCS’
+
+: Proceedings of the
+
+th Annual IEEE Symposium on Foundations of Computer Science , pages
+
+–
+
+,
+
+[
+
+] D. A. Spielman and S.-H. Teng. Solving sparse, symmetric, diagonally-dominant linear sys- tems in time O ( m
+
+.
+
+) . In FOCS’
+
+: Proceedings of the
+
+th Annual IEEE Symposium on Foundations of Computer Science , pages
+
+–
+
+,
+
+[
+
+] D. A. Spielman and S.-H. Teng. Nearly-linear time algorithms for graph partitioning, graph sparsiﬁcation, and solving linear systems. In STOC’
+
+: Proceedings of the
+
+th Annual ACM Symposium on the Theory of Computing , pages
+
+–
+
+,
+
+[
+
+] W. T. Tutte. The factorization of linear graphs. Journal of the London Mathematical Society
+
+:
+
+–
+
+,
+
+[
+
+] P. M. Vaidya. Solving linear equations with symmetric diagonally dominant matrices by con- structing good preconditioners. Unpublished manuscript, UIUC
+
+A talk based on the manuscript was presented at the IMA Workshop on Graph Theory and Sparse Matrix Compu- tation, October
+
+, Mineapolis. [
+
+] V. Vassilevska Williams. Multiplying matrices faster than Coppersmith-Winograd. In STOC’
+
+: Proceedings of the
+
+th Annual ACM Symposium on the Theory of Computing pages
+
+–
+
+,
+
+[
+
+] V. V. Vazirani. A theory of alternating paths and blossoms for proving correctness of the O ( | V || E | ) general graph matching algorithms. Combinatorica ,
+
+(
+
+):
+
+–
+
+,
+
+[58] P. M. Vaidya. Solving linear equations with symmetric diagonally dominant matrices by con- structing good preconditioners. Unpublished manuscript, UIUC 1990. A talk based on the manuscript was presented at the IMA Workshop on Graph Theory and Sparse Matrix Compu- tation, October 1991, Mineapolis.
+
+[
+
+] V. Vassilevska Williams. Multiplying matrices faster than Coppersmith-Winograd. In STOC’
+
+: Proceedings of the
+
+th Annual ACM Symposium on the Theory of Computing , pages
+
+–
+
+,
+
+[60] V. V. Vazirani. A theory of alternating paths and blossoms for proving correctness of the O ( | V || E | ) general graph matching algorithms. Combinatorica , 14 (1):71–109, 1994.

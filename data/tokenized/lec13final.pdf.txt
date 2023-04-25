@@ -1,0 +1,39 @@
+What is a longest increasing subsequence of: 5 3 4 9 6 2 1 8 A sequence S [1 .. k ] is increasing if S [ i ] < S [ i + 1] ∀ i = 1 .. k − 1. Given: A sequence of numbers R [1 .. n ]. Find: LIS of R Use LCS to solve LIS LIS( R ) 1. S = 2. output LCS( S , R )
+
+LimitedLIS( R , x ) # Find LIS with last number less than x . 1. if | R | = 0 return [] 2. T = [] 3. if R [ n ] < x then 4. T = LimitedLIS( R [1 .. n − 1] , R [ n ]) ◦ R [ n ] 5. return max { T , LimitedLIS( R [1 .. n − 1] , x ) } Running time?
+
+LimitedLIS( R , x ) # Find LIS with last number less than x . 1. if | R | = 0 return [] 2. T = [] 3. if R [ n ] < x then 4. T = LimitedLIS( R [1 .. n − 1] , R [ n ]) ◦ R [ n ] 5. return max { T , LimitedLIS( R [1 .. n − 1] , x ) }
+
+5 3 4 9 6 2 1 8 ↑ 3 4 9 or 3 4 6?
+
+5 3 4 9 6 2 1 8 ↑ 3 4 9 or 3 4 6?
+
+1 2 5 3 4 ↑ want shorter IS as well
+
+5 3 4 9 6 2 1 8 ↑ 3 4 9 or 3 4 6?
+
+1 2 5 3 4 ↑ want shorter IS as well
+
+5 3 4 9 6 2 1 8 ↑ 3 4 9 or 3 4 6?
+
+1 2 5 3 4 ↑ want shorter IS as well
+
+8 3 4 9 6 2 1 5 7 2 BIS 9 [1] = 1 BIS 9 [2] = 3 4 BIS 9 [3] = 3 4 5 BIS 9 [4] = 3 4 5 7 R [ k ] extends BIS[ j ] iﬀ BIS[ j ]. last < R [ k ] and ( j = | BIS | or BIS[ j + 1]. last > R [ k ]) Claim: BIS[1] . last < BIS[2] . last < · · · Proof: If BIS[ i ] . last ≥ BIS[ i + 1] . last then the first i numbers in BIS[ i + 1] would be a better BIS[ i ] ⇒⇐ .
+
+Recursive Best Increasing Subsequences 8 3 4 9 6 2 1 5 7 2 BIS 9 [1] = 1 BIS 9 [2] = 3 4 BIS 9 [3] = 3 4 5 BIS 9 [4] = 3 4 5 7 R [ k ] extends BIS[ j ] iﬀ BIS[ j ]. last < R [ k ] and ( j = | BIS | or BIS[ j + 1]. last > R [ k ]) BIS( R ) 1. if | R | = 0 return [] 2. if | R | = 1 return [ R [1]] 3. B = BIS( R [1 .. n − 1]) 4. for j = 1 to | B | − 1 5. if R [ n ] extends B [ j ] then B [ j + 1] = B [ j ] ◦ R [ n ]; return B 6. return B
+
+BIS( R ) 1. if | R | = 0 return [] 2. if | R | = 1 return [ R [1]] 3. B = BIS( R [1 .. n − 1]) 4. for j = 1 to | B | − 1 5. if R [ n ] extends B [ j ] then B [ j + 1] = B [ j ] ◦ R [ n ]; return B 6. return B
+
+Increasing Subsequences Dynamic Programming 8 3 4 9 6 2 1 5 7 2 BIS 9 [1] = 1 BIS 9 [2] = 3 4 BIS 9 [3] = 3 4 5 BIS 9 [4] = 3 4 5 7 BIS 7 [1] = 1 BIS 7 [2] = 3 4 BIS 7 [3] = 3 4 6 BIS 8 [1] = 1 BIS 8 [2] = 3 4 BIS 8 [3] = 3 4 5 R [ k ] extends BIS[ j ] iff BIS[ j ] . last < R [ k ] and ( j = | BIS | or BIS[ j + 1] . last > R [ k
+
+8 3 4 9 6 2 1 5 7 2 R [ k ] extends BIS[ j ] iff BIS[ j ] . last < R [ k ] and ( j = | BIS | or BIS[ j + 1] . last > R Maintain lists L [0] , L [1] , .. where L 0 [0] = [0]. After we scan R [1 L k [ j ] = L k − 1 [ j ] ◦ R [ k ] if R [ k ] extends BIS k − 1 [ j ] L k − 1 [ j ] otherwise L [0] = 0 L [1] = L [2] = L [3] = L [4] = As a result list L [ i ] ends with BIS [ j ] . last at step k .
+
+8 3 4 9 6 2 1 5 7 2 R [ k ] extends BIS[ j ] iff BIS[ j ] . last < R [ k ] and ( j = | BIS | or BIS[ j + 1] . last > R [ k ]) Maintain lists L [0] , L [1] , .. where L 0 [0] = [0]. After we scan R [1 .. k ] L k [ j ] = L k − 1 [ j ] ◦ R [ k ] if R [ k ] extends BIS k − 1 [ j ] L k − 1 [ j ] otherwise L [0] = 0 L [1] = 8 3 2 1 L [2] = 4 L [3] = 9 6 5 L [4] = 7 6 use binary search to ﬁnd j Running time? a b means b extended BIS ending with a As a result list L [ i ] ends with BIS [ j ] . last at step k .
+
+A B C B A C C B B x x x C x x x D A x x B x x x C x x x C x x x
+
+A B C B A C C B B x ○ x x C x ○ x x D A x x B x x ○ x C x x ○ x C x x x ○ Longest Common Subsequence = BCBCC
+
+What properties do the circled entries have?
+
+A B C B A C C B B x ○ x x C x ○ x x D A x x B x x ○ x C x x ○ x C x x x ○ Longest Common Subsequence = BCBCC

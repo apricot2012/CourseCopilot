@@ -1,0 +1,29 @@
+How to prove something in a way that prevents others from proving it, even though they believe it’s true.
+
+1 2 3 4 5 6 7
+
+
+
+1. Peggy writes vertices around a circle in random order. Adds edges. Covers all edge slots and vertex names with scratch-off paint.
+
+
+
+1 2 3 4 5 6 7
+
+1 2 3 4 5 6 7
+
+7 5 3 1 6 2 4
+
+1. Peggy writes vertices around a circle in random order. Adds edges. Covers all edge slots and vertex names with scratch-off paint.
+
+
+
+1. Peggy writes vertices around a circle in random order. Adds edges. Covers all edge slots and vertex names with scratch-off paint.
+
+7 5 3 1 6 2 4
+
+7 5 3 1 6 2 4
+
+doesn’t follow the rules). Claim 2: Any scheme to extract information from Peggy can simulated without Peggy. One simulation step 1. Simulate Peggy: Flip coin to pick either (A) draw an n -cycle in random order or (B) draw Peggy’s graph in random order. 2. Simulate V : If V asks to see (a) Peggy’s G and we picked (A) or (b) Ham. Cycle and we picked (B) then done. Otherwise, rewind V to previous state and goto 1. Expected number of rewinds is two.
+
+Geometry: convex hull, Voronoi diagram

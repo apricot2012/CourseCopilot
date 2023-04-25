@@ -1,0 +1,23 @@
+Introduction to Quantum Computing
+
+However, the model is informed by our current best understanding of physical reality, which turns out to be very weird
+
+superposition of states:
+
+| ψ ⟩ = α 00 | 00 ⟩ + α 01 | 01 ⟩ + α 10 | 10 ⟩ + α 1 | 11 ⟩ where, again, x ∈{ 0 , 1 } 2 α x = 1 Note | x 1 x 2 ⟩ = | x 1 ⟩ ⊗ | x 2 ⟩ = | x 1 ⟩ | x 2 ⟩ What if we just measure just one? Then we get 0 with prob. | α 00 | 2 + | α 01 | 2 and if so the new state is | ψ ⟩ → ψ ′ = α 00 | α 00 | 2 + | α 01 | 2 | 00 ⟩ + α 01 | α 00 | 2 + | α 01 | 2 | 01 ⟩
+
+via quantum gates. Important example: Hadamard Gate H H ( | 0 ⟩ ) = 1 √ 2 | 0 ⟩ + 1 √ 2 | 1 ⟩ H ( | 1 ⟩ ) = 1 √ 2 | 0 ⟩ − 1 √ 2 | 1 ⟩ H ( α | 0 ⟩ + β | 1 ⟩ ) = α H ( | 0 ⟩ ) + β H ( | 1 ⟩ ) = α + β √ 2 | 0 ⟩ + α − β √ 2 | 1 ⟩ H ( | 00 ⟩ ) = H ( | 0 ⟩ ) ⊗ H ( | 0 ⟩ ) = | 00 ⟩ + | 01 ⟩ + | 10 ⟩ + | 11 ⟩ 2 Formally, H is a unitary matrix. This is true in general for quantum
+
+example of quantum weirdness being very useful
+
+The quantum circuit: n | 0 ⟩ H ⊗ n U f H ⊗ n | 1 ⟩ H x x y y ⊕ f ( x ) | ψ 0 ⟩ | ψ 1 ⟩ | ψ 2 ⟩ | ψ 3 ⟩ We start with an initial state | ψ 0 ⟩ = | 0 ⟩ ⊗ n | 1 ⟩ We then apply the Hadamard gate to every qubit, yielding | ψ 1 ⟩ = 1 √ 2 n +1 n | x ⟩ ( | 0 ⟩ − | 1 ⟩ )
+
+n | 0 ⟩ H ⊗ n U f H ⊗ n | 1 ⟩ H x x y y ⊕ f ( x ) | ψ 0 ⟩ | ψ 1 ⟩ | ψ 2 ⟩ | ψ 3 ⟩
+
+n | 0 ⟩ H ⊗ n U f H ⊗ n | 1 ⟩ H x x y y ⊕ f ( x ) | ψ 0 ⟩ | ψ 1 ⟩ | ψ 2 ⟩ | ψ 3 ⟩ | ψ 1 ⟩ = 1 √ 2 n +1 x ∈{ 0 , 1 } n | x ⟩ ( | 0 ⟩ − | 1 ⟩ ) The quantum implementation of f maps | x , y ⟩ (cid:55)→ | x , y ⊕ f ( x )
+
+We have moved f ( x ) to the amplitude!
+
+n | 0 ⟩ H ⊗ n U f H ⊗ n | 1 ⟩ H x x y y ⊕ f ( x ) | ψ 0 ⟩ | ψ 1 ⟩ | ψ 2 ⟩ | ψ 3 ⟩ | ψ 2 ⟩ = 1 √ 2 n +1 x ∈{ 0 , 1 } n ( − 1) f ( x ) | x ⟩ ( | 0 ⟩ − | 1 ⟩ ) know apply the Hadamard gate on the first n qubits. We use relation (exercise) H ⊗ n ( | x ⟩ ) = 1 √ 2 n z ∈{ 0 , 1 } n ( − 1) x · z | z ⟩ yield | ψ 3 ⟩ = n n 1 2 n ( − 1) x · z + f ( x ) | z ⟩ | 0 ⟩ − | 1 ⟩ √ 2
+
+| ψ 3 ⟩ = z ∈{ 0 , 1 } n x ∈{ 0 , 1 } n 1 2 n ( − 1) x · z + f ( x ) | z ⟩ | 0 ⟩ − | 1 ⟩ √ 2 We now measure the first n qubits. Note that the state | 0 ⟩ ⊗ n has amplitude 1 2 n x ∈{ 0 , 1 } n ( − 1) f ( x ) = ± 1 f constant 0 f balanced Thus, if we see all 0s, then f is constant, else its balanced! This is an exponential speedup over classical solution
