@@ -1,6 +1,8 @@
 import pickle
 
 class Loader:
+    def init(self):
+        pass
 
     def load_elements(self, filename, path = "../data"):
         tokenized_path = path + "/tokenized"
