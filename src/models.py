@@ -68,7 +68,7 @@ class dpr_Extractor(Extractor):
         super().load_docs(paths)
         embeddings = HuggingFaceEmbeddings()
         docsearch = OpenSearchVectorSearch.from_documents(self.docs, embeddings, opensearch_url="http://localhost:9200")
-        return docsearch.similarity_search(query)
+        return docsearch.similarity_search(query, k=self.top_k)
     
 class hyde_Extractor(Extractor):
     def __init__(self, segment_length = 512, top_k_documents = 5) -> None:
@@ -80,5 +80,5 @@ class hyde_Extractor(Extractor):
         llm = OpenAI(openai_api_key=SECRET_KEY)
         embeddings = HypotheticalDocumentEmbedder.from_llm(llm, base_embeddings, "web_search")
         result = embeddings.embed_query(query)
-        docsearch = Chroma.from_texts(self.docs, embeddings)
-        return docsearch.similarity_search(query)   
+        docsearch = OpenSearchVectorSearch.from_documents(self.docs, embeddings, opensearch_url="http://localhost:9200")
+        return docsearch.similarity_search(query, k=self.top_k)

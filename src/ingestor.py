@@ -3,7 +3,7 @@ from os.path import isfile, join, splitext
 import pickle
 from unstructured.partition.pdf import partition_pdf
 from tqdm import tqdm
-from loader import Loader
+from src.loader import Loader
 
 class Ingestor:
     file_list_name = "files.list"
@@ -12,7 +12,7 @@ class Ingestor:
     def init(self):
         pass
 
-    def ingest(self, path = "../data"):
+    def ingest(self, path = "./data"):
         raw_path = path + "/raw"
         tokenized_path = path + "/tokenized"
 
@@ -40,7 +40,7 @@ class Ingestor:
                 text_file.write(elements_string)
 
 
-    def ingest_pdf(self, filename, path = "../data"):
+    def ingest_pdf(self, filename, path = "./data"):
         raw_path = path + "/raw"
         tokenized_path = path + "/tokenized"
 
