@@ -1,40 +1,216 @@
-s a b c d e t 3 3 4 10 2 1 1 5 1 2 5
+CPSC 420 Lecture 8 : Today’s announcements:
+▶ Examlet 1 on Jan 27 in class. Closed book & no notes
+▶ Reading: Maximum Flows & Minimum Cuts [Algorithms by
+Erickson Ch. 10]
+Today’s Plan
+▶ Network Flow
+▶ Ford-Fulkerson algorithm
+▶ Augmenting paths
+▶ Max-Flow Min-Cut Theorem
+▶ Edmonds-Karp algorithm
+1 / 7
 
-feasible solution) path from s to t as much as s a b t 1 1 1 1 1
+Network Flows
+A flow network is a directed graph G = (V , E) in which each
+edge (u, v) ∈ E has a positive capacity c(u, v) (non-edges have
+capacity 0).
+G contains a source vertex s and a sink vertex t.
+A flow is an assignment f of real numbers to edges of G:
+1. For all u, v: 0 ≤ f (u, v) ≤ c(u, v) capacity constraint
+2. For all v ̸= s, t : �
+u f (u, v) = �
+w f (v, w) flow conservation
+The size (or value) of a flow is: size(f ) = �
+(s,v)∈E f (s, v)
+Goal: Find flow with maximum size.
+s
+a
+b
+c
+d
+e
+t
+3
+3
+4
+10
+2
+1
+1
+5
+1
+2
+5
+2 / 7
 
-Start with zero flow (a feasible solution) Repeat until impossible
+Max Flow via Path Augmentation [Ford & Fulkerson 1962]
+1. Start with zero flow (a feasible solution)
+2. Repeat until impossible
+▶ Choose an augmenting path from s to t
+▶ Increase flow on this path as much as
+possible
+s
+a
+b
+t
+1
+1
+1
+1
+1
+3 / 7
 
-Choose an augmenting path from s to t Increase flow on this path as much as possible
-
-1. Start with zero flow (a feasible solution) 2. Repeat until impossible ▶ Choose an augmenting path from s to t ▶ Increase flow on this path as much as possible s a b t 1 1 1 1 1 s a b t The residual network of flow network G = ( V , E ) with flow f is G f = ( V , E f ) where E f = { ( u , v ) | f ( u , v ) < c ( u , v ) or f ( v , u ) > 0 } The residual capacity of an edge ( u , v ) ∈ E f is c f ( u , v ) = c ( u , v ) − f ( u , v ) if f ( u , v ) < c ( u , v ) f ( v , u ) if f ( v , u ) > 0 An augmenting path in G is an s ⇝ t path in G f
-
-Start with zero flow (a feasible solution) Repeat until impossible
-
+Max Flow via Path Augmentation [Ford & Fulkerson 1962]
+1. Start with zero flow (a feasible solution)
+2. Repeat until impossible
+▶ Choose an augmenting path from s to t
+▶ Increase flow on this path as much as
+possible
+s
+a
+b
+t
+1
+1
+1
+1
+1
+s
+a
+b
+t
+The residual network of flow network G = (V , E) with flow f is
+G f = (V , E f ) where
+E f = {(u, v)|f (u, v) < c(u, v) or f (v, u) > 0}
+The residual capacity of an edge (u, v) ∈ E f is
+cf (u, v) =
+�
+c(u, v) − f (u, v)
+if f (u, v) < c(u, v)
+f (v, u)
+if f (v, u) > 0
 An augmenting path in G is an s ⇝ t path in G f
+3 / 7
 
-diﬀerence = a ∈ S −{ v } b ∈ T + { v } f ( a , b ) − f ( b , a ) − a ∈ S , b ∈ T f ( a , b ) − f ( b , a ) = a ∈ S −{ v } ( f ( a , v ) − f ( v , a )) − >
- b ∈ T ( f ( v , b ) − f ( b , v )) = u ∈ V f ( u , v ) − w ∈ V f ( v , w ) = 0 f ( S − { v } , T + { v } ) f ( S , T ) 2. = Repeat until S = { s } implies size( f ) = f ( S , T ) □
+Correctness of Ford & Fulkerson
+A cut is a partition (S, T) of V such that s ∈ S and t ∈ T. (Cut
+separates s from t.)
+The capacity of cut (S, T) is c(S, T) =
+�
+u∈S,v∈T
+c(u, v)
+The flow across cut (S, T) is f (S, T) =
+�
+u∈S,v∈T
+f (u, v) − f (v, u)
+Lemma
+For any flow f and any cut (S, T), size(f ) = f (S, T) ≤ c(S, T)
+Proof outline
+1. f (S, T) ≤ c(S, T)
+[Capacity Constraint]
+2. ∀v ̸= s, f (S, T) = f (S − {v}, T + {v})s [Flow Conservation]
+3. f ({s}, V − {s}) = size(f )
+[Definition]
+4 / 7
 
-Theorem: If residual network G f has no augmenting path then f is a max size flow. Proof: Let S = { v | s ⇝ v in G f } . The sink t ̸∈ S since G f has no augmenting path. Let T = V − S . Size of flow f = f ( S , T ) equals c ( S , T ) since f ( u , v ) = c ( u , v ) for u ∈ S , v ∈ T . Size of any flow ≤ c ( S , T ) by Lemma. □ Max-Flow Min-Cut Theorem Size of max-flow f ∗ equals capacity of min capacity cut ( S ∗ , T ∗ ) . Proof: size( f ∗ ) ≤ c ( S ∗ , T ∗ ) by Lemma size( f ∗ ) = c ( S , T ) where S = { v | s ⇝ v in G f ∗ } and c ( S , T ) ≥ c ( S ∗ , T ∗ ) since ( S ∗ , T ∗ ) is min capacity cut. □ Integrality Theorem If all capacities are integers then there is a max-flow with integer flow on every edge.
+Correctness of Ford & Fulkerson
+diﬀerence =
+�
+a∈S−{v}
+b∈T+{v}
+f (a, b) − f (b, a) −
+�
+a∈S,b∈T
+f (a, b) − f (b, a)
+=
+�
+a∈S−{v}
+(f (a, v) − f (v, a)) −
+�
+b∈T
+(f (v, b) − f (b, v))
+=
+�
+u∈V
+f (u, v) −
+�
+w∈V
+f (v, w) = 0
+f (S − {v}, T + {v})
+f (S, T)
+2.
+=
+Repeat until S = {s} implies size(f ) = f (S, T)
+□
+5 / 7
 
-For flow networks ( V , E ) with integral capacities: Running time O ( | E | size( f ∗ ))
+Correctness of Ford & Fulkerson
+Theorem: If residual network G f has no augmenting path then f is
+a max size flow.
+Proof: Let S = {v|s ⇝ v in G f }. The sink t ̸∈ S since G f has no
+augmenting path. Let T = V − S. Size of flow f = f (S, T) equals
+c(S, T) since f (u, v) = c(u, v) for u ∈ S, v ∈ T. Size of any flow
+≤ c(S, T) by Lemma.
+□
+Max-Flow Min-Cut Theorem
+Size of max-flow f ∗ equals capacity of min capacity cut (S∗, T ∗).
+Proof: size(f ∗) ≤ c(S∗, T ∗) by Lemma
+size(f ∗) = c(S, T) where S = {v|s ⇝ v in G f ∗
+} and
+c(S, T) ≥ c(S∗, T ∗) since (S∗, T ∗) is min capacity cut.
+□
+Integrality Theorem
+If all capacities are integers then there is a max-flow with integer
+flow on every edge.
+Proof: Ford-Fulkerson augments by an integral amount.
+□
+6 / 7
 
-For flow networks ( V , E ) with integral capacities: Running time O ( | E | size( f ∗ ))
+Running time of Ford & Fulkerson
+For flow networks (V , E) with integral capacities:
+Running time O(|E|size(f ∗))
+7 / 7
 
-Running time O ( | E | size( f ∗ )) For flow networks ( V , E ) with irrational capacities: Running time ∞ s t 1 1 φ φ = √ 5 − 1 2 < 1 1 − φ = φ 2
+Running time of Ford & Fulkerson
+For flow networks (V , E) with integral capacities:
+Running time O(|E|size(f ∗))
+For flow networks (V , E) with irrational capacities:
+Running time ∞
+s
+t
+1
+1
+φ
+φ =
+√
+25−1
+< 1
+1 − φ = φ2
+7 / 7
 
-s t 1 1 φ φ = √ 5 − 1 2 < 1 1 − φ = φ 2
+Running time of Ford & Fulkerson
+For flow networks (V , E) with integral capacities:
+Running time O(|E|size(f ∗))
+For flow networks (V , E) with irrational capacities:
+Running time ∞
+Edmonds-Karp
+Shortest augmenting path:
+Running time O(|V ||E|2)
+regardless of capacities
+7 / 7
 
-For flow networks ( V , E ) with integral capacities: Running time O ( | E | size( f ∗ ))
-
-For flow networks ( V , E ) with irrational capacities: Running time ∞
-
-Running time O ( | V || E | 2 ) regardless of capacities
-
-For flow networks ( V , E ) with integral capacities: Running time O ( | E | size( f ∗ ))
-
-Running time O ( | V || E | 2 ) regardless of capacities
-
-O ( | V || E | ) O ( | E | 1+ o (1) )
-
+Running time of Ford & Fulkerson
+For flow networks (V , E) with integral capacities:
+Running time O(|E|size(f ∗))
+For flow networks (V , E) with irrational capacities:
+Running time ∞
+Edmonds-Karp
+Shortest augmenting path:
+Running time O(|V ||E|2)
+regardless of capacities
+Beyond Ford-Fulkerson
+[Orlin 2012]
+O(|V ||E|)
 [Chen-Kyng-Liu-Peng-Gutenberg-Sachdeva 2022]
+O(|E|1+o(1))
+7 / 7

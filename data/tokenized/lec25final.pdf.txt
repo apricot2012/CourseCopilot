@@ -1,29 +1,447 @@
-Suppose we use a linear structure (like an array, paper, etc.) to store a set of data (no duplicates).
+CPSC 420 Lecture 24: Today’s announcements:
+▶ HW4 (coming soon) due Mar 30, 23:59
+▶ Reading: https://student.cs.uwaterloo.ca/~cs466/
+Old_courses/F10/online_list.pdf [by L´opez-Ortiz]
+https://courses.csail.mit.edu/6.897/spring03/
+scribe_notes/L5/lecture5.pdf [by Demaine]
+https://courses.csail.mit.edu/6.897/spring03/
+scribe_notes/L6/lecture6.pdf [by Demaine]
+Today’s Plan
+▶ Online Algorithms
+▶ Hiring problem ✓
+▶ Page replacement ✓
+▶ List Update
+▶ Experts
+1 / 9
 
-Oper + a + b + c ? c ? b ? b ? c list a ab abc abc abc abc abc cost 1 2 3 3 2 2 3 = 16 list a ab abc abc cab bca bca cost 1 2 3 3 3 1 2 = 15 list a ab abc bac bac bca bca bca cost 1 2 3 1 3 1 1 2 = 13 list a ab abc abc acb abc bac cost 1 2 3 3 3 2 3 = 17
+List Update
+Suppose we use a linear structure (like an array, linked-list, pile of
+paper, etc.) to store a set of data (no duplicates).
+Operations:
+insert(x) scan list from front (to verify that x is not there) and
+add x to the end (short form: +x)
+find(x) scan list from front to find x (short form: ?x)
+delete(x) like find but remove x (short form: −x)
+The cost of each operation is the position of x in the list.
+List update:
+free to move x anywhere closer to front after find(x)
+(not on insert(x))
+pay 1 per swap of any two adjacent list items
+2 / 9
 
-Oper + a + b + c ? c ? b ? b ? c list a ab abc abc abc abc abc cost 1 2 3 3 2 2 3 = 16 list a ab abc abc cab bca bca cost 1 2 3 3 3 1 2 = 15 list a ab abc bac bac bca bca bca cost 1 2 3 1 3 1 1 2 = 13 list a ab abc abc acb abc bac cost 1 2 3 3 3 2 3 = 17 Frequency Count Order items by #finds so far (decreasing). Move-to-front On every find( x ), move x to the front. Transpose On every find( x ), swap x one closer to the front.
+List Update Example
+Oper
++a
++b
++c
+?c
+?b
+?b
+?c
+list
+a
+ab
+abc
+abc
+abc
+abc
+abc
+cost
+1
+2
+3
+3
+2
+2
+3
+= 16
+list
+a
+ab
+abc
+abc
+cab
+bca
+bca
+cost
+1
+2
+3
+3
+3
+1
+2
+= 15
+list
+a
+ab
+abc
+bac
+bac
+bca
+bca
+bca
+cost
+1
+2
+3
+1
+3
+1
+1
+2
+= 13
+list
+a
+ab
+abc
+abc
+acb
+abc
+bac
+cost
+1
+2
+3
+3
+3
+2
+3
+= 17
+3 / 9
 
-Oper + a + b + c ? c ? b ? b ? c list a ab abc abc abc abc abc cost 1 2 3 3 2 2 3 = 16 MTF a ab abc abc cab bca bca FC 1 2 3 3 3 1 2 = 15 list a ab abc bac bac bca bca bca cost 1 2 3 1 3 1 1 2 = 13 TR a ab abc abc acb abc bac cost 1 2 3 3 3 2 3 = 17 Frequency Count Order items by #finds so far (decreasing). Move-to-front On every find( x ), move x to the front. Transpose On every find( x ), swap x one closer to the front.
+Frequency Count, Move-to-front, Transpose
+Oper
++a
++b
++c
+?c
+?b
+?b
+?c
+list
+a
+ab
+abc
+abc
+abc
+abc
+abc
+cost
+1
+2
+3
+3
+2
+2
+3
+= 16
+list
+a
+ab
+abc
+abc
+cab
+bca
+bca
+cost
+1
+2
+3
+3
+3
+1
+2
+= 15
+list
+a
+ab
+abc
+bac
+bac
+bca
+bca
+bca
+cost
+1
+2
+3
+1
+3
+1
+1
+2
+= 13
+list
+a
+ab
+abc
+abc
+acb
+abc
+bac
+cost
+1
+2
+3
+3
+3
+2
+3
+= 17
+Frequency Count Order items by #finds so far (decreasing).
+Move-to-front On every find(x), move x to the front.
+Transpose On every find(x), swap x one closer to the front.
+3 / 9
 
-orders items by total number of finds:
+Frequency Count, Move-to-front, Transpose
+Oper
++a
++b
++c
+?c
+?b
+?b
+?c
+list
+a
+ab
+abc
+abc
+abc
+abc
+abc
+cost
+1
+2
+3
+3
+2
+2
+3
+= 16
+MTF
+a
+ab
+abc
+abc
+cab
+bca
+bca
+FC
+1
+2
+3
+3
+3
+1
+2
+= 15
+list
+a
+ab
+abc
+bac
+bac
+bca
+bca
+bca
+cost
+1
+2
+3
+1
+3
+1
+1
+2
+= 13
+TR
+a
+ab
+abc
+abc
+acb
+abc
+bac
+cost
+1
+2
+3
+3
+3
+2
+3
+= 17
+Frequency Count Order items by #finds so far (decreasing).
+Move-to-front On every find(x), move x to the front.
+Transpose On every find(x), swap x one closer to the front.
+3 / 9
 
-= number of find( x i ) ops.
+FC, MTF, TR versus Static OPT
+Suppose all n inserts occur at the beginning and there are no
+deletes.
+Static OPT (SOPT) orders items by total number of finds:
+f1 ≥ f2 ≥ · · · ≥ fn where fi = number of find(xi) ops.
+Transpose is bad. Suppose the m operations are
++x3 + x4 + x5 . . . + xn + x1 + x2 ?x1 ?x2 ?x1 ?x2 . . .
+�
+��
+�
+m−n operations
+so the list starts as x3x4 . . . xnx1x2.
+cost(TR) =
+��n
+i=1 i
+�
++ (m − n)n ∼ mn for large m.
+cost(SOPT) =
+��n
+i=1 i
+�
++ 1.5m ∼ 1.5m for large m.
+4 / 9
 
-Transpose is bad. Suppose the m operations are + x 3 + x 4 + x 5 . . . + x n + x 1 + x 2 ? x 1 ? x 2 ? x 1 ? x 2 . . . m − n operations so the list starts as x 3 x 4 . . . x n x 1 x 2 . cost(TR) = n i =1 i + ( m − n ) n ∼ mn for large m . cost(SOPT) = ni =1 i + 1 . 5 m ∼ 1 . 5 m for large m .
+FC, MTF, TR versus Static OPT
+Suppose all n inserts occur at the beginning and there are no
+deletes.
+Static OPT (SOPT) orders items by total number of finds:
+f1 ≥ f2 ≥ · · · ≥ fn where fi = number of find(xi) ops.
+Move-to-front is good1
+Let costA(i, j) be the number of times algorithm A sees item xi
+before finding item xj.
+cost(A) =
+�
+i<j
+costA(i, j) + costA(j, i)
+For i < j, costSOPT(i, j) = fj and costSOPT(j, i) = 0.
+1Similarly, so is Frequency Count.
+4 / 9
 
-= number of find( x i ) ops.
-
-When f i ≥ f j , the worst case for MTF is: ? x j ? x i ? x j ? x i . . . ? x j ? x i 2 f j find ops ? x i ? x i . . . ? x i f i − f j find ops So cost MTF ( i , j ) ≤ f j and cost MTF ( j , i ) ≤ f j . Thus, cost MTF ( i , j ) + cost MTF ( j , i ) ≤ 2 f j ≤ 2(cost SOPT ( i , j ) + cost SOPT ( j , i )) and so cost(MTF) ≤ 2cost(SOPT)
-
+FC, MTF, TR versus Static OPT
+When fi ≥ fj, the worst case for MTF is:
+�?xj ?xi ?xj ?xi . . .?xj ?xi
+��
+�
+2fj find ops
+�?xi ?xi . . .?xi
+��
+�
+fi−fj find ops
+So costMTF(i, j) ≤ fj and costMTF(j, i) ≤ fj.
+Thus,
+costMTF(i, j) + costMTF(j, i) ≤ 2fj
+≤ 2(costSOPT(i, j) + costSOPT(j, i))
+and so
 cost(MTF) ≤ 2cost(SOPT)
+5 / 9
 
-Proof: Let s = s 1 s 2 . . . s m be a sequence of items to find. OPT s i − 1 OPT 0 s i − 1 i s i − 1 i s i − 1 j s i OPT free-moves s i to ‘ after i th access. cost = j + k ‘ k ‘ s i k OPT 0 pay-moves s i to ‘ after i − 1 th access. cost = ( j + ( k − ‘ )) + ‘ j $ i − 1 i − 1 .
+MTF versus Dynamic OPT
+Lemma: OPT only needs paid swaps.
+Proof: Let s = s1s2 . . . sm be a sequence of items to find.
+OPT
+si−1
+OPT′
+si−1
+i
+si−1
+i
+si−1
+j
+si
+OPT free-moves si to ℓ after
+ith access.
+cost = j + k
+ℓ
+k
+ℓ
+si
+k
+OPT′ pay-moves si to ℓ after
+i − 1th access.
+cost = (j + (k − ℓ)) + ℓ
+j
+$
+i − 1
+i − 1
+.
+6 / 9
 
-OPT 0 s i − 1 i s i − 1 ‘ s i k OPT 0 pay-moves s i to ‘ after i − 1 th access. cost = ( j + ( k − ‘ )) + ‘ j $ i − 1
+MTF versus Dynamic OPT
+Theorem: For any sequence s = s1s2 . . . sm of items to find,
+cost(MTF) ≤ 2cost(OPT)
+where cost(A) is the cost (including paid swaps) of algorithm A on
+sequence s.
+Proof: Let ϕ(i) be the number of inversions between the list orders
+of MTF and OPT after find(si).
+a
+b
+c
+d
+e
+b
+d
+a
+e
+c
+φ(i) = 4
+OPT
+MTF
+Let ci(A) be the cost of A on find(si).
+We first show that ci(MTF) + ϕ(i) − ϕ(i − 1) ≤ 2ci(OPT) − 1.
+7 / 9
 
-Proof: Let ϕ ( i ) be the number of inversions between the list orders of MTF and OPT after find( s i ). a b c d e b d a e c φ ( i ) = 4 OPT MTF Let c i ( A ) be the cost of A on find( s i ). We first show that c i (MTF) + ϕ ( i ) − ϕ ( i − 1) ≤ 2 c i (OPT) − 1.
+MTF versus Dynamic OPT
+OPT
+si
+si
+MTF
+A
+B
+C
+D
+OPT
+si
+si
+MTF
+A
+B
+C
+D
+⇒
+k matches from A to C
+ℓ matches from B to C
+φ(i) − φ(i − 1) = k − ℓ
+k
+ℓ
+k
+ℓ
+si
+j
+j
+1. ci(MTF) = k + ℓ + 1
+2. ϕ(i) − ϕ(i − 1) = k − ℓ
+3. ci(OPT) = j + P(i) ≥ k + 1 + P(i) where P(i) is #paid
+swaps by OPT on ith find.
+4. Each of P(i) paid swaps increases ϕ(i) by ≤ 1.
+So
+ci(MTF) + [ϕ(i) − ϕ(i − 1)] ≤ k + ℓ + 1 + [k − ℓ + P(i)]
+= 2k + 1 + P(i) ≤ 2ci(OPT) − 1
+8 / 9
 
-OPT s i s i MTF A B C D OPT s i s i MTF A B C ⇒ k matches from A to C ‘ matches from B to C φ ( i ) − φ ( i − 1) = k k ‘ k ‘ s i j j 1. c i (MTF) = k + ℓ + 1 2. ϕ ( i ) − ϕ ( i − 1) = k − ℓ 3. c i (OPT) = j + P ( i ) ≥ k + 1 + P ( i ) where P ( i ) is #paid swaps by OPT on i th find. 4. Each of P ( i ) paid swaps increases ϕ ( i ) by ≤ 1. So c i (MTF) + [ ϕ ( i ) − ϕ ( i − 1)] ≤ k + ℓ + 1 + [ k − ℓ + P ( i )]
-
-Sum over all i to get: cost(MTF) + mi =1 [ ϕ ( i ) − ϕ ( i − 1)] = m i =1 ( c i (MTF) + [ ϕ ( i ) − ϕ ( i − 1)]) ≤ m i =1 (2 c i (OPT) − 1) = 2cost(OPT) − m ≤ 2cost(OPT) Since mi =1 [ ϕ ( i ) − ϕ ( i − 1)] = ϕ ( m ) − ϕ (0) ≥ 0, we’re done.
+MTF versus Dynamic OPT
+Sum over all i to get: cost(MTF) + �m
+i=1[ϕ(i) − ϕ(i − 1)] =
+m
+�
+i=1
+(ci(MTF) + [ϕ(i) − ϕ(i − 1)]) ≤
+m
+�
+i=1
+(2ci(OPT) − 1)
+= 2cost(OPT) − m
+≤ 2cost(OPT)
+Since �m
+i=1[ϕ(i) − ϕ(i − 1)] = ϕ(m) − ϕ(0) ≥ 0, we’re done.
+9 / 9

@@ -1,42 +1,256 @@
-CPSC 420: Advanced Algorithms Design and Analysis
-
+CPSC 420: Advanced Algorithms Design and
+Analysis
 2022W2
 
+Hello, my name is:
+email
+Office hours
+Will Evans (he/him/his)
+will@cs.ubc.ca
+Th 14-15:00 X841
+TAs
+David Bromley
+Dylan Brown
+Joesph Poremba
+Seyed Ali Tabatabaee
+Abner Turkieltaub
+Access everything from Canvas
+https://canvas.ubc.ca/courses/106386
+2 / 13
+
+Course Work
 No late work; may be flexible with advance notice
-
+30%
+Homework (∼ 4)
+40%
+Examlets (in class Jan 27, Feb 17, Mar 17, Apr 5)
+30%
+Final exam (TBA)
 Must pass the weighted combo of exams to pass the course.
+3 / 13
 
-Rob Dawson Stream the World Cup Final
+Homework Collaboration
+You may discuss problems in a group of fellow 420 students of size
+at most three. However you must write your submission on your
+own. At the top of the first page of your submission, you must
+acknowledge all resources that you used, including books, websites,
+and students who helped. Submissions missing this statement will
+not be graded.
+4 / 13
 
-Become more familiar with algorithm design techniques
+Books
+Algorithms by Erickson https://jeffe.cs.illinois.edu/teaching/algorithms/
+Algorithm Design by Kleinberg & Tardos
+Introduction to Algorithms by Cormen, Leiserson, Rivest & Stein
+The Art of Computer Programming V1-4 by Knuth
+All available online or online via the UBC library.
+5 / 13
 
-Given two bottles of salad dressing: oil vinegar other stuff Bottle A 15% 36% Bottle B 9% 21% Can we make a dressing with Mixture X 13% 31% ? Mixture Y 12% 30% ?
+Today’s announcements:
+▶ HW1 available soon, due Jan 19, 23:59
+▶ Examlet 1 on Jan 27 in class.
+Today’s Plan
+▶ What is this course about?
+▶ Introduce convex hulls
+6 / 13
 
-Given two bottles of salad dressing: oil vinegar other stuff Bottle A 15% 36% Bottle B 9% 21% Can we make a dressing with Mixture X 13% 31% ? Mixture Y 12% 30% ? If we add another bottle? Bottle C 12% 33%
+What is this course about?
+7 / 13
+Rob Dawson
+Stream the World
+Cup Final
 
-Given two bottles of salad dressing: oil vinegar other stuff Bottle A 15% 36% Bottle B 9% 21% Can we make a dressing with Mixture X 13% 31% ? Mixture Y 12% 30% ? If we add another bottle? Bottle C 12% 33% Problem
+Topics
+▶ Geometric algorithms: Convex hulls, Voronoi diagrams
+▶ Linear programming: Network Flow, Zero-sum games
+▶ Online algorithms: Page replacement
+▶ Dynamic programming
+▶ NP-hardness: Approximation algorithms, Hardness of
+approximation
+▶ Compression: Huffman, Lempel-Ziv
+▶ (maybe) Fast Fourier Transform
+▶ (maybe) Quantum computation
+8 / 13
 
-B = (9 , 21) A = (15 , 36) C = (12 , 33) X = (13 , 31) Y = (12 , 30)
+Goals of the Course
+▶ Become more familiar with algorithm design techniques
+▶ Explore optimizing other measures of an algorithm’s
+performance (compression, paging, ...)
+▶ Determine when improving an algorithm is hopeless
+▶ Explore ways to find approximate solutions (and when that’s
+hopeless)
+9 / 13
 
-B = (9 , 21) A = (15 , 36) C = (12 , 33) X = (13 , 31) Y = (12 , 30) Given two bottles of salad dressing: oil vinegar other stuff Bottle A 15% 36% Bottle B 9% 21% Can we make a dressing with Mixture X 13% 31% ? Mixture Y 12% 30% ? If we add another bottle? Bottle C 12% 33% Problem ▶ Given a set of points P = { p 1 , p 2 , . . . , p n } in [0 , 100] × [0 , 100]
+Making Salad Dressing
+Given two bottles of salad dressing:
+oil
+vinegar
+other stuff
+Bottle A
+15%
+36%
+Bottle B
+9%
+21%
+Can we make a dressing with
+Mixture X
+13%
+31%
+?
+Mixture Y
+12%
+30%
+?
+10 / 13
 
-B = (9 , 21) A = (15 , 36) C = (12 , 33) X = (13 , Y = (12 , 30)
+Making Salad Dressing
+Given two bottles of salad dressing:
+oil
+vinegar
+other stuff
+Bottle A
+15%
+36%
+Bottle B
+9%
+21%
+Can we make a dressing with
+Mixture X
+13%
+31%
+?
+Mixture Y
+12%
+30%
+?
+If we add another bottle?
+Bottle C
+12%
+33%
+10 / 13
 
-A mixture (aka convex combination ) of points p 1 , . . . , p n is n i =1 α i p i where α i ≥ 0 and i,
- i α i = 1. For n = 2 points, the set of convex combinations is the line segment between
+Making Salad Dressing
+Given two bottles of salad dressing:
+oil
+vinegar
+other stuff
+Bottle A
+15%
+36%
+Bottle B
+9%
+21%
+Can we make a dressing with
+Mixture X
+13%
+31%
+?
+Mixture Y
+12%
+30%
+?
+If we add another bottle?
+Bottle C
+12%
+33%
+Problem
+▶ Given a set of points P = {p1, p2, . . . , pn} in [0, 100] × [0, 100]
+▶ Output a representation of the set of mixtures we can produce.
+10 / 13
 
-A mixture (aka convex combination ) of points p 1 , . . . , p n is
+Making Salad Dressing
+B = (9, 21)
+A = (15, 36)
+C = (12, 33)
+X = (13, 31)
+Y = (12, 30)
+Given two bottles of salad dressing:
+oil
+vinegar
+other stuff
+Bottle A
+15%
+36%
+Bottle B
+9%
+21%
+Can we make a dressing with
+Mixture X
+13%
+31%
+?
+Mixture Y
+12%
+30%
+?
+If we add another bottle?
+Bottle C
+12%
+33%
+Problem
+▶ Given a set of points P = {p1, p2, . . . , pn} in [0, 100] × [0, 100]
+▶ Output a representation of the set of mixtures we can produce.
+10 / 13
 
+Making mixtures
+B = (9, 21)
+A = (15, 36)
+C = (12, 33)
+X = (13, 31)
+Y = (12, 30)
+A mixture (aka convex combination)
+of points p1, . . . , pn is
+n
+�
+i=1
+αipi
+where αi ≥ 0 and �
+i αi = 1.
+For n = 2 points, the set of convex
+combinations is the line segment between
+them.
+For n = 3, it’s the triangle with those
+points as vertices.
+11 / 13
+
+Convex Hull
+A set S is convex if for all a, b ∈ S the segment ab is in S.
 The convex hull of a set P of points is the intersection of all
+convex sets that contain P.
+CH(P)
+12 / 13
 
-The convex hull of a set P of points is the intersection of all convex sets that contain P .
+Convex Hull
+A set S is convex if for all a, b ∈ S the segment ab is in S.
+The convex hull of a set P of points is the intersection of all
+convex sets that contain P.
+A point p ∈ P is on the boundary of
+CH(P) iff there exists a line ℓ through
+p with all P on one side of ℓ.
+CH(P)
+12 / 13
 
-CH( P )
-
-The convex hull of a set P of points is the intersection of all convex sets that contain P . A point p ∈ P is on the boundary of CH( P ) iff there exists a line ℓ through p with all P on one side of ℓ . CH( P )
-
-The convex hull of a set P of points is the intersection of all convex sets that contain P .
-
-Idea: Tie a string to a point p 1 ∈ P that is on the CH ( P ). Rotate a taut string around the points until it ”bends” at the next point on CH ( P ). Keep go- ing until back to p 1 . Turn test Path a → b → c makes a left turn at b iff det   a x a y 1 b x b y 1 c x c y 1   > 0 a x b y − a y b x + a y c x − a x c y + b x c y − c x b y > 0
-
-a → b → c makes a left turn at b iff det   a x a y 1 b x b y 1 c x c y 1   > 0 a x b y − a y b x + a y c x − a x c y + b x c y − c x b y > 0
+Jarvis March (Gift-wrapping)
+Idea: Tie a string to a point p1 ∈ P
+that is on the CH(P). Rotate a taut
+string around the points until it ”bends”
+at the next point on CH(P). Keep go-
+ing until back to p1.
+Turn test
+Path a → b → c makes a left turn at b iff
+det
+
+
+ax
+ay
+1
+bx
+by
+1
+cx
+cy
+1
+
+ > 0
+axby − aybx + aycx − axcy + bxcy − cxby > 0
+13 / 13

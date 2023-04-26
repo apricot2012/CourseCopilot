@@ -1,41 +1,207 @@
-1. Finding p 1 takes O ( n ) time 2. Sorting by angle takes O ( n log n ) time 3. Put p 1 p 2 p 3 on a stack S takes O (1) time 4. for i = 4 to n while not LeftTurn( S [top-1], S [top], p i ) pop( S ) push p i onto S return S One iteration of for-loop causes < n pops ⇒ O ( n 2 ) But, over all iterations, #pushes < n and #pops < #pushes
+CPSC 420 Lecture 3 : Today’s announcements:
+▶ HW1 available on Gradescope, due Jan 19, 23:59
+▶ Examlet 1 on Jan 27 in class.
+▶ Reading: Chan’s Algorithm [Wikipedia]
+▶ Reading: Voronoi Diagrams [Computational Geometry:
+Algorithms and Applications 3rd Edition pg 147]
+Today’s Plan
+▶ Convex hulls
+▶ Optimal algorithm?
+▶ Chan’s Algorithm
+1 / 8
 
-Graham’s Scan runtime:
+Graham’s Scan Run Time
+1. Finding p1 takes
+O(n)
+time
+2. Sorting by angle takes
+O(n log n)
+time
+3. Put p1p2p3 on a stack S takes
+O(1)
+time
+4.
+for i = 4 to n
+while not LeftTurn(S[top-1], S[top], pi)
+pop(S)
+push pi onto S
+return S
+One iteration of for-loop causes < n pops ⇒
+O(n2)
+time
+But, over all iterations, #pushes < n and #pops < #pushes
+So total time taken by for-loop is
+O(n)
+Graham’s Scan runtime: O(n log n)
+2 / 8
 
-
-
+Faster Convex Hull?
 Is this the fastest algorithm for Convex Hull?
+How powerful is our computer?
+▶ It can multiply, add, subtract, compare two real numbers in
+one step.
+▶ It cannot wrap a string around n objects in linear time.
+This is called an Algebraic Decision Tree model of computation.
+Is this the fastest algorithm using an Algebraic Decision Tree
+model computer for Convex Hull?
+3 / 8
 
-Is this the fastest algorithm using an Algebraic Decision Tree model computer for Convex Hull?
-
+Faster Convex Hull?
 Suppose there exists a really fast Convex Hull algorithm.
+CH Alg.
+Input
+pts P
+Output
+CH(P)
+4 / 8
 
-CH Alg. Input pts P Output CH( P )
-
+Faster Convex Hull?
 Suppose there exists a really fast Convex Hull algorithm.
+CH Alg.
+Input
+pts P
+Output
+CH(P)
+Transform
+Input
+Input to
+Sort
+x1, . . . , xn
+Transform
+Output
+Output
+Create an alg. that transforms
+an input to the sorting problem
+into an input to CH problem...
+Make this really fast.
+and then transform CH
+output into the answer to
+the sorting problem.
+Make this really fast.
+let CH Alg. do all
+the hard work...
+Sorted
+x1, . . . , xn
+4 / 8
 
-CH Alg. Input pts P Output CH( P ) TransformInput Input to Sort x 1 , . . . , x n TransformOutput Output Create an alg. that transforms an input to the sorting problem into an input to CH problem... and then transform CH output into the answer to the sorting problem. let CH Alg. do all the hard work... Sorted x 1 , . . . , x n
-
+Faster Convex Hull?
 Suppose there exists a really fast Convex Hull algorithm.
+CH Alg.
+Input
+pts P
+Output
+CH(P)
+Transform
+Input
+Input to
+Sort
+x1, . . . , xn
+Transform
+Output
+Output
+Create an alg. that transforms
+an input to the sorting problem
+into an input to CH problem...
+Make this really fast.
+and then transform CH
+output into the answer to
+the sorting problem.
+Make this really fast.
+let CH Alg. do all
+the hard work...
+Sorted
+x1, . . . , xn
+x3 x4 x1 x5 x2
+xi → (xi, x2
+i )
+for all i:
+Find hull pt w/ min x-coord
+Output x-coords in ccw order
+Transform Input
+Transform Output
+4 / 8
 
-CH Alg. Input pts P Output CH( P ) TransformInput Input to Sort x 1 , . . . , x n TransformOutput Output Create an alg. that transforms an input to the sorting problem into an input to CH problem... Make this really fast. and then transform CH output into the answer to the sorting problem. Make this really fast. let CH Alg. do all the hard work... Sorted x 1 , . . . , x n x 3 x 4 x 1 x 5 x 2 x i → ( x i , x 2 i ) for all i : Find hull pt w/ min x-coord Output x-coords in ccw order
+Why did we do this?
+We already have good algorithms for sorting. Why make this
+complicated sorting algorithm?
+5 / 8
 
-We already have good algorithms for sorting. Why make this complicated sorting algorithm?
+Why did we do this?
+We already have good algorithms for sorting. Why make this
+complicated sorting algorithm?
+Because we know Sorting complexity is Ω(n log n).
+(i.e. fastest alg. for sorting takes ≥ cn log n steps for large n)
+We’ve just constructed a sorting algorithm that takes time
+T(n) = TI(n) + TCH(n) + TO(n)
+We know T(n) ≥ cn log n (sorting complexity).
+We know TI(n) ≤ cIn and TO(n) ≤ cOn for some constants cI and
+cO (from the input and output transformations).
+That means (since TCH(n) = T(n) − TI(n) − TO(n))
+TCH(n) ≥ cn log n − cIn − cOn ∈ Ω(n log n).
+This holds for any convex hull algorithm, so the complexity of
+convex hull is Ω(n log n).
+5 / 8
 
-We already have good algorithms for sorting. complicated sorting algorithm?
+What about Jarvis?
+Jarvis March takes time O(nh).
+For small enough h, this isn’t Ω(n log n).
+Our lower bound only cared about one measure of the input: the
+number of points n.
+With two measures, number of points n and size of output convex
+hull h, we might find a better algorithm...
+6 / 8
 
-We’ve just constructed a sorting algorithm that takes time T ( n ) = T I ( n ) + T CH ( n ) + T O ( n ) We know T ( n ) ≥ cn log n (sorting complexity). We know T I ( n ) ≤ c I n and T O ( n ) ≤ c O n for some constants c I and c O (from the input and output transformations). That means (since T CH ( n ) = T ( n ) − T I ( n ) − T O ( n )) T CH ( n ) ≥ cn log n − c I n − c O n ∈ Ω( n log n ) . This holds for any convex hull algorithm, so the complexity of
+Chan’s Algorithm
+Given n points P and a guess g for the number of hull points...
+1. Divide P into n/g groups of g points
+2. Use Graham’s Scan to find the convex hull of each group in
+O(g log g) time per group
+7 / 8
 
-Jarvis March takes time O ( nh ). For small enough h , this isn’t Ω( n log n ).
+Chan’s Algorithm
+Given n points P and a guess g for the number of hull points...
+1. Divide P into n/g groups of g points
+2. Use Graham’s Scan to find the convex hull of each group in
+O(g log g) time per group
+7 / 8
 
-Given n points P and a guess g for the number of hull points... 1. Divide P into n / g groups of g points 2. Use Graham’s Scan to find the convex hull of each group in O ( g log g ) time per group
+Chan’s Algorithm
+Given n points P and a guess g for the number of hull points...
+1. Divide P into n/g groups of g points
+2. Use Graham’s Scan to find the convex hull of each group in
+O(g log g) time per group
+7 / 8
 
-Given n points P and a guess g for the number of hull points... 1. Divide P into n / g groups of g points 2. Use Graham’s Scan to find the convex hull of each group in O ( g log g ) time per group
+Chan’s Algorithm
+Given n points P and a guess g for the number of hull points...
+1. Divide P into n/g groups of g points
+2. Use Graham’s Scan to find the convex hull of each group in
+O(g log g) time per group
+3. Find the lowest point p0
+4. Gift-wrap (Jarvis March) these convex hulls for g wrap steps.
+To find the next hull point pi+1
+4.1 find the right-tangent from pi to each group hull in O(log g)
+time per group
+4.2 pi+1 is rightmost-by-tangent-angle of these tangent points
+4.3 If pi+1 = p0 output hull
+5. Output “g is too small!”
+Total time: O(n log g).
+7 / 8
 
-Given n points P and a guess g for the number of hull points... 1. Divide P into n / g groups of g points 2. Use Graham’s Scan to find the convex hull of each group in O ( g log g ) time per group
-
-
-
-Given n points P and a guess g for the number of hull points... 1. Divide P into n / g groups of g points 2. Use Graham’s Scan to find the convex hull of each group in O ( g log g ) time per group 3. Find the lowest point p 0 4. Gift-wrap (Jarvis March) these convex hulls for g wrap steps. To find the next hull point p i +1 4.1 find the right-tangent from p i to each group hull in O (log g ) time per group 4.2 p i +1 is rightmost-by-tangent-angle of these tangent points 4.3 If p i +1 = p 0 output hull 5. Output “ g is too small!” Total time: O ( n log g ).
-
-Start with g = 4 then g = 16 then g = 256 ... g = 2 2 t on the t th try. Total run time (until g ≥ hull size h ): ⌈ lg lg h ⌉ t =1 O ( n log(2 2 t )) = ⌈ lg lg h ⌉ t =1 O ( n 2 t ) = O ( n ⌈ lg lg h ⌉ t =1 2 t ) = O ( n
+How to generate guesses
+Start with g = 4 then g = 16 then g = 256 ...
+g = 22t on the tth try.
+Total run time (until g ≥ hull size h):
+⌈lg lg h⌉
+�
+t=1
+O(n log(22t)) =
+⌈lg lg h⌉
+�
+t=1
+O(n2t) = O(n
+⌈lg lg h⌉
+�
+t=1
+2t) = O(n lg h)
+8 / 8

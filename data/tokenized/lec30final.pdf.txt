@@ -1,31 +1,200 @@
-insert (x) 1. if T [ h 1 ( x )] = x or T [ h 2 ( x )] = x return 2. i ← h 1 ( x ) 3. repeat n times 4. y ← T [ i ] 5. T [ i ] ← x 6. if y = NULL return 7. if i = h 1 ( y ) then i ← h 2 ( y ) else i ← h 1 ( y ) 8. x ← y 9. rehash; insert( x ) Lemma 3: If m ≥ 2 cn then the probability of a cycle in the graph after n insertions is at most 1 c − 1 . Proof: Slot i is involved in a cycle iff there is a path from i to of length ℓ ≥ 1. By Lemma 1, this happens with probability ≤ ∞ ℓ =1 1 ℓ = 1 ( c − 1) m . Summing over all m slots, gives probability
+CPSC 420 Lecture 30: Today’s announcements:
+▶ Examlet 4 is OPTIONAL.
+I will use the best 3 examlet marks for grading.
+▶ Examlet 4 on April 5 in class. Closed book & no notes
+▶ Reading: Cuckoo Hashing for Undergraduates [by Pagh]
+▶ Reading: RSA public-key cryptosystem [Intro to Algs 4th Ed.
+by Cormen, Leiserson, Rivest, Stein Ch.31.7]
+Today’s Plan
+▶ Cuckoo Hashing
+▶ RSA cryptosystem
+1 / 8
 
-m . Summing over all m slots, gives probability
+Cuckoo Rehash
+insert(x)
+1. if T[h1(x)] = x or T[h2(x)] = x return
+2. i ← h1(x)
+4.3. repeat n times
+y ← T[i]
+5.
+T[i] ← x
+6.
+if y = NULL return
+7.
+if i = h1(y) then i ← h2(y) else i ← h1(y)
+8.
+x ← y
+9. rehash; insert(x)
+Lemma 3: If m ≥ 2cn then the probability of a cycle in the cuckoo
+graph after n insertions is at most
+1
+c−1.
+Proof: Slot i is involved in a cycle iff there is a path from i to itself
+of length ℓ ≥ 1. By Lemma 1, this happens with probability
+≤ �∞
+ℓ=1
+1
+cℓm =
+1
+(c−1)m. Summing over all m slots, gives probability
+≤
+1
+c−1 for a cycle.
+2 / 8
 
-Alice Bob Eve (eavesdropper)
+Cuckoo Rehash
+Lemma 3: If m ≥ 2cn then the probability of a cycle in the cuckoo
+graph after n insertions is at most
+1
+c−1.
+Proof: Slot i is involved in a cycle iff there is a path from i to itself
+of length ℓ ≥ 1. By Lemma 1, this happens with probability
+≤ �∞
+ℓ=1
+1
+cℓm =
+1
+(c−1)m. Summing over all m slots, gives probability
+≤
+1
+c−1 for a cycle.
+Each rehash takes O(n) time.
+By Lemma 3, for c > 3, the prob. that one rehash occurs after n
+insertions is ≤ 1/2, that two rehashes occur ≤ 1/4, etc. So
+expected amortized cost of rehash is O(1).
+Note: A rehash triggers k > 0 consecutive rehashes with prob.
+≤ 1/2k. So the expected cost is still O(n) · �∞
+k=1 1/2k = O(n).
+2 / 8
 
-string P (the pad). Alice sends M ⊕ P (bitwise exclusive or) to Bob. Bob decrypts ( M ⊕ P ) ⊕ P = M M = 1011011 P = 01110101101 ... M ⊕ P = 1100001 Alice Bob M ⊕ P = 1100001 P = 01110101101 ... ( M ⊕ P ) ⊕ P = 1011011
+Cryptography
+Alice
+Bob
+3 / 8
 
-Alice Bob Eve (eavesdropper)
+Cryptography
+Alice
+Bob
+Eve (eavesdropper)
+Alice encrypts her message M and sends encrypted version to Bob.
+Bob decrypts to get original message.
+Possible cryptosystems
+One-time pad Alice and Bob agree beforehand on a random n-bit
+string P (the pad).
+Alice sends M ⊕ P (bitwise exclusive or) to Bob.
+Bob decrypts (M ⊕ P) ⊕ P = M
+M = 1011011
+P = 01110101101 ...
+M ⊕ P = 1100001
+Alice
+Bob
+M ⊕ P = 1100001
+P = 01110101101 ...
+(M ⊕ P) ⊕ P = 1011011
+3 / 8
 
-Bob has two functions: secret S B () and public P B ()
+Cryptography
+Alice
+Bob
+Eve (eavesdropper)
+Alice encrypts her message M and sends encrypted version to Bob.
+Bob decrypts to get original message.
+Possible cryptosystems
+One-time pad Alice and Bob agree beforehand on a random n-bit
+string P (the pad).
+Alice sends M ⊕ P (bitwise exclusive or) to Bob.
+Bob decrypts (M ⊕ P) ⊕ P = M
+Good: Information theoretically secure. Eve gets no information
+about M. Given M ⊕ P, any message M is equally likely.
+Bad: Can use just once. (M1 ⊕ P) ⊕ (M2 ⊕ P) = M1 ⊕ M2
+3 / 8
 
-Properties: 1. S B ( P B ( M )) = M and P B ( S B ( M )) = M 2. Hard to find M given P B ( M ) without S B () Alice sends P B ( M ) to Bob. Bob decrypts: S B ( P B ( M )) = M Good: Use again and again Bad: No one knows if it’s secure.
+RSA public/private key cryptosystem [Rivest,Shamir,Adleman ’77]
+Bob has two functions: secret SB() and public PB()
+Properties:
+1. SB(PB(M)) = M and PB(SB(M)) = M
+2. Hard to find M given PB(M) without SB()
+Alice sends PB(M) to Bob.
+Bob decrypts: SB(PB(M)) = M
+Good: Use again and again
+Bad: No one knows if it’s secure.
+factoring easy ⇒ RSA breakable.
+factoring hard ⇒ RSA secure? (unknown)
+Digital Signatures:
+4 / 8
 
-factoring easy ⇒ RSA breakable. factoring hard ⇒ RSA secure? (unknown)
+RSA public/private key cryptosystem [Rivest,Shamir,Adleman ’77]
+Bob has two functions: secret SB() and public PB()
+Properties:
+1. SB(PB(M)) = M and PB(SB(M)) = M
+2. Hard to find M given PB(M) without SB()
+Alice sends PB(M) to Bob.
+Bob decrypts: SB(PB(M)) = M
+Good: Use again and again
+Bad: No one knows if it’s secure.
+factoring easy ⇒ RSA breakable.
+factoring hard ⇒ RSA secure? (unknown)
+Digital Signatures: Alice sends (M, σ = SA(M) to Bob
+Bob can check that PA(σ) = M.
+4 / 8
 
-Bob has two functions: secret S B () and public P B ()
+Constructing public/private keys
+1. Select two large (> 2048 bits) prime numbers p and q.
+p = 31 q = 17
+2. Compute n = p · q
+n = 527
+3. Select a small odd integer e relatively prime to
+ϕ(n) ≜ (p − 1)(q − 1) i.e. gcd(e, ϕ(n)) = 1.
+ϕ(n) = 30 · 15 = 480
+e = 7 (gcd(7, 480) = 1)
+4. Compute d = e−1 (mod ϕ(n)) i.e. ed = 1 (mod ϕ(n))
+solve 7d = 1 (mod 480)
+7d+480c = 1 (and 0 ≤ d < 480)
+extended gcd given a,b finds x,y with
+ax + by = gcd(a, b)
+7 · 343 + 480 · (−5) = 1
+5. Public key P = (e, n)
+Private key S = (d, n)
+P = (7, 527) S = (343, 527)
+6. P(M) = Me (mod n)
+S(C) = C d (mod n)
+5 / 8
 
-1. Select two large ( > 2048 bits) prime numbers p and q . p = 31 q = 17 2. Compute n = p · q n = 527 3. Select a small odd integer e relatively prime to ϕ ( n ) ≜ ( p − 1)( q − 1) i.e. gcd( e , ϕ ( n )) = 1. ϕ ( n ) = 30 · 15 = 480 e = 7 (gcd(7 , 480) = 1) 4. Compute d = e − 1 (mod ϕ ( n )) i.e. ed = 1 (mod ϕ ( n )) solve 7 d = 1 (mod 480) 7d+480c = 1 (and 0 ≤ d < 480) extended gcd given a , b finds x , y with ax + by = gcd( a , b ) 7 · 343 + 480 · ( − 5) = 1 5. Public key P = ( e , n ) Private key S = ( d , n ) P = (7 , 527) S = (343 , 527) 6. P ( M ) = M e (mod n ) S ( C ) = C d (mod n )
+How does this work?
+Theorem
+For all M < n, P(S(M)) = S(P(M)) = M
+Proof.
+P(S(M)) = S(P(M)) = Med (mod n). Since ed = 1 (mod ϕ(n)),
+e · d = 1 + k(p − 1)(q − 1) for integer k.
+If M ̸= 0 (mod ϕ(n)) then
+Med = M(Mp−1)k(q−1)
+(mod p)
+= M(1)k(q−1)
+(mod p)
+Fermat’s little thm
+= M
+(mod p)
+If M = 0 (mod ϕ(n)) then Med = M (mod p) as well.
+Similarly, Med = M (mod q).
+By Chinese Remainder Thm, Med = M (mod n) for all M < n.
+6 / 8
 
-5. Public key P = ( e , n ) 6. P ( M ) = M e (mod n )
-
-For all M < n, P ( S ( M )) = S ( P ( M )) = M Proof. P ( S ( M )) = S ( P ( M )) = M ed (mod n ). Since ed = 1 (mod ϕ ( n )), e · d = 1 + k ( p − 1)( q − 1) for integer k . If M ̸ = 0 (mod ϕ ( n )) then M ed = M ( M p − 1 ) k ( q − 1) (mod p ) = M (1) k ( q − 1) (mod p ) Fermat’s little thm = M (mod p ) If M = 0 (mod ϕ ( n )) then M ed = M (mod p ) as well. Similarly, M ed = M (mod q ). By Chinese Remainder Thm, M ed = M (mod n ) for all M < n .
-
+Chinese Remainder Theorem [Sun-Tzu 300AD]
 “Looks like the army has between 400 and 500 soldiers.”
+3
+5
+7
+A = 2 mod 3
+A = 3 mod 5
+A = 2 mod 7
+A = 23 + 105x
+Let n = n1 × n2 × · · · × nr where ni are pairwise relatively prime.
+Then (a1, a2, . . . , ar) uniquely determines a mod n where
+ai = a mod ni
+7 / 8
 
-3 5 7 A = 2 mod 3 A = 3 mod 5 A = 2 mod 7 A = 23 + 105 x Let n = n 1 × n 2 × · · · × n r where n i are pairwise relatively prime. Then ( a 1 , a 2 , . . . , a r ) uniquely determines a mod n where a i = a mod n i
-
-change.
-
+Please fill out course evaluations
+I read them.
+I change.
 Future students thank you.
+8 / 8

@@ -1,49 +1,232 @@
-of MTF and OPT after find( s i ). a b c d e b d a e c φ ( i ) = 4 OPT MTF Let c i ( A ) be the cost of A on find( s i ). We first show that c i (MTF) + ϕ ( i ) − ϕ ( i − 1) ≤ 2 c i (OPT) − 1.
+CPSC 420 Lecture 27: Today’s announcements:
+▶ HW4 is on Gradescope, due Mar 30, 23:59
+▶ Examlet 4 on Feb 5 in class. Closed book & no notes
+▶ Reading: https://student.cs.uwaterloo.ca/~cs466/
+Old_courses/F10/online_list.pdf [by L´opez-Ortiz]
+https://courses.csail.mit.edu/6.897/spring03/
+scribe_notes/L5/lecture5.pdf [by Demaine]
+https://courses.csail.mit.edu/6.897/spring03/
+scribe_notes/L6/lecture6.pdf [by Demaine]
+▶ Reading: Ch.5 Hash Tables [Director’s Cut by Erickson]
+Today’s Plan
+▶ Online Algorithms
+▶ List Update
+▶ Hashing
+1 / 8
 
-OPT s i s i MTF A B C D φ ( i ) − φ ( i − 1) = k − k j
+List Update: MTF versus Dynamic OPT
+Theorem: For any sequence s = s1s2 . . . sm of items to find,
+cost(MTF) ≤ 2cost(OPT)
+where cost(A) is the cost (including paid swaps) of algorithm A on
+sequence s.
+Proof: Let ϕ(i) be the number of inversions between the list orders
+of MTF and OPT after find(si).
+a
+b
+c
+d
+e
+b
+d
+a
+e
+c
+φ(i) = 4
+OPT
+MTF
+Let ci(A) be the cost of A on find(si).
+We first show that ci(MTF) + ϕ(i) − ϕ(i − 1) ≤ 2ci(OPT) − 1.
+2 / 8
 
-OPT s i s i MTF A B C D OPT s i s i MTF A B C D ⇒ k matches from A to C e
- matches from B to C φ ( i ) − φ ( i − 1) = k − k k s i j j 1. c i (MTF) = k + ℓ + 1 2. ϕ ( i ) − ϕ ( i − 1) = k − ℓ 3. c i (OPT) = j + P ( i ) ≥ k + 1 + P ( i ) where P ( i ) is #paid swaps by OPT on i th find. 4. Each of P ( i ) paid swaps increases ϕ ( i ) by ≤ 1. So c i (MTF) + [ ϕ ( i ) − ϕ ( i − 1)] ≤ k + ℓ + 1 + [ k − ℓ + P ( i )]
+MTF versus Dynamic OPT
+OPT
+si
+si
+MTF
+A
+B
+C
+D
+OPT
+si
+si
+MTF
+A
+B
+C
+D
+⇒
+k matches from A to C
+ℓ matches from B to C
+φ(i) − φ(i − 1) = k − ℓ
+k
+ℓ
+k
+ℓ
+si
+j
+j
+1. ci(MTF) = k + ℓ + 1
+2. ϕ(i) − ϕ(i − 1) = k − ℓ
+3. ci(OPT) = j + P(i) ≥ k + 1 + P(i) where P(i) is #paid
+swaps by OPT on ith find.
+4. Each of P(i) paid swaps increases ϕ(i) by ≤ 1.
+So
+ci(MTF) + [ϕ(i) − ϕ(i − 1)] ≤ k + ℓ + 1 + [k − ℓ + P(i)]
+= 2k + 1 + P(i) ≤ 2ci(OPT) − 1
+3 / 8
 
-) paid swaps increases ϕ ( i ) by ≤ 1. i ) − ϕ ( i − 1)] ≤ k + ℓ + 1 + [ k − ℓ + P ( i )] = 2 k + 1 + P ( i ) ≤ 2 c i (OPT) − 1
+MTF versus Dynamic OPT
+Sum over all i to get: cost(MTF) + �m
+i=1[ϕ(i) − ϕ(i − 1)] =
+m
+�
+i=1
+(ci(MTF) + [ϕ(i) − ϕ(i − 1)]) ≤
+m
+�
+i=1
+(2ci(OPT) − 1)
+= 2cost(OPT) − m
+≤ 2cost(OPT)
+Since �m
+i=1[ϕ(i) − ϕ(i − 1)] = ϕ(m) − ϕ(0) ≥ 0, we’re done.
+4 / 8
 
-Sum over all i to get: cost(MTF) + o>
- mi =1 [ ϕ ( i ) − ϕ ( i − 1)] = m i =1 ( c i (MTF) + [ ϕ ( i ) − ϕ ( i − 1)]) ≤ m i =1 (2 c i (OPT) − 1) = 2cost(OPT) − m ≤ 2cost(OPT) Since mi =1 [ ϕ ( i ) − ϕ ( i − 1)] = ϕ ( m ) − ϕ (0) ≥ 0, we’re done.
-
-A hash function maps keys from a universe U = { 0 , 1 , . . . , u − 1 } of possible keys to a slot (index from 0 to m − 1) in a hash table (array) of size m .
-
+Hashing
+A hash function maps keys from a universe U = {0, 1, . . . , u − 1}
+of possible keys to a slot (index from 0 to m − 1) in a hash table
+(array) of size m.
 What’s a good hash function?
+5 / 8
 
-A hash function maps keys from a universe U = { 0 , 1 , of possible keys to a slot (index from 0 to m − 1) in a (array) of size m .
-
+Hashing
+A hash function maps keys from a universe U = {0, 1, . . . , u − 1}
+of possible keys to a slot (index from 0 to m − 1) in a hash table
+(array) of size m.
 What’s a good hash function?
+▶ No two keys map to the same slot?
+5 / 8
 
-No two keys map to the same slot?
-
-A hash function maps keys from a universe U = { 0 , 1 , of possible keys to a slot (index from 0 to m − 1) in a (array) of size m .
-
+Hashing
+A hash function maps keys from a universe U = {0, 1, . . . , u − 1}
+of possible keys to a slot (index from 0 to m − 1) in a hash table
+(array) of size m.
 What’s a good hash function?
+▶ No two keys map to the same slot?
+Impossible! |U|/m must hash to the same slot.
+5 / 8
 
-No two keys map to the same slot? Impossible! | U | / m must hash to the same slot.
-
-A hash function maps keys from a universe U = { 0 , 1 , of possible keys to a slot (index from 0 to m − 1) in a (array) of size m .
-
+Hashing
+A hash function maps keys from a universe U = {0, 1, . . . , u − 1}
+of possible keys to a slot (index from 0 to m − 1) in a hash table
+(array) of size m.
 What’s a good hash function?
+▶ No two keys map to the same slot?
+Impossible! |U|/m must hash to the same slot.
+▶ SHA-3 cryptographic hash function?
+5 / 8
 
-A hash function maps keys from a universe U = { 0 , 1 , of possible keys to a slot (index from 0 to m − 1) in a (array) of size m .
-
+Hashing
+A hash function maps keys from a universe U = {0, 1, . . . , u − 1}
+of possible keys to a slot (index from 0 to m − 1) in a hash table
+(array) of size m.
 What’s a good hash function?
+▶ No two keys map to the same slot?
+Impossible! |U|/m must hash to the same slot.
+▶ SHA-3 cryptographic hash function?
+Expensive to compute. Secure? Any fixed hash function (used
+for all hash tables) can be studied to find many colliding keys.
+5 / 8
 
-A hash function maps keys from a universe U = { 0 , 1 , of possible keys to a slot (index from 0 to m − 1) in a (array) of size m .
-
+Hashing
+A hash function maps keys from a universe U = {0, 1, . . . , u − 1}
+of possible keys to a slot (index from 0 to m − 1) in a hash table
+(array) of size m.
 What’s a good hash function?
+▶ No two keys map to the same slot?
+Impossible! |U|/m must hash to the same slot.
+▶ SHA-3 cryptographic hash function?
+Expensive to compute. Secure? Any fixed hash function (used
+for all hash tables) can be studied to find many colliding keys.
+Choose hash function at random from a large set H.
+▶ Keys spread evenly through hash table? Pr
+h∈H[h(x) = i] = 1
+m?
+5 / 8
 
-A hash function maps keys from a universe U = { 0 , 1 , of possible keys to a slot (index from 0 to m − 1) in a (array) of size m .
-
+Hashing
+A hash function maps keys from a universe U = {0, 1, . . . , u − 1}
+of possible keys to a slot (index from 0 to m − 1) in a hash table
+(array) of size m.
 What’s a good hash function?
+▶ No two keys map to the same slot?
+Impossible! |U|/m must hash to the same slot.
+▶ SHA-3 cryptographic hash function?
+Expensive to compute. Secure? Any fixed hash function (used
+for all hash tables) can be studied to find many colliding keys.
+Choose hash function at random from a large set H.
+▶ Keys spread evenly through hash table? Pr
+h∈H[h(x) = i] = 1
+m?
+H = {consti|0 ≤ i < m} where consti(x) = i satisfies this,
+but is bad.
+5 / 8
 
-A family of hash functions H (that map U → { 0 , 1 , . . . , m − 1 } ) is universal if for all distinct keys x , y ∈ U Pr h ∈ H [ h ( x ) = h ( y )] ≤ 1 m . Example Let h a , b ( x ) = (( ax + b ) mod p ) mod m where p is a prime bigger than any key. H = h a , b | a ∈ { 1 , 2 , . . . , p − 1 } , b ∈ { 0 , 1 , . . . , p − 1 }
+Universal Families of Hash Functions
+A family of hash functions H (that map U → {0, 1, . . . , m − 1}) is
+universal if for all distinct keys x, y ∈ U
+Pr
+h∈H[h(x) = h(y)] ≤ 1
+m.
+Example
+Let ha,b(x) = ((ax + b) mod p) mod m where p is a prime bigger
+than any key.
+H =
+�
+ha,b|a ∈ {1, 2, . . . , p − 1}, b ∈ {0, 1, . . . , p − 1}
+�
+6 / 8
 
-Let h a , b ( x ) = (( ax + b ) mod p ) mod m where p is a prime bigger than any key. H = h a , b | a ∈ { 1 , 2 , . . . , p − 1 } , b ∈ { 0 , 1 , . . . , p − 1 } Theorem: H is universal Proof: Choose any x ̸ = y . Let r = ( ax + b ) mod p and s = ( ay + b ) mod p . 1. r ̸ = s since x ̸ = y ⇔ x ̸ = y (mod p ) a ̸ =0 ⇔ p prime ax ̸ = ay (mod p ) ⇔ r ̸ = s 2. For x ̸ = y , every pair ( a , b ) gives different ( r , s ) with r ̸ = s since we can solve for ( a , b ) given ( r , s ) . #( a , b ) pairs = #( r , s ) pairs = p ( p − 1) so choosing ( a , b ) uniformly at random yields uniform random ( r , s ). For a given value of r , of the p − 1 possible values of s (since
+Universal Families of Hash Functions
+Let ha,b(x) = ((ax + b) mod p) mod m where p is a prime bigger
+than any key.
+H =
+�
+ha,b|a ∈ {1, 2, . . . , p − 1}, b ∈ {0, 1, . . . , p − 1}
+�
+Theorem: H is universal
+Proof: Choose any x ̸= y.
+Let r = (ax + b) mod p and s = (ay + b) mod p.
+1. r ̸= s since
+x ̸= y ⇔ x ̸= y (mod p)
+a̸=0
+⇔
+p prime ax ̸= ay (mod p) ⇔ r ̸= s
+2. For x ̸= y, every pair (a, b) gives different (r, s) with r ̸= s
+since we can solve for (a, b) given (r, s).
+#(a, b) pairs = #(r, s) pairs = p(p − 1) so choosing (a, b)
+uniformly at random yields uniform random (r, s).
+For a given value of r, of the p − 1 possible values of s (since
+s ̸= r), how many have s = r (mod m)?
+7 / 8
 
-For a given value of r , of the p − 1 possible values of s (since s ̸ = r ), how many have s = r (mod m )? 0 m − 1 1 2 r mod m At most ⌈ pm ⌉ values s from 0 , 1 , . . . , p − 1 hit this spot; minus 1 since s ̸ = r (and r does hit this spot). Thus, 3. Pr h ∈ H [ h ( x ) = h ( y )] = Pr a , b [ r = s (mod m )] ≤ ⌈ p / m ⌉− 1 p − 1 ≤ ( p − 1) / m = 1
+H is universal (cont.)
+For a given value of r, of the p − 1 possible values of s (since
+s ̸= r), how many have s = r (mod m)?
+m−10
+1
+2
+r mod m
+At most ⌈ p
+m⌉ values s from 0, 1, . . . , p − 1 hit this spot;
+minus 1 since s ̸= r (and r does hit this spot). Thus,
+3. Prh∈H[h(x) = h(y)] = Pr
+a,b[r = s (mod m)] ≤ ⌈p/m⌉−1
+p−1
+≤
+(p−1)/m
+p−1
+= 1
+m
+8 / 8

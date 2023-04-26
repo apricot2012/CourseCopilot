@@ -1,49 +1,293 @@
-A # B C a / a / 0 b / 1 1 1 b / 10 a / 0 b / 1 # /10 #/0 #/11 input T Output a # 0 aa # 010 Require: output of M uniquely determines input T . Show all FSC with s states can’t compress better than r (
+CPSC 420 Lecture 17: Today’s announcements:
+▶ HW3 is on Gradescope, due Mar 9, 23:59
+▶ Examlet 3 on Mar 17 in class. Closed book & no notes
+▶ Reading: Shor’s notes on Lempel-Ziv compression https:
+//math.mit.edu/~shor/PAM/lempel_ziv_notes.pdf
+NP-hardness [by Erickson]
+Today’s Plan
+▶ Compression
+▶ Lempel-Ziv Compression
+▶ NP-hardness
+1 / 10
 
-A # B C a / a / 0 b / 1 1 1 b / 10 a / 0 b / 1 # /10 #/0 #/11
+Compression [Lempel & Ziv 1978]
+As good as any finite state compressor
+Every text has an algorithm that compresses it well, but the
+algorithm is as big as the text.
+A finite state compressor is a finite state machine with output
+strings on transitions.
+A
+#
+B
+C
+a/
+a/0
+b/111
+b/10
+a/0
+b/1
+#/10
+#/0
+#/11
+input T
+Output
+a#
+0
+aa#
+010
+Require: output of M uniquely determines input T.
+1. Show all FSC with s states can’t compress better than rs(T)
+2. Show |LZ78(T)| ≤ rs(T) + o(|T|)
+2 / 10
 
-If two phrases x and y cause the same output going from A to B then M outputs the same encoding for wx # ̸ = wy #, where w takes M to state A . Assume c j = s 2 2 j for all j ≤ k i.e. use max number of short codes. c ( T ) = k j =0 c j ≤ s 2 k j =0 2 j = s 2 (2 k +1 − 1) Total length of encoding by M : | M ( T ) | ≥ k j =0 jc j = s 2 k j =0 j 2 j = s 2 (( k − 1)2 k +1 + 2) = r s ( T )
+Compression [Lempel & Ziv 1978]
+As good as FSC continued
+Let c(T) = max number of distinct phrases T can be split into.
+Let cj = #phrases that cause M to output j bits starting from
+some state in M.
+cj ≤ s22j since [A, j-bit code, B] uniquely specifies phrase x, where
+A is state when M starts reading x and B is state when it stops.
+If two phrases x and y cause the same output going from A to B then M
+outputs the same encoding for wx# ̸= wy#, where w takes M to state A.
+Assume cj = s22j for all j ≤ k
+i.e. use max number of short codes.
+c(T) =
+k
+�
+j=0
+cj ≤ s2
+k
+�
+j=0
+2j = s2(2k+1 − 1)
+Total length of encoding by M:
+|M(T)| ≥
+k
+�
+j=0
+jcj = s2
+k
+�
+j=0
+j2j = s2((k − 1)2k+1 + 2) = rs(T)
+3 / 10
 
-| LZ78( T ) | ≤ c ( T ) log 2 c ( T )
+Compression [Lempel & Ziv 1978]
+As good as FSC continued
+From before
+|LZ78(T)| ≤ c(T) log2 c(T)
+and
+rs(T) = s2((k − 1)2k+1 + 2) ≥ (c(T) + s2) log2(c(T)
+4s2 )
+So
+|LZ78(T)| ≤ rs(T)+2c(T) − s2 log2 c(T) + (c(T) + s2) log2(4s2)
+�
+��
+�
+this is o(|T|)
+4 / 10
 
-causes it to output 1? x 1 x 2 x 3 x 4 (( x 1 ∧ x 2 ) ∨ x 2 ) ∧ ( x 2 ∧ ( x 3 ∨ x 2 ∨ x AND NOT OR OR AND AND
+Decision Problems
+A decision problem is a problem (a problem takes an input and
+produces an output) whose output is either “Yes” or “No”.
+Low-cost Spanning Tree: Does a given weighted graph G have a
+spanning tree with total weight less than w?
+Primality: Is 13247836221587427 prime?
+Sorting: Sort cat dog bee ant
+Circuit satisfiability: Is there an input to a given boolean circuit
+that causes it to output 1?
+x1
+x2
+x3
+x4
+((x1 ∧ x2) ∨ x2) ∧ (x2 ∧ (x3 ∨ x2 ∨ x4))
+AND
+NOT
+OR
+OR
+AND
+AND
+5 / 10
 
-A decision problem is a problem (a problem takes an input and produces an output) whose output is either “Yes” or “No”.
+Decision Problems
+A decision problem is a problem (a problem takes an input and
+produces an output) whose output is either “Yes” or “No”.
+Low-cost Spanning Tree: Does a given weighted graph G have a
+spanning tree with total weight less than w?
+Primality: Is 13247836221587427 prime?
+Sorting: Sort cat dog bee ant
+Circuit satisfiability: Is there an input to a given boolean circuit
+that causes it to output 1?
+Circuit tautology: Do all inputs to a given boolean circuit cause
+output 1?
+5 / 10
 
-Do all inputs to a given boolean circuit cause
-
-a proof that can be checked in polynomial time. P co-NP NP Primality Satisﬁability Tautology LCSpanningTree
-
+Complexity classes P, NP, co-NP
+P: Decision problems that can be solved in polynomial time.
+NP: Decision problems where if the answer is “Yes” then there is a
+proof that can be checked in polynomial time.
+co-NP: Decision problems where if the answer is “No” then there
+is a proof that can be checked in polynomial time.
+P
+co-NP
+NP
+Primality
+Satisﬁability
+Tautology LCSpanningTree
 Our current guess of P vs NP vs co-NP
+6 / 10
 
-P co-NP NP NP-hard NP-complete
+NP-hard, NP-complete
+NP-hard: Problems A where if A can be solved in polynomial time
+then P = NP.
+NP-complete: Decision problems A where A ∈ NP-hard and
+A ∈ NP.
+P
+co-NP
+NP
+NP-hard
+NP-complete
+Our current guess of P, NP, co-NP, NP-hard, NP-complete
+7 / 10
 
+Cook-Levin Theorem
+Theorem
 Circuit satisfiability is NP-hard
-
+Proof.
+You don’t need to know the proof but the idea is: Show how to
+encode the execution of any polynomial-time, non-deterministic
+Turing machine M on an input x as some boolean circuit that is
+satisfiable if and only if M outputs “Yes” on input x.
 How do we show other problems are NP-hard?
+8 / 10
 
+Cook-Levin Theorem
+Theorem
 Circuit satisfiability is NP-hard
-
+Proof.
+You don’t need to know the proof but the idea is: Show how to
+encode the execution of any polynomial-time, non-deterministic
+Turing machine M on an input x as some boolean circuit that is
+satisfiable if and only if M outputs “Yes” on input x.
 How do we show other problems are NP-hard?
+To prove problem A is NP-hard, show how to reduce
+(in polynomial time) an NP-hard problem to A.
+Reduce Circuit Satisfiability to A means “Solve Circuit
+Satisfiability using an algorithm for A.”
+8 / 10
 
-Satisfiability using an algorithm for A
-
-3SAT: Is a given boolean formula, which is the AND of several three-literal OR-clauses, satisfiable?
-
+3SAT is NP-hard
+3SAT: Is a given boolean formula, which is the AND of several
+three-literal OR-clauses, satisfiable?
+Example: Is (a ∨ b ∨ c) ∧ (a ∨ b ∨ c) ∧ (a ∨ c ∨ d) satisfiable?
+Reduction: From CircuitSat to 3SAT
+Fast
+input
+transform
+3CNF
+formula
+3SAT
+algorithm
+Circuit
+K
+Φ
+T/F
 CircuitSat algorithm
+9 / 10
 
-Fastinput transform 3CNF formula 3SAT algorithm Circuit K Φ T/F
+Transform Circuit into 3CNF formula
+x1
+x2
+x3
+x4
+AND
+NOT
+OR
+OR
+AND
+AND
+Input to CircuitSAT = Boolean Circuit
+10 / 10
 
-x 1 x 2 x 3 x 4 AND NOT OR OR AND AND
+Transform Circuit into 3CNF formula
+x1
+AND
+NOT
+OR
+OR
+AND
+AND
+OR
+x3
+x4
+x2
+y1
+y2
+y3
+y4
+y5
+y6
+y7
+Equivalent circuit where AND and OR gates have two inputs.
+10 / 10
 
-x 1 AND NOT OR OR AND AND OR x 3 x 4 x 2 y 1 y 2 y 3 y 4 y 5 y 6 y 7
+Transform Circuit into 3CNF formula
+x1
+AND
+NOT
+OR
+OR
+AND
+AND
+OR
+x3
+x4
+x2
+y1
+y2
+y3
+y4
+y5
+y6
+y7
+(x1 ∨ x2 ∨ y1) ∧ (x1 ∨ y1) ∧ (x2 ∨ y1) ∧ (x2 ∨ y2) ∧ (x2 ∨ y2) ∧ (x3 ∨ x2 ∨
+y3) ∧ (x3 ∨ y3) ∧ (x2 ∨ y3) ∧ (y3 ∨ x4 ∨ y4) ∧ (y3 ∨ y4) ∧ (x4 ∨ y4) ∧
+(y1 ∨ y2 ∨ y5) ∧ (y1 ∨ y5) ∧ (y2 ∨ y5) ∧ (y2 ∨ y4 ∨ y6) ∧ (y2 ∨ y6) ∧ (y4 ∨
+y6) ∧ (y5 ∨ y6 ∨ y7) ∧ (y5 ∨ y7) ∧ (y6 ∨ y7) ∧ (y7)
+a ∧ b = c �−→ (a ∨ b ∨ c) ∧ (a ∨ c) ∧ (b ∨ c)
+a ∨ b = c �−→ (a ∨ b ∨ c) ∧ (a ∨ c) ∧ (b ∨ c)
+a = b �−→ (a ∨ b) ∧ (a ∨ b)
+CNF formula satisfied iff circuit is satisfied.
+10 / 10
 
-x 1 AND NOT OR OR AND AND OR x 3 x 4 x 2 y 1 y 2 y 3 y 4 y 5 y 6 y 7 a ∧ b = c (cid:55)−→ ( a ∨ b ∨ c ) ∧ ( a ∨ c ) ∧ ( b ∨ c ) a ∨ b = c (cid:55)−→ ( a ∨ b ∨ c ) ∧ ( a ∨ c ) ∧ ( b ∨ c ) a = b (cid:55)−→ ( a ∨ b ) ∧ ( a ∨ b )
-
-( x 1 ∨ x 2 ∨ y 1 ) ∧ ( x 1 ∨ y 1 ) ∧ ( x 2 ∨ y 1 ) ∧ ( x 2 ∨ y 2 ) ∧ ( x 2 ∨ y 2 ) ∧ ( x 3 ∨ x 2 ∨ y 3 ) ∧ ( x 3 ∨ y 3 ) ∧ ( x 2 ∨ y 3 ) ∧ ( y 3 ∨ x 4 ∨ y 4 ) ∧ ( y 3 ∨ y 4 ) ∧ ( x 4 ∨ y 4 ) ∧ ( y 1 ∨ y 2 ∨ y 5 ) ∧ ( y 1 ∨ y 5 ) ∧ ( y 2 ∨ y 5 ) ∧ ( y 2 ∨ y 4 ∨ y 6 ) ∧ ( y 2 ∨ y 6 ) ∧ ( y 4 ∨ y 6 ) ∧ ( y 5 ∨ y 6 ∨ y 7 ) ∧ ( y 5 ∨ y 7 ) ∧ ( y 6 ∨ y 7 ) ∧ ( y 7 )
-
-x 1 AND NOT OR OR AND AND OR x 3 x 4 x 2 y 1 y 2 y 3 y 4 y 5 y 6 y 7 ∨ b (cid:55)−→ ( a ∨ b ∨ z ) ∧ ( a ∨ b ∨ z ) a (cid:55)−→ ( a ∨ w ∨ z ) ∧ ( a ∨ w ∨ z ) ∧ ( a ∨ w ∨ z ) ∧ ( a ∨ w
-
-( x 1 ∨ x 2 ∨ y 1 ) ∧ ( x 1 ∨ y 1 ∨ z 1 ) ∧ ( x 1 ∨ y 1 ∨ z 1 ) ∧ ( x 2 ∨ y 1 ∨ z 2 ) ∧ ( x 2 ∨ y 1 ∨ z 2 ) ∧ ( x 2 ∨ y 2 ∨ z 3 ) ∧ ( x 2 ∨ y 2 ∨ z 3 )( x 2 ∨ y 2 ∨ z 4 ) ∧ ( x 2 ∨ y 2 ∨ z 4 ) ∧ ( x 3 ∨ x 2 ∨ y 3 ) ∧ ( x 3 ∨ y 3 ∨ z 5 ) ∧ ( x 3 ∨ y 3 ∨ z 5 ) ∧ ( x 2 ∨ y 3 ∨ z 6 ) ∧ ( x 2 ∨ y 3 ∨ z 6 ) ∧ ( y 3 ∨ x 4 ∨ y 4 ) ∧ ( y 3 ∨ y 4 ∨ z 7 ) ∧ ( y 3 ∨ y 4 ∨ z 7 ) ∧ ( x 4 ∨ y 4 ∨ z 8 ) ∧ ( x 4 ∨ y 4 ∨ z 8 ) ∧ ( y 1 ∨ y 2 ∨ y 5 ) ∧ ( y 1 ∨ y 5 ∨ z 9 ) ∧ ( y 1 ∨ y 5 ∨ z 9 ) ∧ ( y 2 ∨ y 5 ∨ z 10 ) ∧ ( y 2 ∨ y 5 ∨ z 10 ) ∧ ( y 2 ∨ y 4 ∨ y 6 ) ∧ ( y 2 ∨ y 6 ∨ z 11 ) ∧ ( y 2 ∨ y 6 ∨ z 11 ) ∧ ( y 4 ∨ y 6 ∨ z 12 ) ∧ ( y 4 ∨ y 6 ∨ z 12 ) ∧ ( y 5 ∨ y 6 ∨ y 7 ) ∧ ( y 5 ∨ y 7 ∨ z 13 ) ∧ ( y 5 ∨ y 7 ∨ z 13 ) ∧ ( y 6 ∨ y 7 ∨ z 14 ) ∧ ( y 6 ∨ y 7 ∨ z 14 ) ∧ ( y 7 ∨ z 15 ∨ z 16 ) ∧ ( y 7 ∨ z 15 ∨ z 16 ) ∧ ( y 7 ∨ z 15 ∨ z 16 ) ∧ ( y 7 ∨ z 15 ∨ z 16 )
-
+Transform Circuit into 3CNF formula
+x1
+AND
+NOT
+OR
+OR
+AND
+AND
+OR
+x3
+x4
+x2
+y1
+y2
+y3
+y4
+y5
+y6
+y7
+(x1 ∨x2 ∨y1)∧(x1 ∨y1 ∨z1)∧(x1 ∨y1 ∨z1)∧(x2 ∨y1 ∨z2)∧(x2 ∨y1 ∨
+z2)∧(x2∨y2∨z3)∧(x2∨y2∨z3)(x2∨y2∨z4)∧(x2∨y2∨z4)∧(x3∨x2∨
+y3)∧(x3∨y3∨z5)∧(x3∨y3∨z5)∧(x2∨y3∨z6)∧(x2∨y3∨z6)∧(y3∨x4∨
+y4)∧(y3∨y4∨z7)∧(y3∨y4∨z7)∧(x4∨y4∨z8)∧(x4∨y4∨z8)∧(y1∨y2∨
+y5)∧(y1∨y5∨z9)∧(y1∨y5∨z9)∧(y2∨y5∨z10)∧(y2∨y5∨z10)∧(y2∨
+y4∨y6)∧(y2∨y6∨z11)∧(y2∨y6∨z11)∧(y4∨y6∨z12)∧(y4∨y6∨z12)∧
+(y5∨y6∨y7)∧(y5∨y7∨z13)∧(y5∨y7∨z13)∧(y6∨y7∨z14)∧(y6∨y7∨
+z14)∧(y7 ∨z15 ∨z16)∧(y7 ∨z15 ∨z16)∧(y7 ∨z15 ∨z16)∧(y7 ∨z15 ∨z16)
+a ∨ b �−→ (a ∨ b ∨ z) ∧ (a ∨ b ∨ z)
+a �−→ (a ∨ w ∨ z) ∧ (a ∨ w ∨ z) ∧ (a ∨ w ∨ z) ∧ (a ∨ w ∨ z))
 3CNF formula satisfied iff circuit is satisfied.
+10 / 10

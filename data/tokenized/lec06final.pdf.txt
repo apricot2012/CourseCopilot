@@ -1,38 +1,281 @@
-x 1 ≤ 200 x 2 ≤ 300 x 1 + x 2 ≤ 400 x 1 , x 2 ≥ 0
+CPSC 420 Lecture 6 : Today’s announcements:
+▶ Examlet 1 on Jan 27 in class.
+▶ Reading: Linear Programming [Intro to Algs 4th Ed. by
+Cormen, Leiserson, Rivest, Stein Ch. 29-29.2, pg 817]
+▶ Reading: Maximum Flows & Minimum Cuts [Algorithms by
+Erickson Ch. 10]
+Today’s Plan
+▶ Linear Programming
+▶ Network Flow
+1 / 9
 
-General Problem We are given a set of variables. We want to assign real values to them so that: 1. They satisfy given linear equations and/or inequalities. 2. They maximize (or minimize) a given linear “objective” function. x 1 200 x 2 300 max x 1 + 6 x x 1 ≤ 200 x 2 ≤ 300 x 1 + x 2 ≤ 400 x 1 , x 2 ≥ 0
+Linear Programming
+General Problem We are given a set of variables. We want to
+assign real values to them so that:
+1. They satisfy given linear equations and/or inequalities.
+2. They maximize (or minimize) a given linear “objective”
+function.
+max x1 + 6x2
+x1 ≤ 200
+x2 ≤ 300
+x1 + x2 ≤ 400
+x1, x2 ≥ 0
+2 / 9
 
-2. They maximize (or minimize) a function. x 1 200 x 2 300
+Linear Programming
+General Problem We are given a set of variables. We want to
+assign real values to them so that:
+1. They satisfy given linear equations and/or inequalities.
+2. They maximize (or minimize) a given linear “objective”
+function.
+x1
+200
+x2
+300
+max x1 + 6x2
+x1 ≤ 200
+x2 ≤ 300
+x1 + x2 ≤ 400
+x1, x2 ≥ 0
+2 / 9
 
-max x 1 + 6 x 2 x 1 ≤ 200 x 2 ≤ 300 x 1 + x 2 ≤ 400 x 1 , x 2 ≥ 0
+Linear Programming
+Optimum point exists unless
+infeasible The feasible set is empty.
+E.g. x1 < 1 and x1 > 3
+unbounded The feasible set is unbounded (in the direction of
+optimization).
+E.g. max (x1 + x2) where x1, x2 ≥ 0.
+3 / 9
 
-1. Start at a vertex v of the feasible set 2. While there is a neighbor v ′ of v with better objective value 3. v = v ′ x 1 200 x 2 300 $ 0 $ 200 $ 1400 $ 1900
+Simplex algorithm Dantzig 1947
+1. Start at a vertex v of the feasible set
+3.2. While there is a neighbor v′ of v with better objective value
+v = v′
+x1
+200
+x2
+300
+$0
+$200
+$1400
+$1900
+4 / 9
 
-x 1 200 x 2 300 $ 0 $ 200 $ 1400 $ 1900
+More Chocolate
+profit
+demand
+Box 1
+$1
+≤ 200 boxes/day
+Box 2
+$6
+≤ 300 boxes/day
+Box 3
+$13
+unlimited
+We can produce ≤ 400 boxes/day. Box 3 uses three times the
+filling as Box 2 and total filling is enough for 600 Box 2’s per day.
+5 / 9
 
-profit demand Box 1 $ 1 ≤ 200 boxes/day Box 2 $ 6 ≤ 300 boxes/day Box 3 $ 13 unlimited We can produce ≤ 400 boxes/day. Box 3 uses three times the filling as Box 2 and total filling is enough for 600 Box 2’s per day.
+More Chocolate
+profit
+demand
+Box 1
+$1
+≤ 200 boxes/day
+Box 2
+$6
+≤ 300 boxes/day
+Box 3
+$13
+unlimited
+We can produce ≤ 400 boxes/day. Box 3 uses three times the
+filling as Box 2 and total filling is enough for 600 Box 2’s per day.
+max x1 + 6x2 + 13x3
+x1 ≤ 200
+x2 ≤ 300
+x1 + x2 + x3 ≤ 400
+x2 + 3x3 ≤ 600
+x1, x2, x3 ≥ 0
+5 / 9
 
-profit demand Box 1 $ 1 ≤ 200 boxes/day Box 2 $ 6 ≤ 300 boxes/day Box 3 $ 13 unlimited We can produce ≤ 400 boxes/day. Box 3 uses three times the filling as Box 2 and total filling is enough for 600 Box 2’s per day.
+More Chocolate
+x1
+x2
+x3
+max x1 + 6x2 + 13x3
+x1 ≤ 200
+x2 ≤ 300
+x1 + x2 + x3 ≤ 400
+x2 + 3x3 ≤ 600
+x1, x2, x3 ≥ 0
+6 / 9
 
-x 1 ≤ 200 x 2 ≤ 300 x 1 + x 2 + x 3 ≤ 400 x 2 + 3 x 3 ≤ 600 x 1 , x 2 , x 3 ≥ 0
+More Chocolate
+x1
+x2
+x3
+$0
+$200
+$1400
+$2800
+$3100
+(0, 0, 0) → (200, 0, 0) → (200, 200, 0) → (200, 0, 200) → (0, 300, 100)
+max x1 + 6x2 + 13x3
+x1 ≤ 200
+x2 ≤ 300
+x1 + x2 + x3 ≤ 400
+x2 + 3x3 ≤ 600
+x1, x2, x3 ≥ 0
+6 / 9
 
-x 1 x 2 3
+Bandwidth allocation
+a
+b
+c
+A
+B
+C
+6
+12
+11
+13
+8
+10
+Need to connect each pair of users with ≥ 2 units.
+Per unit AB pays $3, BC pays $2, AC pays $4
+Two paths satisfy each connection:
+a short path: A → a → b → B for AB
+a long path: A → a → c → b → B for AB
+Let xAB and x′
+AB be AB bandwidth routed on short and long path
+7 / 9
 
-x 1 ≤ 200 x 2 ≤ 300 x 1 + x 2 + x 3 ≤ 400 x 2 + 3 x 3 ≤ 600 x 1 , x 2 , x 3 ≥ 0
+Bandwidth allocation
+a
+b
+c
+A
+B
+C
+6
+12
+11
+13
+8
+10
+Need to connect each pair of users with ≥ 2 units.
+Per unit AB pays $3, BC pays $2, AC pays $4
+Two paths satisfy each connection:
+a short path: A → a → b → B for AB
+a long path: A → a → c → b → B for AB
+Let xAB and x′
+AB be AB bandwidth routed on short and long path
+max 3(xAB + x′
+AB) + 2(xBC + x′
+BC) + 4(xAC + x′
+AC)
+xAB + x′
+AB + xBC + x′
+BC ≤ 10
+xAB + x′
+AB + xAC + x′
+AC ≤ 12
+xAB + x′
+AC + x′
+BC ≤ 6
+xAB + x′
+AB ≥ 2
+...
+7 / 9
 
-x 1 x 2 x 3 $ 0 $ 200 $ 1400 $ 2800 $ 3100 (0,0,0) → (200,0,0) → (200,200,0) → (200,0,200) →
+Bandwidth allocation
+a
+b
+c
+A
+B
+C
+6
+12
+11
+13
+8
+10
+Need to connect each pair of users with ≥ 2 units.
+Per unit AB pays $3, BC pays $2, AC pays $4
+Two paths satisfy each connection:
+a short path: A → a → b → B for AB
+a long path: A → a → c → b → B for AB
+Let xAB and x′
+AB be AB bandwidth routed on short and long path
+max 3(xAB + x′
+AB) + 2(xBC + x′
+BC) + 4(xAC + x′
+AC)
+xAB + x′
+AB + xBC + x′
+BC ≤ 10
+xAB + x′
+AB + xAC + x′
+AC ≤ 12
+xAB + x′
+AC + x′
+BC ≤ 6
+xAB + x′
+AB ≥ 2
+...
+Solution:
+xAB
+x′
+AB
+xBC
+x′
+BC
+xAC
+x′
+AC
+0
+7
+1.5
+1.5
+0.5
+4.5
+7 / 9
 
-x 1 ≤ 200 x 2 ≤ 300 x 1 + x 2 + x 3 ≤ 400 x 2 + 3 x 3 ≤ 600 x 1 , x 2 , x 3 ≥ 0
+Network Flows
+A flow network is a directed graph G = (V , E) in which each
+edge (u, v) ∈ E has a positive capacity c(u, v) (non-edges have
+capacity 0).
+G contains a source vertex s and a sink vertex t.
+A flow is an assignment f of real numbers to edges of G:
+1. 0 ≤ f (u, v) ≤ c(u, v)
+2. For all v ̸= s, t : �
+u f (u, v) = �
+w f (v, w)
+The size (or value) of a flow is: size(f ) = �
+(s,v)∈E f (s, v)
+Goal: Find flow with maximum size.
+s
+a
+b
+c
+d
+e
+t
+3
+3
+4
+10
+2
+1
+1
+5
+1
+2
+5
+8 / 9
 
-(0,0,0) → (200,0,0) → (200,200,0) → (200,0,200) → (0,300,100)
-
-a b c B C 6 11 13 8 10 Need to connect each pair of users with ≥ 2 units. Per unit AB pays $ 3, BC pays $ 2, AC pays $ 4 Two paths satisfy each connection: a short path: A → a → b → B for AB a long path: A → a → c → b → B for AB Let x AB and x ′ AB be AB bandwidth routed on short and long path
-
-a b c B C 6 12 11 13 8 10 Need to connect each pair of users with ≥ 2 units. Per unit AB pays $ 3, BC pays $ 2, AC pays $ 4 Two paths satisfy each connection: a short path: A → a → b → B for AB a long path: A → a → c → b → B for AB Let x AB and x ′ AB be AB bandwidth routed on short and long path max 3( x AB + x ′ AB ) + 2( x BC + x ′ BC ) + 4( x AC + x ′ AC ) x AB + x ′ AB + x BC + x ′ BC ≤ 10 x AB + x ′ AB + x AC + x ′ AC ≤ 12 x AB + x ′ AC + x ′ BC ≤ 6 x AB + x ′ AB ≥ 2 ...
-
-a b c B C 6 12 11 13 8 10 Need to connect each pair of users with ≥ 2 units. Per unit AB pays $ 3, BC pays $ 2, AC pays $ 4 Two paths satisfy each connection: a short path: A → a → b → B for AB a long path: A → a → c → b → B for AB Let x AB and x ′ AB be AB bandwidth routed on short and long path max 3( x AB + x ′ AB ) + 2( x BC + x ′ BC ) + 4( x AC + x ′ AC ) x AB + x ′ AB + x BC + x ′ BC ≤ 10 x AB + x ′ AB + x AC + x ′ AC ≤ 12 x AB + x ′ AC + x ′ BC ≤ 6 x AB + x ′ AB ≥ 2 ... Solution: x AB x ′ AB x BC x ′ BC x AC x ′ AC 0 7 1.5 1.5 0.5 4.5
-
-G contains a source vertex s and a sink vertex t . A flow is an assignment f of real numbers to edges of G : 1. 0 ≤ f ( u , v ) ≤ c ( u , v ) 2. For all v ̸ = s , t : u f ( u , v ) = w f ( v , w ) The size (or value ) of a flow is: size( f ) = ( s , v ) ∈ E f ( s , v ) Goal: Find flow with maximum size. s a b c d e t 3 3 4 10 2 1 1 5 1 2 5
-
-s a b c d e t 3 3 4 10 2 1 1 5 1 2 5
-
+Network Flows [Harris & Ross 1955]
+9 / 9

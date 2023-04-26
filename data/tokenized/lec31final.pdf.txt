@@ -1,23 +1,243 @@
 Introduction to Quantum Computing
+David Bromley
 
-However, the model is informed by our current best understanding of physical reality, which turns out to be very weird
+The Map is Not the Territory
+There exists a distinction between the mathematical model and the
+physical realizations. We deal with the math
+Regular, “Classical” computer: bits
+Mathematical Model: 0, 1
+Physical Implementation: High/Low Voltage
+Quantum computer: qubits
+Mathematical Model: To be continued...
+Physical Implementation: Spin of an electron, many others
+However, the model is informed by our current best understanding
+of physical reality, which turns out to be very weird
 
+Whats in a Qubit?
+Like a classical bit has a state: 0 or 1, a qubit has a state
+Two important states are |0⟩ , |1⟩. Quantum analogies to 0, 1
+However, the difference from classical is that a qubit can be in a
 superposition of states:
+|ψ⟩ = α |0⟩ + β |1⟩
+where α, β are complex numbers called amplitudes such that
+|α|2 + |β|2 = 1
+Formally, the state is a unit vector in a two-dimensional
+complex vector space.
+|0⟩ , |1⟩ form an orthonormal basis
 
-| ψ ⟩ = α 00 | 00 ⟩ + α 01 | 01 ⟩ + α 10 | 10 ⟩ + α 1 | 11 ⟩ where, again, x ∈{ 0 , 1 } 2 α x = 1 Note | x 1 x 2 ⟩ = | x 1 ⟩ ⊗ | x 2 ⟩ = | x 1 ⟩ | x 2 ⟩ What if we just measure just one? Then we get 0 with prob. | α 00 | 2 + | α 01 | 2 and if so the new state is | ψ ⟩ → ψ ′ = α 00 | α 00 | 2 + | α 01 | 2 | 00 ⟩ + α 01 | α 00 | 2 + | α 01 | 2 | 01 ⟩
+A Qubit by Any Other Name
+We can examine a bit to determine if its 0 or 1.
+However, we cannot examine a qubit to determine
+|ψ⟩ = α |0⟩ + β |1⟩
+Instead, when we look at a qubit, we see
+0 with probability |α|2
+1 with probability |β|2
+This is weird! Normally, there is a direct correspondence between
+what we see and our abstract model.
+Further, after looking, the qubit changes!
+If we saw 0, then |ψ⟩ → |0⟩. If we saw 1, then |ψ⟩ → |1⟩
+The art of quantum algorithms is changing amplitudes so we get
+the “right” answer with high probability
 
-via quantum gates. Important example: Hadamard Gate H H ( | 0 ⟩ ) = 1 √ 2 | 0 ⟩ + 1 √ 2 | 1 ⟩ H ( | 1 ⟩ ) = 1 √ 2 | 0 ⟩ − 1 √ 2 | 1 ⟩ H ( α | 0 ⟩ + β | 1 ⟩ ) = α H ( | 0 ⟩ ) + β H ( | 1 ⟩ ) = α + β √ 2 | 0 ⟩ + α − β √ 2 | 1 ⟩ H ( | 00 ⟩ ) = H ( | 0 ⟩ ) ⊗ H ( | 0 ⟩ ) = | 00 ⟩ + | 01 ⟩ + | 10 ⟩ + | 11 ⟩ 2 Formally, H is a unitary matrix. This is true in general for quantum
+Multiple Qubits
+Two Qubit Case:
+|ψ⟩ = α00 |00⟩ + α01 |01⟩ + α10 |10⟩ + α1 |11⟩
+where, again, �
+x∈{0,1}2 αx = 1
+Note |x1x2⟩ = |x1⟩ ⊗ |x2⟩ = |x1⟩ |x2⟩
+What if we just measure just one? Then we get 0 with prob.
+|α00|2 + |α01|2 and if so the new state is
+|ψ⟩ →
+��ψ′�
+=
+α00
+�
+|α00|2 + |α01|2 |00⟩ +
+α01
+�
+|α00|2 + |α01|2 |01⟩
+In General, n qubits:
+|ψ⟩ =
+�
+x∈{0,1}n
+αx |x⟩
+Weird! 2n numbers evolving in time (but hidden)
 
-example of quantum weirdness being very useful
+Manipulation of Qubits
+Much like we manipulate bits via logic gates, we manipulate qubits
+via quantum gates.
+Important example: Hadamard Gate H
+H(|0⟩) =
+1
+√
+2
+|0⟩ + 1
+√
+2
+|1⟩
+H(|1⟩) =
+1
+√
+2
+|0⟩ − 1
+√
+2
+|1⟩
+H(α |0⟩ + β |1⟩) = αH(|0⟩) + βH(|1⟩) = α + β
+√
+2
+|0⟩ + α − β
+√
+2
+|1⟩
+H(|00⟩) = H(|0⟩) ⊗ H(|0⟩) = |00⟩ + |01⟩ + |10⟩ + |11⟩
+2
+Formally, H is a unitary matrix. This is true in general for quantum
+gates.
+Unitary: H−1 = H† (note: reversible)
 
-The quantum circuit: n | 0 ⟩ H ⊗ n U f H ⊗ n | 1 ⟩ H x x y y ⊕ f ( x ) | ψ 0 ⟩ | ψ 1 ⟩ | ψ 2 ⟩ | ψ 3 ⟩ We start with an initial state | ψ 0 ⟩ = | 0 ⟩ ⊗ n | 1 ⟩ We then apply the Hadamard gate to every qubit, yielding | ψ 1 ⟩ = 1 √ 2 n +1 n | x ⟩ ( | 0 ⟩ − | 1 ⟩ )
+So What?
+We will see an example of quantum weirdness being very useful
+Problem:
+Given a function f : {0, 1}n → {0, 1}, determine whether:
+f is balanced: f (x) = 0 for exactly 1/2 of inputs
+Or f is constant: f (x) is the same for all x
+Classical: Need to evaluate f (x) 2n−1 + 1 times.
+Quantum: Need just one evaluation!
 
-n | 0 ⟩ H ⊗ n U f H ⊗ n | 1 ⟩ H x x y y ⊕ f ( x ) | ψ 0 ⟩ | ψ 1 ⟩ | ψ 2 ⟩ | ψ 3 ⟩
+Quantum Solution (Deutch-Jozsa Algorithm)
+The quantum circuit:
+n
+|0⟩
+H⊗n
+Uf
+H⊗n
+|1⟩
+H
+x
+x
+y y ⊕ f (x)
+|ψ0⟩
+|ψ1⟩
+|ψ2⟩
+|ψ3⟩
+We start with an initial state
+|ψ0⟩ = |0⟩⊗n |1⟩
+We then apply the Hadamard gate to every qubit, yielding
+|ψ1⟩ =
+1
+√
+2n+1
+�
+x∈{0,1}n
+|x⟩ (|0⟩ − |1⟩)
 
-n | 0 ⟩ H ⊗ n U f H ⊗ n | 1 ⟩ H x x y y ⊕ f ( x ) | ψ 0 ⟩ | ψ 1 ⟩ | ψ 2 ⟩ | ψ 3 ⟩ | ψ 1 ⟩ = 1 √ 2 n +1 x ∈{ 0 , 1 } n | x ⟩ ( | 0 ⟩ − | 1 ⟩ ) The quantum implementation of f maps | x , y ⟩ (cid:55)→ | x , y ⊕ f ( x )
+Deutch-Jozsa Algorithm Continued
+n
+|0⟩
+H⊗n
+Uf
+H⊗n
+|1⟩
+H
+x
+x
+y y ⊕ f (x)
+|ψ0⟩
+|ψ1⟩
+|ψ2⟩
+|ψ3⟩
+|ψ1⟩ =
+1
+√
+2n+1
+�
+x∈{0,1}n
+|x⟩ (|0⟩ − |1⟩)
+The quantum implementation of f maps |x, y⟩ �→ |x, y ⊕ f (x)⟩
+|ψ2⟩ =
+1
+√
+2n+1
+�
+x∈{0,1}n
+|x⟩ (|0 ⊕ f (x)⟩ − |1 ⊕ f (x)⟩)
+=
+1
+√
+2n+1
+�
+x∈{0,1}n
+(−1)f (x) |x⟩ (|0⟩ − |1⟩)
+We have moved f (x) to the amplitude!
 
-We have moved f ( x ) to the amplitude!
+Deutch-Jozsa Algorithm Continued2
+n
+|0⟩
+H⊗n
+Uf
+H⊗n
+|1⟩
+H
+x
+x
+y y ⊕ f (x)
+|ψ0⟩
+|ψ1⟩
+|ψ2⟩
+|ψ3⟩
+|ψ2⟩ =
+1
+√
+2n+1
+�
+x∈{0,1}n
+(−1)f (x) |x⟩ (|0⟩ − |1⟩)
+We know apply the Hadamard gate on the first n qubits. We use
+the relation (exercise)
+H⊗n(|x⟩) =
+1
+√
+2n
+�
+z∈{0,1}n
+(−1)x·z |z⟩
+to yield
+|ψ3⟩ =
+�
+z∈{0,1}n
+�
+x∈{0,1}n
+1
+2n (−1)x·z+f (x) |z⟩
+�|0⟩ − |1⟩
+√
+2
+�
 
-n | 0 ⟩ H ⊗ n U f H ⊗ n | 1 ⟩ H x x y y ⊕ f ( x ) | ψ 0 ⟩ | ψ 1 ⟩ | ψ 2 ⟩ | ψ 3 ⟩ | ψ 2 ⟩ = 1 √ 2 n +1 x ∈{ 0 , 1 } n ( − 1) f ( x ) | x ⟩ ( | 0 ⟩ − | 1 ⟩ ) know apply the Hadamard gate on the first n qubits. We use relation (exercise) H ⊗ n ( | x ⟩ ) = 1 √ 2 n z ∈{ 0 , 1 } n ( − 1) x · z | z ⟩ yield | ψ 3 ⟩ = n n 1 2 n ( − 1) x · z + f ( x ) | z ⟩ | 0 ⟩ − | 1 ⟩ √ 2
-
-| ψ 3 ⟩ = z ∈{ 0 , 1 } n x ∈{ 0 , 1 } n 1 2 n ( − 1) x · z + f ( x ) | z ⟩ | 0 ⟩ − | 1 ⟩ √ 2 We now measure the first n qubits. Note that the state | 0 ⟩ ⊗ n has amplitude 1 2 n x ∈{ 0 , 1 } n ( − 1) f ( x ) = ± 1 f constant 0 f balanced Thus, if we see all 0s, then f is constant, else its balanced! This is an exponential speedup over classical solution
+Deutch-Jozsa Algorithm Continued3
+|ψ3⟩ =
+�
+z∈{0,1}n
+�
+x∈{0,1}n
+1
+2n (−1)x·z+f (x) |z⟩
+�|0⟩ − |1⟩
+√
+2
+�
+We now measure the first n qubits.
+Note that the state |0⟩⊗n has amplitude
+1
+2n
+�
+x∈{0,1}n
+(−1)f (x) =
+�
+±1
+f constant
+0
+f balanced
+Thus, if we see all 0s, then f is constant, else its balanced!
+This is an exponential speedup over classical solution

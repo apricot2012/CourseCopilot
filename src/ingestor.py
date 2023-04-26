@@ -4,6 +4,7 @@ import pickle
 from unstructured.partition.pdf import partition_pdf
 from tqdm import tqdm
 from src.loader import Loader
+from langchain.document_loaders import PyMuPDFLoader
 
 class Ingestor:
     file_list_name = "files.list"
@@ -32,10 +33,10 @@ class Ingestor:
         pdfs = sorted(split_by_type[".pdf"])
         print("ingesting pdfs...")
         for file in tqdm(pdfs):
-            self.ingest_pdf(file)
+            self.py_ingest_pdf(file)
             # Also create .txt file
             elements = self.loader.load_elements(file)
-            elements_string = "\n\n".join([str(el) for el in elements])
+            elements_string = "\n\n".join([str(el.page_content) for el in elements])
             with open(tokenized_path + "/" + file + ".txt", "w") as text_file:
                 text_file.write(elements_string)
 
@@ -47,3 +48,12 @@ class Ingestor:
         elements = partition_pdf(raw_path + "/" + filename)
         with open(tokenized_path + "/" + filename + ".pickle", "wb") as outfile:
             pickle.dump(elements, outfile)
+
+    def py_ingest_pdf(self, filename, path = "./data"):
+        raw_path = path + "/raw"
+        tokenized_path = path + "/tokenized"
+
+        loader = PyMuPDFLoader(raw_path + "/" + filename)
+        pages = loader.load_and_split()
+        with open(tokenized_path + "/" + filename + ".pickle", "wb") as outfile:
+            pickle.dump(pages, outfile)

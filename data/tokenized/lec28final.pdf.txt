@@ -1,44 +1,921 @@
+CPSC 420 Lecture 28: Today’s announcements:
+▶ HW4 is on Gradescope, due Mar 30, 23:59
+▶ Examlet 4 on April 5 in class. Closed book & no notes
+▶ Reading: Ch.5 Hash Tables [Director’s Cut by Erickson]
+▶ Reading: Cuckoo Hashing for Undergraduates [by Pagh]
+Today’s Plan
+▶ Cuckoo Hashing
+1 / 9
+
+Cuckoo Hashing
+Time per operation
+Find O(1) time worst case
+Delete O(1) time worst case
+Insert O(1) expected, amortized time
 How is this possible?
+2 / 9
 
+Cuckoo Hashing
+Time per operation
+Find O(1) time worst case
+Delete O(1) time worst case
+Insert O(1) expected, amortized time
+▶ Use two hash functions h1 and h2.
+▶ Item x will be stored in slot h1(x) or h2(x) of hash table T.
+▶ Each slot in the hash table can contain at most one item.
+▶ n = maximum number of items stored at any time
+▶ m = size of hash table T (m > n)
+2 / 9
 
+Cuckoo Hashing
+Time per operation
+Find O(1) time worst case
+Delete O(1) time worst case
+Insert O(1) expected, amortized time
+▶ Use two hash functions h1 and h2.
+▶ Item x will be stored in slot h1(x) or h2(x) of hash table T.
+▶ Each slot in the hash table can contain at most one item.
+▶ n = maximum number of items stored at any time
+▶ m = size of hash table T (m > n)
+On an insert(x) collision, item x kicks the resident item y out.
+Item y then goes to its alternate slot (kicking whoever’s there
+out). Etc. Etc.
+2 / 9
 
-insert (x) 1. if T [ h 1 ( x )] = x or T [ h 2 ( x )] = x return 2. i ← h 1 ( x ) 3. repeat n times 4. y ← T [ i ] 5. T [ i ] ← x 6. if y = NULL return 7. if i = h 1 ( y ) then i ← h 2 ( y ) else i ← h 1 ( y ) 8. x ← y 9. rehash; insert( x )
+Cuckoo Hashing
+1
+1Per Harald Olsen (Wikipedia)
+3 / 9
 
-Cuckoo Graph 0 1 2 3 4 5 6 7 8 9 T h 1 h 2 A 0 3 B 3 8 C 1 2 H 4 7 P 5 8 W 7 4 X 7 0 Y 3 4 m − 1 = n = 8
+Insert Algorithm
+insert(x)
+1. if T[h1(x)] = x or T[h2(x)] = x return
+2. i ← h1(x)
+4.3. repeat n times
+y ← T[i]
+5.
+T[i] ← x
+6.
+if y = NULL return
+7.
+if i = h1(y) then i ← h2(y) else i ← h1(y)
+8.
+x ← y
+9. rehash; insert(x)
+4 / 9
 
-0 1 2 3 4 5 6 7 8 9 T h 1 h 2 A 0 3 B 3 8 C 1 2 H 4 7 P 5 8 W 7 4 X 7 0 Y 3 4 m − 1 = n = 8
+Example and Cuckoo Graph
+0
+1
+2
+3
+4
+5
+6
+7
+8
+9
+T
+Ah1 h2
+0
+3
+B
+3
+8
+C
+1
+2
+H
+4
+7
+P
+5
+8
+W 7
+4
+X
+7
+0
+Y
+3
+4
+m − 1 =
+n = 8
+5 / 9
 
-0 1 2 3 4 5 6 7 8 9 T h 1 h 2 A 0 3 B 3 8 C 1 2 H 4 7 P 5 8 W 7 4 X 7 0 Y 3 4 m − 1 = n = 8 0 1 2 3 4 5 6 7 8 9 Vertex i for every slot i = 0 , 1 , . . . , m − 1.
+Example and Cuckoo Graph
+0
+1
+2
+3
+4
+5
+6
+7
+8
+9
+T
+Ah1 h2
+0
+3
+B
+3
+8
+C
+1
+2
+H
+4
+7
+P
+5
+8
+W 7
+4
+X
+7
+0
+Y
+3
+4
+m − 1 =
+n = 8
+0
+1
+2
+3
+4
+5
+6
+7
+8
+9
+Vertex i for every slot i = 0, 1, . . . , m − 1.
+Edge (h1(x), h2(x)) for every item x.
+5 / 9
 
-0 1 2 3 4 5 6 7 8 9 T h 1 h 2 0 3 3 8 1 2 4 7 5 8 7 4 7 0 3 4 m − 1 = = 8 0 1 2 3 4 5 6 7 8 9 A A Vertex i for every slot i = 0 , 1 , . . . , m
+Example and Cuckoo Graph
+0
+1
+2
+3
+4
+5
+6
+7
+8
+9
+T
+Ah1 h2
+0
+3
+B
+3
+8
+C
+1
+2
+H
+4
+7
+P
+5
+8
+W 7
+4
+X
+7
+0
+Y
+3
+4
+m − 1 =
+n = 8
+0
+1
+2
+3
+4
+5
+6
+7
+8
+9
+A
+A
+Vertex i for every slot i = 0, 1, . . . , m − 1.
+Edge (h1(x), h2(x)) for every item x.
+5 / 9
 
-0 1 2 3 4 5 6 7 8 9 T h 1 h 2 A 0 3 B 3 8 C 1 2 H 4 7 P 5 8 W 7 4 X 7 0 Y 3 4 m − 1 = n = 8 0 1 2 3 4 5 6 7 8 9 A B A B Vertex i for every slot i =
+Example and Cuckoo Graph
+0
+1
+2
+3
+4
+5
+6
+7
+8
+9
+T
+Ah1 h2
+0
+3
+B
+3
+8
+C
+1
+2
+H
+4
+7
+P
+5
+8
+W 7
+4
+X
+7
+0
+Y
+3
+4
+m − 1 =
+n = 8
+0
+1
+2
+3
+4
+5
+6
+7
+8
+9
+A
+B
+A
+B
+Vertex i for every slot i = 0, 1, . . . , m − 1.
+Edge (h1(x), h2(x)) for every item x.
+5 / 9
 
-C 0 1 2 3 4 5 6 7 8 9 T h 1 h 2 0 3 3 8 1 2 4 7 5 8 7 4 7 0 3 4 m − 1 = n = 8 0 1 2 3 4 5 6 7 8 9 A B C A B Vertex i for every slot i = 0 , 1 ,
+Example and Cuckoo Graph
+C
+0
+1
+2
+3
+4
+5
+6
+7
+8
+9
+T
+Ah1 h2
+0
+3
+B
+3
+8
+C
+1
+2
+H
+4
+7
+P
+5
+8
+W 7
+4
+X
+7
+0
+Y
+3
+4
+m − 1 =
+n = 8
+0
+1
+2
+3
+4
+5
+6
+7
+8
+9
+A
+B
+C
+A
+B
+Vertex i for every slot i = 0, 1, . . . , m − 1.
+Edge (h1(x), h2(x)) for every item x.
+5 / 9
 
-C 0 1 2 3 4 5 6 7 8 9 T h 1 h 2 0 3 3 8 1 2 4 7 5 8 7 4 7 0 3 4 m − 1 = n = 8 0 1 2 3 4 5 6 7 8 9 A B C H A B H Vertex i for every slot i = 0 , 1 ,
+Example and Cuckoo Graph
+C
+0
+1
+2
+3
+4
+5
+6
+7
+8
+9
+T
+Ah1 h2
+0
+3
+B
+3
+8
+C
+1
+2
+H
+4
+7
+P
+5
+8
+W 7
+4
+X
+7
+0
+Y
+3
+4
+m − 1 =
+n = 8
+0
+1
+2
+3
+4
+5
+6
+7
+8
+9
+A
+B
+C
+H
+A
+B
+H
+Vertex i for every slot i = 0, 1, . . . , m − 1.
+Edge (h1(x), h2(x)) for every item x.
+5 / 9
 
-C 0 1 2 3 4 5 6 7 8 9 T h 1 h 2 0 3 3 8 1 2 4 7 5 8 7 4 7 0 3 4 m − 1 = = 8 0 1 2 3 4 5 6 7 8 9 A B C H P A B H P Vertex i for every slot i = 0 , 1 ,
+Example and Cuckoo Graph
+C
+0
+1
+2
+3
+4
+5
+6
+7
+8
+9
+T
+Ah1 h2
+0
+3
+B
+3
+8
+C
+1
+2
+H
+4
+7
+P
+5
+8
+W 7
+4
+X
+7
+0
+Y
+3
+4
+m − 1 =
+n = 8
+0
+1
+2
+3
+4
+5
+6
+7
+8
+9
+A
+B
+C
+H
+P
+A
+B
+H
+P
+Vertex i for every slot i = 0, 1, . . . , m − 1.
+Edge (h1(x), h2(x)) for every item x.
+5 / 9
 
-C 0 1 2 3 4 5 6 7 8 9 T h 1 h 2 0 3 3 8 1 2 4 7 5 8 7 4 7 0 3 4 m − 1 = n = 8 0 1 2 3 4 5 6 7 8 9 A B C H P W A B H P W Vertex i for every slot i = 0 , 1 , . . . , m −
+Example and Cuckoo Graph
+C
+0
+1
+2
+3
+4
+5
+6
+7
+8
+9
+T
+Ah1 h2
+0
+3
+B
+3
+8
+C
+1
+2
+H
+4
+7
+P
+5
+8
+W 7
+4
+X
+7
+0
+Y
+3
+4
+m − 1 =
+n = 8
+0
+1
+2
+3
+4
+5
+6
+7
+8
+9
+A
+B
+C
+H
+P
+W
+A
+B
+H
+P
+W
+Vertex i for every slot i = 0, 1, . . . , m − 1.
+Edge (h1(x), h2(x)) for every item x.
+5 / 9
 
-C 0 1 2 3 4 5 6 7 8 9 T h 1 h 2 0 3 3 8 1 2 4 7 5 8 7 4 7 0 3 4 m − 1 = n = 8 0 1 2 3 4 5 6 7 8 9 A B C H P W A B H P W X Vertex i for every slot i = 0 , 1 , . . . , m
+Example and Cuckoo Graph
+C
+0
+1
+2
+3
+4
+5
+6
+7
+8
+9
+T
+Ah1 h2
+0
+3
+B
+3
+8
+C
+1
+2
+H
+4
+7
+P
+5
+8
+W 7
+4
+X
+7
+0
+Y
+3
+4
+m − 1 =
+n = 8
+0
+1
+2
+3
+4
+5
+6
+7
+8
+9
+A
+B
+C
+H
+P
+W
+A
+B
+H
+P
+W
+X
+Vertex i for every slot i = 0, 1, . . . , m − 1.
+Edge (h1(x), h2(x)) for every item x.
+5 / 9
 
-C 0 1 2 3 4 5 6 7 8 9 A B C H P W A B H P W X
+Example and Cuckoo Graph
+0
+1
+2
+3
+4
+5
+6
+7
+8
+9
+T
+Ah1 h2
+0
+3
+B
+3
+8
+C
+1
+2
+H
+4
+7
+P
+5
+8
+W 7
+4
+X
+7
+0
+Y
+3
+4
+m − 1 =
+n = 8
+0
+1
+2
+3
+4
+5
+6
+7
+8
+9
+C
+0
+1
+2
+3
+4
+5
+6
+7
+8
+9
+A
+B
+H
+P
+W
+X
+X
+C
+A
+P
+W
+H
+B
+Vertex i for every slot i = 0, 1, . . . , m − 1.
+Edge (h1(x), h2(x)) for every item x.
+5 / 9
 
-0 1 2 3 4 5 6 7 8 9 T h 1 h 2 0 3 3 8 1 2 4 7 5 8 7 4 7 0 3 4 m − 1 = n = 8 0 1 2 3 4 5 6 7 8 9 C 0 1 2 3 4 5 6 7 8 9 A B H P W X X C A P W H B Vertex i for every slot i = 0 , 1 , . . . , m − Edge ( h ( x ) , h ( x )) for every item
+Example and Cuckoo Graph
+0
+1
+2
+3
+4
+5
+6
+7
+8
+9
+T
+Ah1 h2
+0
+3
+B
+3
+8
+C
+1
+2
+H
+4
+7
+P
+5
+8
+W 7
+4
+X
+7
+0
+Y
+3
+4
+m − 1 =
+n = 8
+0
+1
+2
+3
+4
+5
+6
+7
+8
+9
+C
+0
+1
+2
+3
+4
+5
+6
+7
+8
+9
+A
+B
+H
+P
+W
+X
+X
+C
+A
+P
+W
+H
+B
+Y
+Vertex i for every slot i = 0, 1, . . . , m − 1.
+Edge (h1(x), h2(x)) for every item x.
+5 / 9
 
-0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 C 0 1 2 3 4 5 6 7 8 9 A B H P W X X C A P W H B
+Example and Cuckoo Graph
+0
+1
+2
+3
+4
+5
+6
+7
+8
+9
+T
+Ah1 h2
+0
+3
+B
+3
+8
+C
+1
+2
+H
+4
+7
+P
+5
+8
+W 7
+4
+X
+7
+0
+Y
+3
+4
+m − 1 =
+n = 8
+0
+1
+2
+3
+4
+5
+6
+7
+8
+9
+C
+0
+1
+2
+3
+4
+5
+6
+7
+8
+9
+A
+B
+H
+P
+W
+X
+X
+C
+A
+P
+W
+H
+B
+Y
+Vertex i for every slot i = 0, 1, . . . , m − 1.
+Edge (h1(x), h2(x)) for every item x.
+5 / 9
 
-0 1 2 3 4 5 6 7 8 9 T h 1 h 2 0 3 3 8 1 2 4 7 5 8 7 4 7 0 3 4 m − 1 = = 8 0 1 2 3 4 5 6 7 8 9 C 0 1 2 3 4 5 6 7 8 9 A B H P W X X C A P W H B Y Vertex i for every slot i = 0 , 1 , . .
+Cuckoo Insert Analysis
+insert(x) only visits slots that are connected in the cuckoo graph
+to h1(x) or h2(x).
+We say x and y are in the same bucket if there is a path in the
+cuckoo graph from h1(x) or h2(x) to h1(y) or h2(y).
+Only elements in the same bucket as x can impact the runtime of
+insert(x).
+Lemma 2: The probability that x and y are in the same bucket is
+O(1/m).
+To show this we first prove:
+Lemma 1: For any slots i and j and any c > 1, if m ≥ 2cn then
+the probability that a shortest path from i to j has length ℓ in the
+cuckoo graph is ≤
+1
+cℓr .
+6 / 9
 
-0 1 2 3 4 5 6 7 8 9 T h 1 h 2 0 3 3 8 1 2 4 7 5 8 7 4 7 0 3 4 m − 1 = n = 8 0 1 2 3 4 5 6 7 8 9 C 0 1 2 3 4 5 6 7 8 9 A B H P W X X C A P W H B Y Vertex i for every slot i = 0 , 1 , . . . , m − 1.
+Cuckoo Insert Analysis
+Lemma 1: For any slots i and j and any c > 1, if m ≥ 2cn then
+the probability that a shortest path from i to j has length ℓ in the
+cuckoo graph is ≤
+1
+cℓm.
+Proof: Such a path exists of length ℓ = 1 iff some item x has
+≤(h1(x), h2(x)) = (i, j) or (j, i). This happens with probability
+n
+(choices for x)(2/m2) ≤ 1/(cm) (assuming h1 and h2 are random).
+Proceed by induction on ℓ. There is a shortest path from i to j of
+length ℓ ≥ 2 iff there is
+(1) a shortest path of length ℓ − 1 from i to k (that avoids j)
+probability ≤
+1
+cℓ−1m by induction
+and (2) an edge from k to j (for some k ̸= i, j).
+probability ≤ n(2/m2) ≤ 1/(cm)
+Probability of (1) and (2) ≤
+m
+(choices for k)
+1
+cℓm2 =
+1
+cℓm.
+7 / 9
 
-Lemma 1: For any slots i and j and any c > 1, if m ≥ 2 cn then the probability that a shortest path from i to j has length ℓ in the cuckoo graph is ≤ 1 c ℓ m . Proof: Such a path exists of length ℓ = 1 iff some item x has ( h 1 ( x ) , h 2 ( x )) = ( i , j ) or ( j , i ). This happens with probability ≤ n (choices for x ) (2 / m 2 ) ≤ 1 / ( cm ) (assuming h 1 and h 2 are random). Proceed by induction on ℓ . There is a shortest path from i to j of length ℓ ≥ 2 iff there is (1) a shortest path of length ℓ − 1 from i to k (that avoids j ) probability ≤ 1 c ℓ − 1 m by induction and (2) an edge from k to j (for some k ̸ = i , j ). probability ≤ n (2 / m 2 ) ≤ 1 / ( cm )
+Cuckoo Insert Analysis
+Lemma 2: The probability that x and y are in the same bucket is
+O(1/m).
+Proof: Items x and y are in the same bucket iff there is a path of
+length ℓ (for some ℓ) from h1(x) or h2(x) to h1(y) or h2(y). This
+happens with probability ≤ 4
+∞
+�
+ℓ=1
+1
+cℓm =
+4
+(c−1)m = O(1/m).
+Theorem: If there is no cycle in the cuckoo graph then the
+expected time for insert(x) is O(1)
+Proof: Only those items y ̸= x that are in the same bucket as x
+can cause cuckoo swaps during insert(x) and each y causes at
+most one swap (assuming there is no cycle). The probability that
+item y is in the same bucket as x is O(1/m) (Lemma 2). So the
+total expected number of swaps is ≤
+(n − 1)
+(choices for y)
+· O(1/m) = O(1)
+(since n < m).
+8 / 9
 
-Lemma 2: The probability that x and y are in the same bucket is O (1 / m ). Proof: Items x and y are in the same bucket iff there is a path of length ℓ (for some ℓ ) from h 1 ( x ) or h 2 ( x ) to h 1 ( y ) or h 2 ( y ). This happens with probability ≤ 4 ∞ 7
- ℓ =1 1 c ℓ m = 4 ( c − 1) m = O (1 / m ). Theorem: If there is no cycle in the cuckoo graph then the expected time for insert( x ) is O (1) Proof: Only those items y ̸ = x that are in the same bucket as x can cause cuckoo swaps during insert( x ) and each y causes at most one swap (assuming there is no cycle). The probability that item y is in the same bucket as x is O (1 / m ) (Lemma 2). So the total expected number of swaps is ≤ ( n − 1) (choices for y ) · O (1 / m ) = O (1)
+Cuckoo Rehash
+insert(x)
+1. if T[h1(x)] = x or T[h2(x)] = x return
+2. i ← h1(x)
+4.3. repeat n times
+y ← T[i]
+5.
+T[i] ← x
+6.
+if y = NULL return
+7.
+if i = h1(y) then i ← h2(y) else i ← h1(y)
+8.
+x ← y
+9. rehash; insert(x)
+Lemma 3: If m ≥ 2cn then the probability of a cycle in the cuckoo
+graph after n insertions is at most
+1
+c−1.
+Proof: Slot i is involved in a cycle iff there is a path from i to itself
+of length ℓ ≥ 1. By Lemma 1, this happens with probability
+≤ �∞
+ℓ=1
+1
+cℓm =
+1
+(c−1)m. Summing over all m slots, gives probability
+≤
+1
+c−1 for a cycle.
+9 / 9
 
-insert (x) 1. if T [ h 1 ( x )] = x or T [ h 2 ( x )] = x return 2. i ← h 1 ( x ) 3. repeat n times 4. y ← T [ i ] 5. T [ i ] ← x 6. if y = NULL return 7. if i = h 1 ( y ) then i ← h 2 ( y ) else i ← h 1 ( y ) 8. x ← y 9. rehash; insert( x ) Lemma 3: If m ≥ 2 cn then the probability of a cycle in the cuckoo graph after n insertions is at most 1 c − 1 . Proof: Slot i is involved in a cycle iff there is a path from i to itself of length ℓ ≥ 1. By Lemma 1, this happens with probability ≤ ∞ ℓ =1 1 c ℓ m = 1 ( c − 1) m . Summing over all m slots, gives probability
-
-m . Summing over all m slots, gives probability
+Cuckoo Rehash
+Lemma 3: If m ≥ 2cn then the probability of a cycle in the cuckoo
+graph after n insertions is at most
+1
+c−1.
+Proof: Slot i is involved in a cycle iff there is a path from i to itself
+of length ℓ ≥ 1. By Lemma 1, this happens with probability
+≤ �∞
+ℓ=1
+1
+cℓm =
+1
+(c−1)m. Summing over all m slots, gives probability
+≤
+1
+c−1 for a cycle.
+Each rehash takes O(n) time.
+By Lemma 3, for c > 3, the prob. that one rehash occurs after n
+insertions is ≤ 1/2, that two rehashes occur ≤ 1/4, etc. So
+expected amortized cost of rehash is O(1).
+Note: A rehash triggers k > 0 consecutive rehashes with prob.
+≤ 1/2k. So the expected cost is still O(n) · �∞
+k=1 1/2k = O(n).
+9 / 9

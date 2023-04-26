@@ -1,42 +1,418 @@
-Construct an encoding (sequence of bits) c i for each character a i that the expected length of an encoded message is minimized.
+CPSC 420 Lecture 15: Today’s announcements:
+▶ Examlet 2 on Feb 17 in class. Closed book & no notes
+▶ Reading: Shor’s notes on Lempel-Ziv compression https:
+//math.mit.edu/~shor/PAM/lempel_ziv_notes.pdf
+Today’s Plan
+▶ Compression
+▶ Huffman Coding
+▶ Lempel-Ziv Compression
+1 / 9
 
-Construct an encoding (sequence of bits) c i for each character a i that the expected length of an encoded message is minimized.
+Information Theory [Shannon 1948]
+The information (measured in bits) contained in a message i that
+has probability pi of being sent is
+log2
+pi1
+Entropy is the average information content of a message X:
+H(X) =
+�
+i
+pi log2
+pi1
+= −
+�
+i
+pi log2 pi
+Source Coding Theorem m i.i.d. random variables each with
+entropy H(X) can be compressed into more than mH(X) bits with
+negligible risk of information loss but using less than mH(X) bits
+results almost certainly in information loss. [Wikipedia-ish]
+2 / 9
 
-Idea Higher probability characters get shorter codes. A B C D E F G H .3 .2 .1 .1 .07 .03 .15 .05 minPQ: A .2 B .05 C .15 D .1 E .3 F .03 G .1 H .07
+Huffman Coding [Huffman 1952]
+Given a set of characters a1, a2, . . . , aα and a probability pi for
+each ai (�
+i pi = 1)
+Construct an encoding (sequence of bits) ci for each character ai
+so that the expected length of an encoded message is minimized.
+Idea Higher probability characters get shorter codes.
+A
+B
+C
+D
+E
+F
+G
+H
+.3
+.2
+.1
+.03.1 .07
+.15
+.05
+3 / 9
 
-Construct an encoding (sequence of bits) c i for each character a i that the expected length of an encoded message is minimized.
+Huffman Coding [Huffman 1952]
+Given a set of characters a1, a2, . . . , aα and a probability pi for
+each ai (�
+i pi = 1)
+Construct an encoding (sequence of bits) ci for each character ai
+so that the expected length of an encoded message is minimized.
+Idea Higher probability characters get shorter codes.
+A
+B
+C
+D
+E
+F
+G
+H
+.3
+.2
+.1
+.03.1 .07
+.15
+.05
+minPQ:
+A
+.2
+B
+.05
+C
+.15
+D
+.1
+E
+.3
+F
+.03
+G
+.1
+H
+.07
+3 / 9
 
-Construct an encoding (sequence of bits) c i for each character a i that the expected length of an encoded message is minimized.
+Huffman Coding [Huffman 1952]
+Given a set of characters a1, a2, . . . , aα and a probability pi for
+each ai (�
+i pi = 1)
+Construct an encoding (sequence of bits) ci for each character ai
+so that the expected length of an encoded message is minimized.
+Idea Higher probability characters get shorter codes.
+A
+B
+C
+D
+E
+F
+G
+H
+.3
+.2
+.1
+.03.1 .07
+.15
+.05
+A
+.2
+C
+.15
+D
+.1
+E
+.3
+G
+.1
+H
+.07
+BF
+.08
+B
+F
+BF
+minPQ:
+3 / 9
 
-Higher probability characters get shorter codes. A B C D E F G H .3 .2 .1 .1 .07 .03 .15 .05 A .2 C .15 D .1 E .3 G .1 BFH .15 B F BF H BFH minPQ:
+Huffman Coding [Huffman 1952]
+Given a set of characters a1, a2, . . . , aα and a probability pi for
+each ai (�
+i pi = 1)
+Construct an encoding (sequence of bits) ci for each character ai
+so that the expected length of an encoded message is minimized.
+Idea Higher probability characters get shorter codes.
+A
+B
+C
+D
+E
+F
+G
+H
+.3
+.2
+.1
+.03.1 .07
+.15
+.05
+A
+.2
+C
+.15
+D
+.1
+E
+.3
+G
+.1
+BFH
+.15
+B
+F
+BF H
+BFH
+minPQ:
+3 / 9
 
-A .2 C .15 D .1 E .3 G .1 BFH .15 minPQ:
+Huffman Coding [Huffman 1952]
+Given a set of characters a1, a2, . . . , aα and a probability pi for
+each ai (�
+i pi = 1)
+Construct an encoding (sequence of bits) ci for each character ai
+so that the expected length of an encoded message is minimized.
+Idea Higher probability characters get shorter codes.
+A
+B
+C
+D
+E
+F
+G
+H
+.3
+.2
+.1
+.03.1 .07
+.05.15
+B
+F
+BF
+C
+G
+D
+A
+E
+H
+BFH
+A: 11
+B: 00000
+C: 001
+D: 101
+E: 01
+F: 00001
+G: 100
+H: 0001
+3 / 9
 
-Construct an encoding (sequence of bits) c i for each character a i so that the expected length of an encoded message is minimized.
-
-Idea Higher probability characters get shorter codes. A B C D E F G H .3 .2 .1 .1 .07 .03 .15 .05 B F BF C G D A E H BFH A: 11 B: 00000 C: 001 D: 101 E: 01 F: 00001 G: 100 H: 0001
-
-A B C D not unique 0 010 01 10 not prefix-free 00 10 11 110 prefix-free 0 10 110 111 Decode 10101100010
-
-A B C D not unique 0 010 01 10 not prefix-free 00 10 11 110 prefix-free 0 10 110 111
-
+Decoding
+A
+B
+C
+D
+not unique
+0
+010
+01
+10
+not prefix-free
+00
+10
+11
+110
+prefix-free
+0
+10
+110
+111
 Decode 10101100010
+4 / 9
 
-No (unique) code can compress all inputs of length n .
+Decoding
+A
+B
+C
+D
+not unique
+0
+010
+01
+10
+not prefix-free
+00
+10
+11
+110
+prefix-free
+0
+10
+110
+111
+Decode 10101100010
+No (unique) code can compress all inputs of length n.
+There are 2n different inputs.
+There are
+n−1
+�
+i=1
+2i = 2n − 2 codes of length < n.
+Pigeonhole.
+4 / 9
 
-Let c ( n ) be the number of phrases created from input of length n . Let α be the size of the alphabet of characters in input. Length of output is c ( n )(log 2 c ( n ) + log 2 α ) bits.
+Compression [Lempel & Ziv 1978]
+AAABABBBBAABBBB
+▶ Parse input into distinct phrases reading from left to right.
+Each phrase is the shortest string not already a phrase.
+The 0th phrase is ∅.
+▶ Output i c for each phrase w, where c is the last character of
+w and i is the index of phrase u where w = u ◦ c
+Let c(n) be the number of phrases created from input of length n.
+Let α be the size of the alphabet of characters in input.
+Length of output is c(n)(log2 c(n) + log2 α) bits.
+5 / 9
 
-| A | AA | B | AB | BB | BA | ABB | BB ▶ Parse input into distinct phrases reading from left to right. Each phrase is the shortest string not already a phrase. The 0th phrase is ∅ . ▶ Output i c for each phrase w , where c is the last character of w and i is the index of phrase u where w = u ◦ c 1 2 3 4 5 6 7 8 A AA B AB BB BA ABB BB 0 A 1 A 0 B 1 B 3 B 3 A 4 B 3 00 10 001 011 0111 0110 1001 111 Let c ( n ) be the number of phrases created from input of length n . Let α be the size of the alphabet of characters in input. Length of output is c ( n )(log 2 c ( n ) + log 2 α ) bits.
+Compression [Lempel & Ziv 1978]
+|A|AA|B|AB|BB|BA|ABB|BB
+▶ Parse input into distinct phrases reading from left to right.
+Each phrase is the shortest string not already a phrase.
+The 0th phrase is ∅.
+▶ Output i c for each phrase w, where c is the last character of
+w and i is the index of phrase u where w = u ◦ c
+1
+2
+3
+4
+5
+6
+7
+8
+A
+AA
+B
+AB
+BB
+BA
+ABB
+BB
+0A
+1A
+0B
+1B
+3B
+3A
+4B
+3
+00
+10
+001
+011
+0111
+0110
+1001
+111
+Let c(n) be the number of phrases created from input of length n.
+Let α be the size of the alphabet of characters in input.
+Length of output is c(n)(log2 c(n) + log2 α) bits.
+5 / 9
 
-How do we show LZ78 is a good compressor? Empirical Try it on lots of inputs. Worst case? Average case? Something else?
+Compression [Lempel & Ziv 1978]
+How do we show LZ78 is a good compressor?
+Empirical Try it on lots of inputs.
+Worst case? Average case? Something else?
+Worst case
+c(n) = #phrases
+α = |alphabet| (assume α = 2)
+Maximize c(n) (make many small phrases)
+A|B|AA|AB|BA|BB|...
+The smallest input with all phrases of lengths 1, 2, . . . , k has length
+nk =
+k
+�
+j=1
+j2j = (k − 1)2k+1 + 2
+For such an input, c(nk) = �k
+i=1 2i = 2k+1 − 2, so c(nk) ≤
+nk
+k−1.
+6 / 9
 
-Maximize c ( n ) (make many small phrases)
-
-A | B | AA | AB | BA | BB |
-
-c ( n ) ❶ ≤ n k k − 1 + n − n k k + 1 ≤ n k − 1 ❷ ≤ n log 2 c ( n ) − 3 since ❶ to maximize c ( n ), the first n k input bits make ≤ c ( n k ) phrases and the rest make phrases of length k + 1, and ❷ c ( n ) ≤ c ( n k +1 ) = 2 k +2 − 2.
-
+Compression [Lempel & Ziv 1978]
+Worst case continued
+In fact, for all n between nk and nk+1,
+c(n)
+≤❶
+nk
+k − 1 + n − nk
+k + 1 ≤
+n
+k − 1
+≤❷
+n
+log2 c(n) − 3
+since ❶ to maximize c(n), the first nk input bits make ≤ c(nk)
+phrases and the rest make phrases of length k + 1, and
+❷ c(n) ≤ c(nk+1) = 2k+2 − 2.
 As we saw, LZ78 compresses inputs of length n to about
+c(n) log2 c(n) + c(n) ≤ n + 4c(n) = n + O(
+n
+log2 n) bits.
+Is this good?
+7 / 9
 
-If LZ78 breaks x into distinct phrases x = y 1 y 2 . . . y c ( n ) then Q ( x ) = c ( n ) j =1 Q ( y j ) = ℓ | y i | = ℓ Q ( y i ) Let c ℓ be the number of phrases of length ℓ . Since the y i ’s with length ℓ are distinct v,
- | y i | = ℓ Q ( y i ) ≤ 1 and | y | = ℓ Q ( y i ) ≤ 1 c ℓ c ℓ take log sum over ℓ − log 2 Q ( x ) ≥ ℓ c ℓ log 2 c ℓ
+Compression [Lempel & Ziv 1978]
+Average case
+Alphabet = {a1, a2, . . . , aα}
+Create input x = ax(1)ax(2) . . . ax(n) by choosing n characters at
+random, where ai is chosen with probability pi.
+Let Q(x) = �n
+i=1 px(i) be the probability of input x.
+If LZ78 breaks x into distinct phrases x = y1y2 . . . yc(n) then
+Q(x) =
+c(n)
+�
+j=1
+Q(yj) =
+�
+ℓ
+�
+|yi|=ℓ
+Q(yi)
+Let cℓ be the number of phrases of length ℓ.
+Since the yi’s with length ℓ are distinct �
+|yi|=ℓ Q(yi) ≤ 1 and
+�
+|yi|=ℓ
+Q(yi) ≤
+� 1
+cℓ
+�cℓ
+take log
+sum over ℓ
+− log2 Q(x) ≥
+�
+ℓ
+cℓ log2 cℓ
+8 / 9
+
+Compression [Lempel & Ziv 1978]
+Average case continued
+�
+ℓ
+cℓ log2 cℓ ≤ − log2 Q(x) ≈ npi log2(1/pi) = nH(X)
+where X is a random character.
+Recall, LZ78 compresses to approx. c(n) log2 c(n) bits. If this is
+approx. �
+ℓ cℓ log2 cℓ then LZ78 compresses (nearly) optimally
+[Source Coding Theorem].
+In fact,
+nH(X) ≥ − log2 Q(x) ≥ c(n) log2 c(n) − O(log2( n
+c(n)))
+9 / 9

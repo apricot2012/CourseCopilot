@@ -6,8 +6,8 @@ from pathlib import Path
 import src.evaluator as eval
 from src.enquirer import Enquirer
 
-# ingestor = Ingestor()
-# ingestor.ingest()
+ingestor = Ingestor()
+ingestor.ingest()
 
 segment_length = 512
 top_k = 5

@@ -1,83 +1,467 @@
-graph G with positive weights on the edges and a number k , G contain a Hamiltonian cycle with total edge weight ≤ k ?
+CPSC 420 Lecture 20: Today’s announcements:
+▶ HW3 is on Gradescope, due Mar 9, 23:59
+▶ Examlet 3 on Mar 17 in class. Closed book & no notes
+▶ Reading: Approximation Algorithms [Intro to Algs 4th Ed. by
+Cormen, Leiserson, Rivest, Stein Ch. 35]
+Today’s Plan
+▶ NP-hardness
+▶ Hamiltonian cycle (and TSP)
+▶ Approximation algorithms
+1 / 9
 
-An optimization problem asks for a maximum (or minimum) value solution to a problem.
+Traveling Salesperson Problem (TSP)
+Given graph G with positive weights on the edges and a number k,
+does G contain a Hamiltonian cycle with total edge weight ≤ k?
+Claim: TSP is NP-complete.
+A. If we can solve TSP in polytime then we can solve HamCycle in
+polytime.
+B. Given a sequence of vertices, we can check in polytime:
+1. the sequence forms a cycle in G
+2. the cycle visits all the vertices in G
+3. the sum of the edges in the cycle is ≤ k
+2 / 9
 
-finds a minimum weight TSP in a given edge-weighted
+Approximate Solutions for NP-hard Optimization Problems
+An optimization problem asks for a maximum (or minimum)
+value solution to a problem.
+For example,
+MaxClique finds a maximum size clique in a given graph G.
+MinVertexCover finds a minimum size vertex cover in a given
+graph G.
+MinTSP finds a minimum weight TSP in a given edge-weighted
+graph G.
+These problems are all NP-hard (but not NP-complete) so fast
+algorithms are unlikely.
+What do we do?
+3 / 9
 
-These problems are all NP-hard (but not NP-complete) so fast algorithms are unlikely.
+Approximation Algorithms
+An algorithm A is a ρ(n)-approximation algorithm if for every
+input I of size n with optimal solution value OPT(I),
+max
+
+
+
+
+
+
+
+
+
+
+
+
+
+value A(I)
+�OPT(I)
+��
+minimizing�
+problems
+,
+OPT(I)
+�value A(I)
+��
+maximizing�
+problems
+
+
+
+
+
+
+
+
+
+
+
+
+
+≤ ρ(n).
+For example, for MinVertexCover, we want an algorithm A so that
+for all inputs I,
+value A(I)
+OPT(I)
+≤ ρ(n).
+4 / 9
 
-An algorithm A is a ρ ( n ) -approximation algorithm if for every input I of size n with optimal solution value OPT( I ),
+2-Approximation Algorithm for MinVertexCover
+MatchVC
+1. S = {}
+3.2. Repeat
+Pick arbitrary edge (u, v) in G
+4.
+Remove u and v and their edges from G
+5.
+Add u and v to S
+6. Until G contains no edges
+S = {}
+a
+b
+c
+d
+e
+f
+g
+h
+5 / 9
 
-max     value A ( I ) OPT( I ) minimizingproblems , OPT( I ) value A ( I ) maximizingproblems     ≤ ρ ( n
+2-Approximation Algorithm for MinVertexCover
+MatchVC
+1. S = {}
+3.2. Repeat
+Pick arbitrary edge (u, v) in G
+4.
+Remove u and v and their edges from G
+5.
+Add u and v to S
+6. Until G contains no edges
+S = {}
+a
+b
+c
+d
+e
+f
+g
+h
+5 / 9
 
-MatchVC1. S = {} 2. Repeat 3. Pick arbitrary edge ( u , v ) in G 4. Remove u and v and their edges from G 5. Add u and v to S 6. Until G contains no edges
+2-Approximation Algorithm for MinVertexCover
+MatchVC
+1. S = {}
+3.2. Repeat
+Pick arbitrary edge (u, v) in G
+4.
+Remove u and v and their edges from G
+5.
+Add u and v to S
+6. Until G contains no edges
+S = {a, b}
+c
+d
+e
+f
+g
+h
+5 / 9
 
-a b c d e f g h
+2-Approximation Algorithm for MinVertexCover
+MatchVC
+1. S = {}
+3.2. Repeat
+Pick arbitrary edge (u, v) in G
+4.
+Remove u and v and their edges from G
+5.
+Add u and v to S
+6. Until G contains no edges
+S = {a, b}
+c
+d
+e
+f
+g
+h
+5 / 9
 
-MatchVC1. S = {} 2. Repeat 3. Pick arbitrary edge ( u , v ) in G 4. Remove u and v and their edges from G 5. Add u and v to S 6. Until G contains no edges
+2-Approximation Algorithm for MinVertexCover
+MatchVC
+1. S = {}
+3.2. Repeat
+Pick arbitrary edge (u, v) in G
+4.
+Remove u and v and their edges from G
+5.
+Add u and v to S
+6. Until G contains no edges
+S = {a, b, g, h}
+c
+d
+e
+f
+5 / 9
 
-a b c d e f g h
+2-Approximation Algorithm for MinVertexCover
+MatchVC
+1. S = {}
+3.2. Repeat
+Pick arbitrary edge (u, v) in G
+4.
+Remove u and v and their edges from G
+5.
+Add u and v to S
+6. Until G contains no edges
+S = {a, b, g, h}
+c
+d
+e
+f
+5 / 9
 
-MatchVC1. S = {} 2. Repeat 3. Pick arbitrary edge ( u , v ) in G 4. Remove u and v and their edges from G 5. Add u and v to S 6. Until G contains no edges
+2-Approximation Algorithm for MinVertexCover
+MatchVC
+1. S = {}
+3.2. Repeat
+Pick arbitrary edge (u, v) in G
+4.
+Remove u and v and their edges from G
+5.
+Add u and v to S
+6. Until G contains no edges
+S = {a, b, g, h, c, d}
+e
+f
+5 / 9
 
-MatchVC1. S = {} 2. Repeat 3. Pick arbitrary edge ( u , v ) in G 4. Remove u and v and their edges from G 5. Add u and v to S 6. Until G contains no edges
+2-Approximation Algorithm for MinVertexCover
+MatchVC
+1. S = {}
+3.2. Repeat
+Pick arbitrary edge (u, v) in G
+4.
+Remove u and v and their edges from G
+5.
+Add u and v to S
+6. Until G contains no edges
+a
+b
+c
+d
+e
+f
+g
+h
+S = {a, b, g, h, c, d}
+5 / 9
 
-c d e f g h
+2-Approximation Algorithm for MinVertexCover
+Claim: MatchVC is a 2-approx algorithm for MinVertexCover
+Proof:
+1. OPT(G) ≥ # edges picked by MatchVC(G)
+2. value MatchVC(G) = 2 × # edges picked by MatchVC(G)
+⇒
+value MatchVC(G)
+OPT(G)
+≤ 2
+Why is 1. true?
+6 / 9
 
-MatchVC1. S = {} 2. Repeat 3. Pick arbitrary edge ( u , v ) in G 4. Remove u and v and their edges from G 5. Add u and v to S 6. Until G contains no edges S = { a , b , g , h } c d e f
+2-Approximation Algorithm for MinVertexCover
+Claim: MatchVC is a 2-approx algorithm for MinVertexCover
+Proof:
+1. OPT(G) ≥ # edges picked by MatchVC(G)
+2. value MatchVC(G) = 2 × # edges picked by MatchVC(G)
+⇒
+value MatchVC(G)
+OPT(G)
+≤ 2
+Why is 1. true?
+Each picked edge must be covered by any vertex cover (including
+OPT(G) solution), and no two picked edges share an endpoint.
+6 / 9
 
-MatchVC1. S = {} 2. Repeat 3. Pick arbitrary edge ( u , v ) in G 4. Remove u and v and their edges from G 5. Add u and v to S 6. Until G contains no edges
+2-Approximation Algorithm for MinVertexCover
+Claim: MatchVC is a 2-approx algorithm for MinVertexCover
+Proof:
+1. OPT(G) ≥ # edges picked by MatchVC(G)
+2. value MatchVC(G) = 2 × # edges picked by MatchVC(G)
+⇒
+value MatchVC(G)
+OPT(G)
+≤ 2
+Why is 1. true?
+Each picked edge must be covered by any vertex cover (including
+OPT(G) solution), and no two picked edges share an endpoint.
+Note: We don’t know OPT(G) but we can lower bound it.
+6 / 9
 
-MatchVC1. S = {} 2. Repeat 3. Pick arbitrary edge ( u , v ) in G 4. Remove u and v and their edges from G 5. Add u and v to S 6. Until G contains no edges
-
-MatchVC1. S = {} 2. Repeat 3. Pick arbitrary edge ( u , v ) in G 4. Remove u and v and their edges from G 5. Add u and v to S 6. Until G contains no edges
-
-MatchVC1. S = {} 2. Repeat 3. Pick arbitrary edge ( u , v ) in G 4. Remove u and v and their edges from G 5. Add u and v to S 6. Until G contains no edges
-
-a b c d e f g h
-
-MatchVC is a 2-approx algorithm for MinVertexCover
-
-MatchVC is a 2-approx algorithm for MinVertexCover
-
-MatchVC is a 2-approx algorithm for MinVertexCover
-
-Given a set of n jobs where job i must run uninterrupted for p i time units, and m identical machines each of which can work on one job at a time. Find schedule of jobs on machines that minimizes the completion time (time when last job finishes).
-
+List Scheduling
+Given a set of n jobs where job i must run uninterrupted for pi
+time units, and m identical machines each of which can work on
+one job at a time. Find schedule of jobs on machines that
+minimizes the completion time (time when last job finishes).
 GreedyLS: Whenever a machine becomes idle, assign next job to
+that machine.
+p = [5, 7, 17, 10, 9, 30]
+m = 3
+M1
+M2
+M3
+5
+7
+17
+7 / 9
 
-M 1 M 2 M 3 5 7 17
-
-Given a set of n jobs where job i must run uninterrupted for p i time units, and m identical machines each of which can work on one job at a time. Find schedule of jobs on machines that minimizes the completion time (time when last job finishes).
-
+List Scheduling
+Given a set of n jobs where job i must run uninterrupted for pi
+time units, and m identical machines each of which can work on
+one job at a time. Find schedule of jobs on machines that
+minimizes the completion time (time when last job finishes).
 GreedyLS: Whenever a machine becomes idle, assign next job to
+that machine.
+p = [5, 7, 17, 10, 9, 30]
+m = 3
+M1
+M2
+M3
+5
+7
+17
+10
+7 / 9
 
-M 1 M 2 M 3 5 7 17 10
-
-Given a set of n jobs where job i must run uninterrupted for p i time units, and m identical machines each of which can work on one job at a time. Find schedule of jobs on machines that minimizes the completion time (time when last job finishes).
-
+List Scheduling
+Given a set of n jobs where job i must run uninterrupted for pi
+time units, and m identical machines each of which can work on
+one job at a time. Find schedule of jobs on machines that
+minimizes the completion time (time when last job finishes).
 GreedyLS: Whenever a machine becomes idle, assign next job to
+that machine.
+p = [5, 7, 17, 10, 9, 30]
+m = 3
+M1
+M2
+M3
+5
+7
+17
+10
+9
+7 / 9
 
-1 2 3 5 7 17 10 9
+List Scheduling
+Given a set of n jobs where job i must run uninterrupted for pi
+time units, and m identical machines each of which can work on
+one job at a time. Find schedule of jobs on machines that
+minimizes the completion time (time when last job finishes).
+GreedyLS: Whenever a machine becomes idle, assign next job to
+that machine.
+p = [5, 7, 17, 10, 9, 30]
+m = 3
+M1
+M2
+M3
+5
+7
+17
+10
+9
+30
+7 / 9
 
-Given a set of n jobs where job i must run uninterrupted for p i time units, and m identical machines each of which can work on one job at a time. Find schedule of jobs on machines that minimizes the completion time (time when last job finishes).
+List Scheduling
+Given a set of n jobs where job i must run uninterrupted for pi
+time units, and m identical machines each of which can work on
+one job at a time. Find schedule of jobs on machines that
+minimizes the completion time (time when last job finishes).
+GreedyLS: Whenever a machine becomes idle, assign next job to
+that machine.
+p = [5, 7, 17, 10, 9, 30]
+m = 3
+M1
+M2
+M3
+5
+7
+17
+10
+9
+30
+45
+7 / 9
 
-M 1 M 2 M 3 5 7 17 10 9 30
+List Scheduling
+Given a set of n jobs where job i must run uninterrupted for pi
+time units, and m identical machines each of which can work on
+one job at a time. Find schedule of jobs on machines that
+minimizes the completion time (time when last job finishes).
+GreedyLS: Whenever a machine becomes idle, assign next job to
+that machine.
+p = [5, 7, 17, 10, 9, 30]
+m = 3
+M1
+M2
+M3
+5
+7
+17
+10
+9
+30
+45
+M1
+M2
+M3
+5
+7
+17
+10
+9
+30
+30
+Optimal
+7 / 9
 
-Given a set of n jobs where job i must run uninterrupted for p i time units, and m identical machines each of which can work on one job at a time. Find schedule of jobs on machines that minimizes the completion time (time when last job finishes).
+GreedyLS is a (2 − 1
+m)-Approximation Alg. [Graham ’66]
+Let Gm(p1, . . . , pn) be completion time of GreedyLS schedule
+Let OPTm(p1, . . . , pn) be minimum completion time
+Claim: Gm(p1, . . . , pn) ≤ (2 − 1
+m)OPT(p1, . . . , pn)
+Proof: Let k be the last job to finish for GreedyLS. Let sk be its
+start time.
+M1
+M2
+M3
+G3(p1, ... , pn)
+pk
+sk
+1. sk ≤ 1
+m
+�
+i̸=k
+pi [all machines work nonstop before sk in GreedyLS]
+2. OPTm(p1, . . . , pn) ≥ pk and OPTm(p1, . . . , pn) ≥ 1
+m
+n�
+i=1
+pi
+3. Gm(p1, . . . , pn) = sk + pk ≤ 1
+m
+�
+i̸=k
+pi + pk
+= 1
+m
+n�
+i=1
+pi + (1 − 1
+m)pk ≤ (2 − 1
+m)OPT(p1, . . . , pn)
+8 / 9
 
-M 1 M 2 M 3 5 7 17 10 9 30
-
-Given a set of n jobs where job i must run uninterrupted for p i time units, and m identical machines each of which can work on one job at a time. Find schedule of jobs on machines that minimizes the completion time (time when last job finishes).
-
-7, 17, 10, 9, 30] M 1 M 2 M 3 5 7 17 10 9 30 45 M 1 M 2 M 3 5 7 17 10 9 30 Optimal
-
-m Let G m ( p 1 , . . . , p n ) be completion time of GreedyLS schedule Let OPT m ( p 1 , . . . , p n ) be minimum completion time Claim: G m ( p 1 , . . . , p n ) ≤ (2 − 1 m )OPT( p 1 , . . . , p n ) Proof: Let k be the last job to finish for GreedyLS. Let s k be its start time. M 1 M 2 M 3 G 3 ( p 1 , ... , p n ) p k s k 1. s k ≤ 1 m i ̸ = k p i [all machines work nonstop before s k in GreedyLS] 2. OPT m ( p 1 , . . . , p n ) ≥ p k and OPT m ( p 1 , . . . , p n ) ≥ 1 m n “W
- i =1 p i 3. G m ( p 1 , . . . , p n ) = s k + p k ≤ 1 m i ̸ = k p i + p k = 1 m n i =1 p i + (1 − 1 m ) p k ≤ (2 − 1 m )OPT( p 1 , . . . , p n )
-
-1. s k ≤ 1 m i ̸ = k p i [all machines work nonstop before s k in GreedyLS] 2. OPT m ( p 1 , . . . , p n ) ≥ p k and OPT m ( p 1 , . . . , p n ) ≥ 1 m n “W
- i =1 p i 3. G m ( p 1 , . . . , p n ) = s k + p k ≤ 1 m i ̸ = k p i + p k = 1 m n i =1 p i + (1 − 1 m ) p k ≤ (2 − 1 m )OPT( p 1 , . . . , p n )
-
-12 m )-approximation algorithm if
-
-because two jobs from biggest m + 1 jobs must run on the same machine in any schedule ⇒ completion time ≥ 2 p m +1 . p k ≤ p m +1 since GreedyLS schedules p 1 , . . . , p m first. As before G m ( p 1 , . . . , p n ) = s k + p k ≤ 1 m n i =1 p i + (1 − 1 m ) p k ≤ OPT( p 1 , . . . , p n ) + (1 − 1 m ) OPT( p 1 ,..., p n ) 2 = ( 32 − 12 m )OPT( p 1 , . . . , p n )
+Sorting Job Sizes
+Claim: GreedyLS is a (3
+2 −
+1
+2m)-approximation algorithm if
+p1 ≥ p2 ≥ · · · ≥ pn
+Proof: If n ≤ m then Gm(p1, . . . , pn) = OPT(p1, . . . , pn).
+If n > m then OPT(p1, . . . , pn) ≥ 2pm+1
+because two jobs from biggest m + 1 jobs must run on the same
+machine in any schedule ⇒ completion time ≥ 2pm+1.
+pk ≤ pm+1 since GreedyLS schedules p1, . . . , pm first.
+As before Gm(p1, . . . , pn) = sk + pk ≤ 1
+m
+n�
+i=1
+pi + (1 − 1
+m)pk
+≤ OPT(p1, . . . , pn) + (1 − 1
+m) OPT(p1,...,pn)
+2
+= ( 3
+2 −
+1
+2m)OPT(p1, . . . , pn)
+9 / 9

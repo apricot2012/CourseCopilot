@@ -1,39 +1,335 @@
-x 1 + 6 x 2 ≤ 200 y 1 + 300 y 2 + 400 y 3 for all x 1 ≤ 200 for all y 1 + y 3 ≥ 1 x 2 ≤ 300 y 2 + y 3 ≥ 6 x 1 + x 2 ≤ 400 x 1 , x 2 ≥ 0 y 1 , y 2 , y 3 ≥ 0 objective value of any feasible solution of the dual LP is an
+CPSC 420 Lecture 12: Today’s announcements:
+▶ HW2 is on Gradescope, due Feb 9, 23:59
+▶ Examlet 2 on Feb 17 in class. Closed book & no notes
+▶ Reading: Ch.H Linear Programming, Ch.3 Dynamic
+Programming [all by Erickson]
+Today’s Plan
+▶ Linear programming duality
+▶ Dynamic programming
+1 / 9
 
-max c 1 x 1 + · · · + c n x n min b 1 y 1 + · · · + b m y m a i , 1 x 1 + · · · + a i , n x n ≤ b i a 1 , j y 1 + · · · + a m , j y m ≥ c j x j ≥ 0 y i ≥ 0 i = 1 . . . m j = 1 . . . n i = 1 . . . m j = 1 . . . n max c · x subject to: Ax ≤ b x ≥ 0 min y · b subject to: yA ≥ c y ≥ 0
+Linear Programming Duality
+x1 + 6x2 ≤ 200y1 + 300y2 + 400y3
+for all x1 ≤ 200
+for all y1 + y3 ≥ 1
+x2 ≤ 300
+y2 + y3 ≥ 6
+x1 + x2 ≤ 400
+x1, x2 ≥ 0
+y1, y2, y3 ≥ 0
+The objective value of any feasible solution of the dual LP is an
+upper bound on the objective value of any feasible solution of the
+primal LP.
+Duality Theorem If LP has bounded optimum then so does its dual
+and the two optimum values are the same.
+2 / 9
 
-What is a longest common subsequence (LCS) of: A B A N D O N B A D N O D N O A string (array of characters) Z [1 .. k ] is a subsequence of X [1 .. m ] if there exist indices i 1 < i 2 < · · · < i k such that Z [ j ] = X [ i j ] for all
+Duality in general
+max c1x1 + · · · + cnxn
+min b1y1 + · · · + bmym
+ai,1x1 + · · · + ai,nxn ≤ bi
+a1,jy1 + · · · + am,jym ≥ cj
+xj ≥ 0
+yi ≥ 0
+i = 1 . . .m j = 1 . . . n
+i = 1 . . .m j = 1 . . . n
+max
+c · x
+subject to:
+Ax ≤ b
+x ≥ 0
+min
+y · b
+subject to:
+yA ≥ c
+y ≥ 0
+3 / 9
 
-A string (array of characters) Z [1 .. k ] is a subsequence of X [1 .. m ] if there exist indices i 1 < i 2 < · · · < i k such that Z [ j ] = X [ i j ] for all j = 1 . . . k . Given: Two character strings X and Y ( | X | = m , | Y | = n ) Find: LCS of X and Y If last characters match (i.e. X [ m ] = Y [ n ]) Then there is some LCS that ends with this character. (Why?) So recursively find LCS( X [1 .. m − 1], Y [1 .. n − 1]) and add X [ m ].
+Longest Common Subsequence
+What is a longest common subsequence (LCS) of:
+A
+B
+A
+N
+D
+O
+N
+B
+A
+D
+N
+O
+D
+N
+O
+A string (array of characters) Z[1..k] is a subsequence of X[1..m]
+if there exist indices i1 < i2 < · · · < ik such that Z[j] = X[ij] for all
+j = 1 . . . k.
+Given: Two character strings X and Y (|X| = m, |Y | = n)
+Find: LCS of X and Y
+4 / 9
 
-What if the last characters don’t match? A B A N D O N B A D N O D N O Then X [ m ] might match something in Y [1 .. n − 1] Or Y [ n ] might match something in X [1 .. m − 1] But not both. (Why?) So recursivly find LCS( X [1 .. m ], Y [1 .. n − 1]) and LCS( X [1 .. m − 1], Y [1 .. n ]) and return the longest. LCS(X,Y) 1. m = | X | , n = | Y | , If m = 0 or n = 0 return ∅ 2. If X [ m ] = Y [ n ] return LCS( X [1 .. m − 1], Y [1 .. n − 1]) ◦ X [ m ] 3. Else return longer of LCS( X [1 .. m ], Y [1 .. n − 1]) and LCS( X [1 .. m − 1], Y [1 .. n ])
+Longest Common Subsequence
+What is a longest common subsequence (LCS) of:
+A
+B
+A
+N
+D
+O
+N
+B
+A
+D
+N
+O
+D
+N
+O
+A string (array of characters) Z[1..k] is a subsequence of X[1..m]
+if there exist indices i1 < i2 < · · · < ik such that Z[j] = X[ij] for all
+j = 1 . . . k.
+Given: Two character strings X and Y (|X| = m, |Y | = n)
+Find: LCS of X and Y
+If last characters match (i.e. X[m] = Y [n])
+Then there is some LCS that ends with this character. (Why?)
+So recursively find LCS(X[1..m − 1],Y [1..n − 1]) and add X[m].
+4 / 9
 
-Dynamic programming is a technique for avoiding repeated recursive calls by:
+Longest Common Subsequence
+What if the last characters don’t match?
+A
+B
+A
+N
+D
+O
+N
+B
+A
+D
+N
+O
+D
+N
+O
+Then X[m] might match something in Y [1..n − 1]
+Or Y [n] might match something in X[1..m − 1]
+But not both. (Why?)
+So recursivly find LCS(X[1..m],Y [1..n − 1])
+and LCS(X[1..m − 1],Y [1..n]) and return the longest.
+LCS(X,Y)
+1. m = |X|, n = |Y |, If m = 0 or n = 0 return ∅
+2. If X[m] = Y [n] return LCS(X[1..m − 1],Y [1..n − 1])◦X[m]
+3. Else return longer of
+LCS(X[1..m],Y [1..n − 1]) and LCS(X[1..m − 1],Y [1..n])
+5 / 9
 
-Storing the solutions to subproblems.
+Dynamic Programming
+Dynamic programming is a technique for avoiding repeated
+recursive calls by:
+1. Storing the solutions to subproblems.
+2. Solving subproblems from the bottom up.
+∅
+A
+B
+A
+N
+D
+O
+N
+NDONDAB∅
+O
+6 / 9
 
-∅ A B A N D O N ∅ B A D N O D N O
+Dynamic Programming
+Dynamic programming is a technique for avoiding repeated
+recursive calls by:
+1. Storing the solutions to subproblems.
+2. Solving subproblems from the bottom up.
+∅
+A
+B
+A
+N
+D
+O
+N
+∅
+0
+0
+0
+0
+0
+0
+0
+0
+B
+0
+0
+1
+1
+1
+1
+1
+1
+A
+0
+1
+1
+2
+2
+2
+2
+2
+D
+0
+1
+1
+2
+2
+3
+3
+3
+N
+0
+1
+1
+2
+3
+3
+3
+4
+O
+0
+1
+1
+2
+3
+3
+4
+4
+D
+0
+1
+1
+2
+3
+4
+4
+4
+N
+0
+1
+1
+2
+3
+4
+4
+5
+O
+0
+1
+1
+2
+3
+4
+5
+5
+6 / 9
 
-Dynamic programming is a technique for avoiding repeated recursive calls by:
+Dynamic Programming LCS
+T[i, j] = LCS(X[1..i],Y [1..j])
+T[i, j] =
+�
+T[i − 1, j − 1] ◦ X[i]
+if X[i] = Y [j]
+max{T[i − 1, j], T[i, j − 1]}
+otherwise
+LCS(X,Y)
+1. T[0, 0] = ∅
+2. For i = 1 to m T[i, 0] = ∅
+3. For j = 1 to n T[0, j] = ∅
+5.4. For i = 1 to m
+For j = 1 to n
+6.
+if X[i] = Y [j] then T[i, j] = T[i − 1, j − 1] ◦ X[i]
+7.
+else T[i, j] = max{T[i − 1, j], T[i, j − 1]}
+8. return T[m, n]
+Running time?
+7 / 9
 
-Storing the solutions to subproblems.
+Longest Increasing Subsequence
+What is a longest increasing subsequence of:
+5
+3
+4
+9
+6
+2
+1
+8
+A sequence S[1..k] is increasing if S[i] < S[i + 1] ∀i = 1..k − 1.
+Given: A sequence of numbers R[1..n]. Find: LIS of R
+Use LCS to solve LIS
+LIS(R)
+1. S =
+2. output LCS(S, R)
+Running time?
+8 / 9
 
-∅ A B A N D O N ∅ 0 0 0 0 0 0 0 0 B 0 0 1 1 1 1 1 1 A 0 1 1 2 2 2 2 2 D 0 1 1 2 2 3 3 3 N 0 1 1 2 3 3 3 4 O 0 1 1 2 3 3 4 4 D 0 1 1 2 3 4 4 4 N 0 1 1 2 3 4 4 5 O 0 1 1 2 3 4 5 5
+Faster Longest Increasing Subsequence
+To find LIS(R[1..k]), what information about R[1..k − 1] is
+enough?
+A. LIS of R[1..k − 1]
+5 3 4 9 6 2 1 8
+3 4 9↑
+or
+3 4 6?
+9 / 9
 
-Dynamic Programming LCS T [ i , j ] = LCS( X [1 .. i ], Y [1 .. j ]) T [ i , j ] = T [ i − 1 , j − 1] ◦ X [ i ] if X [ i ] = Y [ j ] max { T [ i − 1 , j ] , T [ i , j − 1] } otherwise LCS(X,Y) 1. T [0 , 0] = ∅ 2. For i = 1 to m T [ i , 0] = ∅ 3. For j = 1 to n T [0 , j ] = ∅ 4. For i = 1 to m 5. For j = 1 to n 6. if X [ i ] = Y [ j ] then T [ i , j ] = T [ i − 1 , j − 1] ◦ X [ i ] 7. else T [ i , j ] = max { T [ i − 1 , j ] , T [ i , j − 1] } 8. return T [ m , n ] Running time?
+Faster Longest Increasing Subsequence
+To find LIS(R[1..k]), what information about R[1..k − 1] is
+enough?
+A. LIS of R[1..k − 1]
+5 3 4 9 6 2 1 8
+3 4 9↑
+or
+3 4 6?
+B. Best LIS of R[1..k − 1]
+1 2 5 3 4
+↑
+want shorter IS as well
+9 / 9
 
-What is a longest increasing subsequence of: 5 3 4 9 6 2 1 8 A sequence S [1 .. k ] is increasing if S [ i ] < S [ i + 1] ∀ i = 1 .. k − 1. Given: A sequence of numbers R [1 .. n ]. Find: LIS of R Use LCS to solve LIS LIS( R ) 1. S = 2. output LCS( S , R )
+Faster Longest Increasing Subsequence
+To find LIS(R[1..k]), what information about R[1..k − 1] is
+enough?
+A. LIS of R[1..k − 1]
+5 3 4 9 6 2 1 8
+3 4 9↑
+or
+3 4 6?
+B. Best LIS of R[1..k − 1]
+1 2 5 3 4
+↑
+want shorter IS as well
+C. Best ISs of length 1, 2, . . . , j, where j = |LIS(R[1..k − 1])|
+9 / 9
 
-5 3 4 9 6 2 1 8 ↑ 3 4 9 or 3 4 6?
-
-5 3 4 9 6 2 1 8 ↑ 3 4 9 or 3 4 6?
-
-1 2 5 3 4 ↑ want shorter IS as well
-
-5 3 4 9 6 2 1 8 ↑ 3 4 9 or 3 4 6?
-
-1 2 5 3 4 ↑ want shorter IS as well
-
-5 3 4 9 6 2 1 8 ↑ 3 4 9 or 3 4 6?
-
-1 2 5 3 4 ↑ want shorter IS as well
+Faster Longest Increasing Subsequence
+To find LIS(R[1..k]), what information about R[1..k − 1] is
+enough?
+A. LIS of R[1..k − 1]
+5 3 4 9 6 2 1 8
+3 4 9↑
+or
+3 4 6?
+B. Best LIS of R[1..k − 1]
+1 2 5 3 4
+↑
+want shorter IS as well
+C. Best ISs of length 1, 2, . . . , j, where j = |LIS(R[1..k − 1])|
+Now we need to find best ISs for R[1..k] using this info. How?
+9 / 9

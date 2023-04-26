@@ -1,31 +1,313 @@
-Maximum matching in bipartite graphs Pennant Race Problem Open Pit Mining
+CPSC 420 Lecture 10: Today’s announcements:
+▶ HW2 is on Gradescope, due Feb 9, 23:59
+▶ Examlet 2 on Feb 17 in class. Closed book & no notes
+▶ Reading: Maximum Flows & Minimum Cuts [Algorithms by
+Erickson Ch. 10]
+Today’s Plan
+▶ Network Flow
+▶ Maximum matching in bipartite graphs
+▶ Pennant Race Problem
+▶ Open Pit Mining
+1 / 9
 
-A matching in a graph G is a subset M of its edges with no vertex the endpoint of more than
-
+Maximum Matching in Bipartite Graphs
+A matching in a graph G is a subset M of its
+edges with no vertex the endpoint of more than
+one edge in M.
+A maximum matching is a matching with the
+maximum number of edges.
+A maximal matching is a matching to which
+another edge cannot be added to form a new
+matching.
 matching edge
+A bipartite graph is a graph G = (V , E) where
+V can be partitioned into A and B such that
+∀(u, v) ∈ E, either u ∈ A and v ∈ B or u ∈ B
+and v ∈ A.
+B
+A
+Given bipartite graph G = (V , E) with partitions A and B
+find maximum matching in G.
+2 / 9
 
-B A
+Maximum Matching in Bipartite Graphs Algorithm
+Given bipartite graph G = (V , E) with partitions A and B:
+1. Create a flow network F = (V ′, E ′)
+V ′ = V ∪ {s, t}
+add source and sink
+E ′ = E ∪ {(s, u)|u ∈ A} ∪ {(v, t)|v ∈ B}
+Set all capacities to 1.
+2. Find maximum flow f in F
+3. Output edges (u, v) ∈ E such that f (u, v) = 1
+A
+B
+s
+t
+A
+B
+Claim If M is a matching in G then ∃ flow f in F with
+size(f ) = |M|.
+Claim If f is an integer-valued flow in F then there exists a
+matching M in G with |M| = size(f ).
+3 / 9
 
-A bipartite graph is a graph G = ( V , E ) where V can be partitioned into A and B such that ∀ ( u , v ) ∈ E , either u ∈ A and v ∈ B or u ∈ B and v ∈ A .
+Pennant Race Problem
+Input
+Example
+Given team A (your favorite team)
+A
+list of teams T1, T2, . . . , Tn
+A
+T1
+T2
+T3
+T4
+#wins for each team this season
+3
+4
+6
+5
+4
+list of games remaining to be played
+(A, T1), (A, T3), (A, T4),(T1, T3), (T2, T4), (T1, T2), (T2, T3)
+Determine if it is possible for team A to win at least as many
+games as any other team by the end of the season.
+1. Assume A wins all remaining games (it’s possible)
+This removes some games.
+2. Let w be number of A’s wins. Let wi be number of Ti’s wins.
+3. If w < wi for some i then return NO.
+4. Create a flow network
+4 / 9
 
-Given bipartite graph G = ( V , E ) with partitions A and B : 1. Create a flow network F = ( V ′ , E ′ ) V ′ = V ∪ { s , t } add source and sink E ′ = E ∪ { ( s , u ) | u ∈ A } ∪ { ( v , t ) | v ∈ B } Set all capacities to 1. 2. Find maximum flow f in F 3. Output edges ( u , v ) ∈ E such that f ( u , v ) = 1 A B s t A B Claim If M is a matching in G then ∃ flow f in F with size( f ) = | M | . Claim If f is an integer-valued flow in F then there exists a matching M in G with | M | = size( f ).
+Pennant Race Problem
+Input
+Example
+Given team A (your favorite team)
+A
+list of teams T1, T2, . . . , Tn
+A
+T1
+T2
+T3
+T4
+#wins for each team this season
+6
+4
+6
+5
+4
+list of games remaining to be played
+(T1, T3), (T2, T4), (T1, T2), (T2, T3)
+Determine if it is possible for team A to win at least as many
+games as any other team by the end of the season.
+T1T3
+T2T4
+T1T2
+T2T3
+T1
+T2
+T3
+T4
+s
+t
+1
+1
+1
+1
+1
+1
+11
+1 1
+1
+1
+2
+0
+1
+2
+A has hope iff max flow size = # games
+4 / 9
 
-Pennant Race Problem Input Example Given team A (your favorite team) A list of teams T 1 , T 2 , . . . , T n A T 1 T 2 T 3 T 4 #wins for each team this season 3 4 6 5 4 list of games remaining to be played ( A , T 1 ) , ( A , T 3 ) , ( A , T 4 ) , ( T 1 , T 3 ) , ( T 2 , T 4 ) , ( T 1 , T 2 ) , ( T 2 , T 3 ) Determine if it is possible for team A to win at least as many games as any other team by the end of the season.
+Open Pit Mining
+Imagine the earth is a lattice of cubes.
+Every cube has a value (think “gold” minus “cost” to process)
+Constraint: must remove some cubes before others (think cave-in)
+Input: Directed acyclic graph G = (V , E). V = set of cubes
+E = {(u, v)|u must be removed before v}
+w(v) = value of cube v
+A
+B
+C
+D
+E
+F
+G
+H
+I
+-1
+-2
+-1
++1
+-3
+-2
++1
++5
++2
+Find most profitable set of cubes to process but obey constraints.
+5 / 9
 
-Determine if it is possible for team A to win at least as many games as any other team by the end of the season. T 1 T 3 T 2 T 4 T 1 T 2 T 2 T 3 T 1 T 2 T 3 T 4 s t 1 1 1 1 1 1 1 11 1 1 1 2 0 1 2 A has hope iff max flow size = # games
+Maximum Value Initial Set
+Convert the vertex-valued directed graph G = (V , E) into a flow
+network so that
+A. Any finite capacity cut corresponds to an initial set.
+B. A min capacity cut corresponds to a max value initial set.
+1. Add source s and sink t
+2. Set capacity c(u, v) = ∞ for (u, v) ∈ E
+3. Create an edge (s, v) or (v, t) for every v ∈ V with finite
+capacity (to be determined)
+A
+B
+C
+D
+E
+F
+G
+H
+I
+∞
+∞
+∞
+∞
+∞
+∞
+∞
+∞
+s
+t
+-1
+-2
+-1
++1
+-3
+-2
++1
++5
++2
+6 / 9
 
-Imagine the earth is a lattice of cubes. Every cube has a value (think “gold” minus “cost” to process) Constraint: must remove some cubes before others (think cave-in) Input: Directed acyclic graph G = ( V , E ). V = set of cubes E = { ( u , v ) | u must be removed before v } w ( v ) = value of cube v A B C D E F G H I -1 -2 -1 +1 -3 -2 +1 +5 +2
+Maximum Value Initial Set
+A
+B
+C
+D
+E
+F
+G
+H
+I
+∞
+∞
+∞
+∞
+∞
+∞
+∞
+∞
+s
+t
+-1
+-2
+-1
++1
+-3
+-2
++1
++5
++2
+Claim: In this network any finite capacity cut (S, T) defines an
+initial set T − t (and vice-versa).
+Proof: If cut (S, T) has finite capacity then no original edges are
+directed into T from S so T − t is an initial set.
+If U ⊆ V is initial then cut (S = (V − U) + s, T = U + t) has
+finite capacity. Only edges (s, u)|u ∈ T and (v, t)|v ∈ S cross the
+cut from S to T (and they have finite capacity).
+□
+7 / 9
 
-network so that A. Any finite capacity cut corresponds to an initial set . B. A min capacity cut corresponds to a max value initial set. 1. Add source s and sink t 2. Set capacity c ( u , v ) = ∞ for ( u , v ) ∈ E 3. Create an edge ( s , v ) or ( v , t ) for every v ∈ V with finite capacity (to be determined) A B C D E F G H I ∞ ∞ ∞ ∞ ∞ ∞ ∞ ∞ s t -1 -2 -1 +1 -3 -2 +1 +5 +2
-
-A B C D E F G H I ∞ ∞ ∞ ∞ ∞ ∞ ∞ ∞ s t -1 -2 -1 +1 -3 -2 +1 +5 +2
-
-A B C D E F G H I ∞ ∞ ∞ ∞ ∞ ∞ ∞ ∞ -1 -2 -1 +1 -3 -2 +1 +5 +2
-
-If w ( u ) > 0, increase cut capacity if we don’t take u ( u ̸∈ If w ( v ) < 0, increase cut capacity if we do take v ( v ∈ T ). v u -1 +3 ∞ s t 1 3 flow network A B C D E F G H I ∞ ∞ ∞ ∞ ∞ ∞ ∞ ∞ s t 1 2 1 2 1 1 5 2 3
-
-network A B C D E F G H I ∞ ∞ ∞ ∞ ∞ ∞ ∞ ∞ s t 1 2 1 2 1 1 5 2 3
-
+Maximum Value Initial Set
+Idea If w(u) > 0, increase cut capacity if we don’t take u (u ̸∈ T).
+If w(v) < 0, increase cut capacity if we do take v (v ∈ T).
+v
+u
+-1
++3
+∞
+s
+t
+1
+3
 Final flow network
+A
+B
+C
+D
+E
+F
+G
+H
+I
+∞
+∞
+∞
+∞
+∞
+∞
+∞
+∞
+s
+t
+1
+2
+1
+2
+1
+1
+5
+2
+3
+8 / 9
 
-For any initial set U , the capacity of the corresponding cut ( S = ( V − U ) + s , T = U + t ) is c ( S , T ) = u ̸∈ U w ( u ) > 0 w ( u ) + v ∈ U w ( v ) < 0 − w ( v ) profit = u ∈ U w ( u ) > 0 w ( u ) + v ∈ U w ( v ) < 0 w ( v ) To maximize profit, minimize (over cuts ( S , T ), which define U u ∈ U w ( u ) > 0 w ( u ) − profit = u ̸∈ U w ( u ) > 0 w ( u ) − v ∈ U w ( v ) < 0 w ( v ) = c ( S , T
+Maximum Value Initial Set
+For any initial set U, the capacity of the corresponding cut
+(S = (V − U) + s, T = U + t) is
+c(S, T) =
+�
+u̸∈U
+w(u)>0
+w(u) +
+�
+v∈U
+w(v)<0
+−w(v)
+profit =
+�
+u∈U
+w(u)>0
+w(u) +
+�
+v∈U
+w(v)<0
+w(v)
+To maximize profit, minimize (over cuts (S, T), which define U)
+�
+u∈U
+w(u)>0
+w(u) − profit =
+�
+u̸∈U
+w(u)>0
+w(u) −
+�
+v∈U
+w(v)<0
+w(v) = c(S, T)
+9 / 9
