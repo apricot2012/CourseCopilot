@@ -1,0 +1,1 @@
+If we want to build a neural network for images by ourselves, what are the top 3 factors we should consider?

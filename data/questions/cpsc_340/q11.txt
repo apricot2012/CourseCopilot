@@ -1,0 +1,1 @@
+Suppose Al is a new user to the platform Netflix. What machine learning algorithms can we use to recommend movies to Al? 

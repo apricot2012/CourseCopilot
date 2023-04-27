@@ -1,0 +1,2 @@
+Softmax loss is better for multi-class y
+NLL under the softmax likelihood is the softmax loss

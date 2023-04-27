@@ -11,10 +11,11 @@ from src.constants import SECRET_KEY
 
 class Extractor:
 
-    def __init__(self, segment_length = 128, top_k_documents = 5) -> None:
+    def __init__(self, paths, segment_length = 512, top_k_documents = 5) -> None:
         self.docs = []
         self.segment_length = segment_length
         self.top_k = top_k_documents
+        self.load_docs(paths)
 
     def load_docs(self, paths):
         for path in paths:
@@ -26,11 +27,10 @@ class Extractor:
 
 
 class tf_idfExtractor(Extractor):
-    def __init__(self, segment_length = 512, top_k_documents = 5) -> None:
-        super().__init__(segment_length, top_k_documents)
+    def __init__(self, paths, segment_length = 512, top_k_documents = 5) -> None:
+        super().__init__(paths, segment_length, top_k_documents)
 
-    def infer_relevant_docs(self, paths, query):
-        super().load_docs(paths)
+    def infer_relevant_docs(self, query):
         return self.get_top_k_articles(query)
 
     def get_top_k_articles(self, query):
@@ -61,24 +61,22 @@ class tf_idfExtractor(Extractor):
         return top_docs
     
 class dpr_Extractor(Extractor):
-    def __init__(self, segment_length = 512, top_k_documents = 5) -> None:
-        super().__init__(segment_length, top_k_documents)
+    def __init__(self, paths, segment_length = 512, top_k_documents = 5) -> None:
+        super().__init__(paths, segment_length, top_k_documents)
     
-    def infer_relevant_docs(self, paths, query):
-        super().load_docs(paths)
+    def infer_relevant_docs(self, query):
         embeddings = HuggingFaceEmbeddings()
         docsearch = OpenSearchVectorSearch.from_documents(self.docs, embeddings, opensearch_url="http://localhost:9200")
         return docsearch.similarity_search(query, k=self.top_k)
     
 class hyde_Extractor(Extractor):
-    def __init__(self, segment_length = 512, top_k_documents = 5) -> None:
-        super().__init__(segment_length, top_k_documents)
+    def __init__(self, paths, segment_length = 512, top_k_documents = 5) -> None:
+        super().__init__(paths, segment_length, top_k_documents)
     
-    def infer_relevant_docs(self, paths, query):
-        super().load_docs(paths)
+    def infer_relevant_docs(self, query):
         base_embeddings = OpenAIEmbeddings(openai_api_key=SECRET_KEY)
         llm = OpenAI(openai_api_key=SECRET_KEY)
         embeddings = HypotheticalDocumentEmbedder.from_llm(llm, base_embeddings, "web_search")
         result = embeddings.embed_query(query)
-        docsearch = OpenSearchVectorSearch.from_documents(self.docs, embeddings, opensearch_url="http://localhost:9200")
+        docsearch = OpenSearchVectorSearch.from_documents(self.docs, embeddings, opensearch_url="http://localhost:9200", bulk_size=1500)
         return docsearch.similarity_search(query, k=self.top_k)

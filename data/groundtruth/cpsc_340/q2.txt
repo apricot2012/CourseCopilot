@@ -1,0 +1,5 @@
+A bootstrap approach to reducing false positives:
+Apply the method to bootstrap samples of the training data.
+Only take the features selected in all bootstrap samples.
+Ensemble Feature Selection
+Example: bootstrapping plus L1-regularization (“BoLASSO”).

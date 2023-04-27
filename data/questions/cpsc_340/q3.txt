@@ -1,0 +1,1 @@
+What is the problem with having too small of a learning rate in gradient descent?

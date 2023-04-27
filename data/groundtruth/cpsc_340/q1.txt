@@ -1,0 +1,5 @@
+Decision trees are simple programs consisting of
+A nested sequence of “if-else” decisions based on the features (splitting rules)
+A class label as a return value at the end of each sequence.
+Decision trees: predicting a label using a sequence of simple rules.
+Decision stumps: simple decision tree that is very fast to fit.

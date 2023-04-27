@@ -1,0 +1,4 @@
+Can predict on new users/movies, but can’t learn about each user/movie.\n• If two users have the same features, then they get the exact same recommendations.
+We discussed recommender systems using collaborative filtering:\n– Methods that only looks at ratings, not features of movies/users
+Collaborative filtering is ‘filling in’ the user-item matrix:
+SVDfeature combines content-based/collaborative filtering:

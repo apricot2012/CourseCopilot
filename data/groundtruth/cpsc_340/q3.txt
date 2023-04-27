@@ -1,0 +1,4 @@
+Generate new guess by moving in the negative gradient direction:
+The step size 𝛼# must be set carefully for gradient descent to work.
+If 𝛼! is too large gradient descent may not converge.
+This decreases ‘f’ if the “step size” 𝛼! is small enough.

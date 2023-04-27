@@ -1,0 +1,9 @@
+Consider training neural networks on 500 pixel by 500 pixel images.
+– So the number of inputs ‘d’ to first layer is 250,000 inputs.
+• If first layer has k=10,000, then ‘W’ has 2.5 billion parameters.
+We want to avoid this huge number (due to storage and overfitting).
+• CNNs drastically reduce the number of parameters.
+– Main way they do this is using layers that look like convolutions:
+CNNs give some amount of translation invariance:
+– Because same filters used across the image, they can detect a pattern anywhere in the image.
+• Even in image locations where the pattern has never been seen.

@@ -12,10 +12,6 @@ from src.enquirer import Enquirer
 segment_length = 512
 top_k = 5
 
-tf = tf_idfExtractor(segment_length, top_k)
-dpr = dpr_Extractor(segment_length, top_k)
-hyde = hyde_Extractor(segment_length, top_k)
-models = [tf, dpr, hyde]
 
 question_path = './data/questions'
 extracted_path = './data/extracted'
@@ -29,16 +25,21 @@ for t in text_directories:
     question_names = [Path(q).stem for q in question_files]
 
     enquirer = Enquirer()
+    tf = tf_idfExtractor(text_file_paths, segment_length, top_k)
+    dpr = dpr_Extractor(text_file_paths, segment_length, top_k)
+    hyde = hyde_Extractor(text_file_paths, segment_length, top_k)
+    #models = [tf, dpr, hyde]
+    models = [tf, dpr]
 
     for i in range(len(question_files)):
         with open(question_files[i]) as f:
             query = f.readline()
         with open(join(groundtruth_path, t, question_names[i] + '.txt')) as f:
             lines = f.readlines()
-            groundtruth = eval.lines_to_relevant_strings(lines, text_file_paths, segment_length)
+            groundtruth = eval.lines_to_relevant_strings(lines, tf.docs, segment_length)
 
         for model in models:
-            docs = model.infer_relevant_docs(text_file_paths, query)
+            docs = model.infer_relevant_docs(query)
             docs_as_string = [doc.page_content for doc in docs]
             print(docs_as_string)
             print(eval.percentage_contained(groundtruth, docs_as_string))
