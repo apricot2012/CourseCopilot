@@ -1,1 +1,1 @@
-What is a setting where you would use the L1-loss, and what is a setting where you would use L1-regularization?
+What is the relationship between the softmax loss and the softmax function?

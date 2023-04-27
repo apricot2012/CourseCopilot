@@ -1,0 +1,6 @@
+Absolute (L1) error and Huber error are more robust to outliers.
+L1-loss is robust to outlier data points.
+L1-regularization simultaneously regularizes and selects features.
+L1-regularization is robust to irrelevant features.
+Simultaneous regularization and feature selection.
+L1-Regularization:\n–Insensitive to changes in data.

@@ -1,2 +1,3 @@
-Softmax loss is better for multi-class y
-NLL under the softmax likelihood is the softmax loss
+It may converge to sub-optimal solution
+K-means cannot separate some non-convex clusters
+Clusters can be non-convex:

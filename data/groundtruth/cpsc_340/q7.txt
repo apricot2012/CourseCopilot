@@ -1,3 +1,5 @@
-It may converge to sub-optimal solution
-K-means cannot separate some non-convex clusters
-Clusters can be non-convex:
+Gradient descent costs O(ndt) to run for ‘t’ iterations.
+Cost of gradient descent iteration is O(nd) (no need to form XTX).
+Overall cost is O(nd2 + d3).
+Normal equations cost O(nd2 + d3).\n– Gradient descent costs O(ndt) to run for ‘t’ iterations.\n• Each of the ‘t’ iterations costs O(nd).\n– Gradient descent can be faster when ‘d’ is very large:
+Cost of gradient descent iteration is O(nd) (no need to form XTX)

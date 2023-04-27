@@ -1,1 +1,1 @@
-What is the relationship between the softmax loss and the softmax function?
+Describe a dataset with k clusters where k-means cannot find the true clusters.
