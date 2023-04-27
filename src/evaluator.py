@@ -19,6 +19,8 @@ def lines_to_relevant_strings(lines, paths, segment_length):
 def percentage_contained(groundtruth, result):
     num = 0
     denum = len(groundtruth)
+    if denum == 0:
+        print("Did not find corresponding segments")
     for segment in groundtruth:
         if segment in result:
             num += 1
