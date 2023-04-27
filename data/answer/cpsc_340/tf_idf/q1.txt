@@ -1,0 +1,1 @@
+ Decision trees are simple programs consisting of a nested sequence of “if-else” decisions based on the features (splitting rules) and a class label as a return value at the end of each sequence. They can be drawn as a tree, with each branch representing a decision based on a feature.

@@ -1,0 +1,1 @@
+ Single-cell sequencing traditionally relies on genome amplification, which can lead to uneven coverage and allelic dropout. To address these issues, researchers have developed Direct Library Preparation Plus (DLP+), which delivers single-cell resolution for precise deconvolution of both major and minor clonal populations and resolving clonal CNVS in low tumour burden settings.

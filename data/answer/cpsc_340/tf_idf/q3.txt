@@ -1,0 +1,1 @@
+ If the learning rate 𝛼 is too small, gradient descent may be too slow and take too long to converge.

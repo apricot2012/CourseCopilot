@@ -1,0 +1,1 @@
+ The softmax function is used to map the zi values to probabilities, and the softmax loss is the negative of the logarithm of these probabilities.

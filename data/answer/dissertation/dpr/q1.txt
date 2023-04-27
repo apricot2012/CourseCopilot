@@ -1,0 +1,1 @@
+ We use the L1 values from Table 3.2 to evaluate the accuracy of the tumor subclonal prevalence in the synthetic experiment. Table 3.2 contains the L1 values from synthetic experiments for clonal prevalences. The L1 values measure the accuracy of the estimates by calculating the sum of the absolute differences between the estimated values and the true values.

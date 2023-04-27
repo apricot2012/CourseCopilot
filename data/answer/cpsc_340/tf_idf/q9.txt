@@ -1,0 +1,1 @@
+ The top 3 factors to consider when building a neural network for images are: 1) the number of hidden units, 2) the parameters of the ‘W’ matrix and ‘v’ vector, and 3) the use of convolution layers.

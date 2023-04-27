@@ -1,0 +1,1 @@
+ We use the tool correctReadcount to normalize the read count data and rule out the bias/outliers. This is referenced in Figure 2.3, which states that the right side of the figure shows the read counts after correctReadcount was applied.

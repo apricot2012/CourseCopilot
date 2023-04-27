@@ -1,0 +1,1 @@
+ A dataset with k clusters where k-means cannot find the true clusters is a dataset with non-convex clusters. K-means assumes that the clusters are convex, so it cannot separate non-convex clusters. Over-clustering can help, but it is not a guaranteed solution.

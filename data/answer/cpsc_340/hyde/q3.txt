@@ -1,0 +1,1 @@
+ Having too small of a learning rate in gradient descent can cause the algorithm to take too long to converge to a solution. This is because the algorithm will take small steps and will not be able to make large enough changes to the parameters in order to reach the optimal solution.

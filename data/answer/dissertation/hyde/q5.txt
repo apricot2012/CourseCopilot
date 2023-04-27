@@ -1,0 +1,1 @@
+ In both the synthetic and semi-realistic experiments, the extended model of LiquidBayes did not show any significant improvement over the base model.

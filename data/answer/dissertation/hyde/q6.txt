@@ -1,0 +1,1 @@
+ We use correctReadcount from HMMcopy to normalize the read count data and remove outliers by fitting a two component Gaussian Mixture Model (GMM) and removing read counts in the component with the higher covariance.

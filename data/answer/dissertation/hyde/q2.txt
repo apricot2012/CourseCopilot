@@ -1,0 +1,1 @@
+ The three drawbacks of tissue biopsy listed in the article are: 1) sampling bias is present when extracting tissue; 2) spatial heterogeneity limits its representative scope; and 3) temporal heterogeneity is ignored as serial sampling is infeasible.

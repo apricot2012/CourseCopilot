@@ -1,0 +1,1 @@
+ The softmax function is used to convert the real numbers zi = wcTxi into probabilities, and the softmax loss is the negative of the logarithm of these probabilities.

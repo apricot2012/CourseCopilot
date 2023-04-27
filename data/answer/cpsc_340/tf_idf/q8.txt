@@ -1,0 +1,1 @@
+ We can use a variant of stochastic gradient descent to train a logistic regression model to classify movies for Al. This model will use global features to predict what is important to a generic user, and local/user features to make the prediction personalized for Al.

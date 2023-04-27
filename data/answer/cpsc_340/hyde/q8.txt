@@ -1,0 +1,1 @@
+ We can use collaborative filtering with latent factors to recommend movies to Al. This algorithm looks at ratings from other users and uses matrix factorization to fit to minimize regularized squared error on available ratings (with biases). The learned wj and zi can then be used to predict unknown yij values for Al.

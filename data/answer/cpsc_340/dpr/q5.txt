@@ -1,0 +1,1 @@
+ The softmax loss is the negative of the logarithm of the probabilities given by the softmax function. The softmax function takes the real numbers zi = wcTxi and maps them to probabilities, which are then used to calculate the softmax loss.

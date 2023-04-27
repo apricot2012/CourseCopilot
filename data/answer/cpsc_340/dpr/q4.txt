@@ -1,0 +1,1 @@
+ You would use the L1-loss when you want to be robust to outlier data points, as it is more robust than removing outliers. You would use L1-regularization when you want to be robust to irrelevant features, as it is more robust than removing features.
