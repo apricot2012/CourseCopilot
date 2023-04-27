@@ -1,0 +1,22 @@
+However, single-cell sequencing methods traditionally rely on genome amplifica-tion, which leads to uneven coverage and allelic dropout[67][44]. 
+We tackle this
+3
+issue by employing a unique library preparation method, DLP+, to mitigate these biases.
+DLP+
+is
+a
+scalable
+single-cell
+library
+preparation
+method
+without
+preamplification[36].
+DLP+ distinguishes itself by performing shallow se-quencing of thousands of cells rather than deep sequencing of few cells. 
+In DLP+, object recognition is used to assess cell state, quality and doublets. 
+A tagmentationstep appends unique oligonucleotide barcodes to exposed DNA in each well for mapping reads back to their respective cells.
+Then, rounds of Polymerase Chain Reaction (PCR) are performed on individual wells. 
+DLP+ identifies clonal populations by clustering cells on their CN profiles. 
+Briefly, UMAP[39] is applied to normalized raw copy number data from HMMcopy[34].
+Next, the reduced data are clustered, where clusters represent clones. 
+Then, cells in each cluster are merged to produce clone-level pseudo-bulk genomes.

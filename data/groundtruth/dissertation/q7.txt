@@ -1,0 +1,4 @@
+We showed that LiquidBayes was able to infer tumour burden at fractions as low as 1e-7 more accurately than the current SOTA (Sec-
+tion 3.2.1). 
+Furthermore, LiquidBayes deconvolved individual clone proportions, providing insight into the clone-level mechanisms of resistance in patients. 
+Specif-ically, by uncovering changes in clone populations using LiquidBayes, clinicians can identify resistant clones, informing treatment decisions and enhancing patient survival.

@@ -1,0 +1,1 @@
+How do we synthesize read counts, copy number profiles and allelic count if data is not sufficient?

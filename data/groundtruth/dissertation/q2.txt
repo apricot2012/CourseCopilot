@@ -1,0 +1,4 @@
+Tissue biopsies suffer from three major drawbacks: 
+first, sampling bias is present when extracting tissue; 
+second, spatial heterogeneity limits its representative scope; 
+and lastly, temporal heterogeneity is ignored as serial sampling is infeasible.

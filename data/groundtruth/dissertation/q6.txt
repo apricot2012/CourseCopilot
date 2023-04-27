@@ -1,0 +1,10 @@
+Binned read counts were extracted from the CTDNA bam using readCounter from hmmcopy utils[33]. 
+GC and mappability bias correction were applied using correctReadcount from HMMcopy[34]; GC and mappa-bility wig files were generated using gcCounter and mapCounter from hmm-
+copy utils[33]. 
+The copy column of the resultant dataframe contained normalized and corrected binned read counts.
+
+Subsequently, we removed outliers from corrected and normalized binned read counts. We noted that the number of read counts across bins with identical bin-specific CN configurations should be normally distributed. 
+Therefore, we grouped read counts according to bin-specific CN configurations; 
+for each group, we fitted a two component Gaussian Mixture Model (GMM) and removed read counts in the component with the higher covariance. 
+Bin-specific CN configurations were ordered tuples of clonal and normal CN values. 
+Possible CN configurations for a setting with two clones and a matched normal were {(2,2,2), (2,2,3), (4,3,2)}.

@@ -1,0 +1,10 @@
+In both the synthetic and semi-realistic experiments, we did not observe any significant improvement from the extended model over the base model. 
+This could be an artifact of our SNV processing procedure or experimental design. 
+Our SNV processing only left 100-200 SNVS, which may not be enough to contribute any additional power in our framework (Section 2.1.2). 
+Regarding our experiments, the CN profiles of our sample manifested aneuploidy, suggesting CN to explain much of the genetic variation among clones.
+
+Furthermore, the variability of estimates decreased as the number of clones increased. 
+We did not observe any significant difference in performance between the base and extended models. 
+L1 and Relative L1 values for the extended model can be found in Table A.4.
+
+For tumour fractions above 1e-3, the L1 was relatively small relative to the true clone proportion (Table 3.7). Boxplots and L1 values for the extended model are in Figure A.9 and Table A.5, respectively.

@@ -1,0 +1,1 @@
+Which tool do we use to normalize the read count data and rule out the bias/outliers?

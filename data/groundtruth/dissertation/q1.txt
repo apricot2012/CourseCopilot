@@ -1,0 +1,3 @@
+We used the L1 and Relative L1 losses to evaluate accuracy.
+Average L1 and Relative L1 values across ten replicates for semi-realistic experiments on LiquidBayes’ base and extended models, ichorCNA and MRDetectSNV at six tumour fractions. 
+Relative L1=log(L1 / tumour fraction + 1).					

@@ -1,0 +1,3 @@
+SNVS describe the event where a single nucleotide is substituted at a specific genomic position[68]. This substitution can alter amino acid synthesis, disrupt protein function, and ultimately effect disease. 
+In cancer, variants may confer selective advantages to a subpopulation of cells, promoting tumour growth[60]. 
+These vari-ants are called ‘driver mutations’.

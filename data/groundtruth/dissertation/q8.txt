@@ -1,0 +1,9 @@
+Further benchmarking of LiquidBayes can reveal additional insights into its strengths and weaknesses. 
+We intend to perform experiments on cancer types other than Lymphoma to understand how LiquidBayes generalizes across cancers. 
+In particular, we want to explore cancers with less aneuploidy, to investigate the utility of SNVS in our extended model. 
+Due to time constraints, we were not able to run any experiments on real CTDNA data. 
+This is an important task for future analyses.
+
+In future work, we intend to add SNPS into LiquidBayes. 
+SNPS enable us to obtain allele-specific read counts, potentially increasing LiquidBayes’ predic-tion power and sensitivity. 
+This requires extracting SNPS from DLP+ results and blending an additional SNPS component in the model.
