@@ -1,0 +1,6 @@
+The marginal decision rule states that an activity should be expanded if its 
+marginal benefit exceeds its marginal cost. The marginal benefit of this 
+activity is the utility gained by spending an additional $1 on the good. The 
+marginal cost is the utility lost by spending $1 less on another good. 
+How much utility is gained by spending another $1 on a good? It is the 
+marginal utility of the good divided by its price.
