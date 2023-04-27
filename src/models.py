@@ -29,6 +29,7 @@ class Extractor:
 class tf_idfExtractor(Extractor):
     def __init__(self, paths, segment_length = 512, top_k_documents = 5) -> None:
         super().__init__(paths, segment_length, top_k_documents)
+        self.name = 'tf_idf'
 
     def infer_relevant_docs(self, query):
         return self.get_top_k_articles(query)
@@ -63,6 +64,7 @@ class tf_idfExtractor(Extractor):
 class dpr_Extractor(Extractor):
     def __init__(self, paths, segment_length = 512, top_k_documents = 5) -> None:
         super().__init__(paths, segment_length, top_k_documents)
+        self.name = 'dpr'
     
     def infer_relevant_docs(self, query):
         embeddings = HuggingFaceEmbeddings()
@@ -72,6 +74,7 @@ class dpr_Extractor(Extractor):
 class hyde_Extractor(Extractor):
     def __init__(self, paths, segment_length = 512, top_k_documents = 5) -> None:
         super().__init__(paths, segment_length, top_k_documents)
+        self.name = 'hyde'
     
     def infer_relevant_docs(self, query):
         base_embeddings = OpenAIEmbeddings(openai_api_key=SECRET_KEY)
