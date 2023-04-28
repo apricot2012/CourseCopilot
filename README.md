@@ -1,4 +1,4 @@
-# study-copilot
+# CPSC440 Project
 
 ### Setting up OpenSearch
 Create the following yml file:
